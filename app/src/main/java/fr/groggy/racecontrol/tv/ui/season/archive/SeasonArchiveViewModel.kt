@@ -7,7 +7,5 @@ import fr.groggy.racecontrol.tv.core.season.SeasonService
 class SeasonArchiveViewModel @ViewModelInject constructor(
     private val seasonService: SeasonService
 ): ViewModel() {
-    suspend fun listArchive() {
-        val archive = seasonService.listArchive()
-    }
+    suspend fun listArchive() = seasonService.listArchive().filter { it.hasContent }
 }

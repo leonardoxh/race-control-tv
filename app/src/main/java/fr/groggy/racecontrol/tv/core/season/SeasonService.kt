@@ -2,6 +2,7 @@ package fr.groggy.racecontrol.tv.core.season
 
 import android.util.Log
 import fr.groggy.racecontrol.tv.core.event.EventService
+import fr.groggy.racecontrol.tv.f1tv.Archive
 import fr.groggy.racecontrol.tv.f1tv.F1TvClient
 import fr.groggy.racecontrol.tv.f1tv.F1TvSeasonId
 import fr.groggy.racecontrol.tv.f1tv.F1TvSeasonId.Companion.CURRENT
@@ -21,9 +22,9 @@ class SeasonService @Inject constructor(
         private val TAG = SeasonService::class.simpleName
     }
 
-    suspend fun listArchive() {
+    suspend fun listArchive(): List<Archive> {
         Log.d(TAG, "listSeasons")
-        val seasonList = f1Tv.listArchive(Year.now().value)
+        return f1Tv.listArchive(Year.now().value)
     }
 
     suspend fun loadCurrentSeason() {

@@ -16,6 +16,8 @@ inline class F1TvSeasonId(val value: String) {
     companion object {
         // 2020 example = race_11cd5edd03404b6199bf4712efb34391
         val CURRENT = F1TvSeasonId("/api/race-season/current/")
+
+        fun ofUid(uid: String) = F1TvSeasonId("/api/race-season/$uid/")
     }
 }
 

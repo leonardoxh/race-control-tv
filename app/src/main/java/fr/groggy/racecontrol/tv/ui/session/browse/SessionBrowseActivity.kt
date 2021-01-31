@@ -37,8 +37,7 @@ class SessionBrowseActivity : FragmentActivity() {
         setContentView(R.layout.activity_session_browse)
         val viewModel: SessionBrowseViewModel by viewModels()
         lifecycleScope.launchWhenCreated {
-            val session = viewModel.sessionLoaded(sessionId)
-            when (session) {
+            when (val session = viewModel.sessionLoaded(sessionId)) {
                 is SingleChannelSession -> {
                     val intent = ChannelPlaybackActivity.intent(this@SessionBrowseActivity, session.channel)
                     startActivity(intent)
