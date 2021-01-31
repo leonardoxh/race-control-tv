@@ -7,11 +7,10 @@ import android.widget.TextView
 import androidx.leanback.widget.Presenter
 import fr.groggy.racecontrol.tv.R
 import fr.groggy.racecontrol.tv.f1tv.Archive
-import fr.groggy.racecontrol.tv.ui.channel.ChannelCardPresenter
 
 class ArchivePresenter: Presenter() {
     companion object {
-        private val TAG = ChannelCardPresenter::class.simpleName
+        private val TAG = ArchivePresenter::class.simpleName
     }
 
     override fun onCreateViewHolder(parent: ViewGroup): ViewHolder {

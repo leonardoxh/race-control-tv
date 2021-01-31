@@ -15,9 +15,11 @@ fun <T> T.toJsonRequestBody(adapter: JsonAdapter<T>): RequestBody =
 
 suspend fun <T> Response.parseJsonBody(adapter: JsonAdapter<T>): T =
     if (isSuccessful) body?.source()?.parseJson(adapter)!!
-    else throw IllegalStateException("HTTP request failed with status $code")
+    else throw HttpException(code)
 
 suspend fun <T> BufferedSource.parseJson(adapter: JsonAdapter<T>): T? =
     withContext(Dispatchers.IO) {
         adapter.fromJson(this@parseJson)
     }
+
+class HttpException(val code: Int): IllegalStateException("HTTP request failed with status $code")
