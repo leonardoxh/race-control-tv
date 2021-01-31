@@ -4,6 +4,7 @@ import android.util.Log
 import fr.groggy.racecontrol.tv.core.event.EventService
 import fr.groggy.racecontrol.tv.f1tv.Archive
 import fr.groggy.racecontrol.tv.f1tv.F1TvClient
+import fr.groggy.racecontrol.tv.f1tv.F1TvSeason
 import fr.groggy.racecontrol.tv.f1tv.F1TvSeasonId
 import fr.groggy.racecontrol.tv.f1tv.F1TvSeasonId.Companion.CURRENT
 import javax.inject.Inject
@@ -26,19 +27,26 @@ class SeasonService @Inject constructor(
         return f1Tv.listArchive()
     }
 
-    suspend fun loadCurrentSeason() {
-        Log.d(TAG, "loadCurrentSeason")
-        val season = f1Tv.getSeason(CURRENT)
-        seasonRepository.save(season)
-        currentSeasonIdRepository.save(season.id)
-        eventService.loadEvents(season.events)
+    suspend fun loadSeason(id: F1TvSeasonId?) {
+        if (id == null) {
+            loadCurrentSeason()
+        } else {
+            loadSeasonById(id)
+        }
     }
 
-    suspend fun loadSeason(id: F1TvSeasonId) {
-        Log.d(TAG, "loadSeason")
+    private suspend fun loadCurrentSeason() {
+        val season = loadSeasonById(CURRENT)
+        currentSeasonIdRepository.save(season.id)
+    }
+
+    private suspend fun loadSeasonById(id: F1TvSeasonId): F1TvSeason {
+        Log.d(TAG, "loadSeason ${id.value}")
         val season = f1Tv.getSeason(id)
         seasonRepository.save(season)
         eventService.loadEvents(season.events)
+
+        return season
     }
 
 }

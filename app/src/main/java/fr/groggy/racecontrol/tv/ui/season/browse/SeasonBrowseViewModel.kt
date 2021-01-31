@@ -33,10 +33,18 @@ class SeasonBrowseViewModel @ViewModelInject constructor(
         Log.d(TAG, "init")
     }
 
-    suspend fun currentSeasonLoaded() =
+    suspend fun seasonLoaded(id: F1TvSeasonId?) {
+        if (id == null) {
+            currentSeasonLoaded()
+        } else {
+            seasonLoadedById(id)
+        }
+    }
+
+    private suspend fun currentSeasonLoaded() =
         loaded(currentSeason)
 
-    suspend fun seasonLoaded(id: F1TvSeasonId) =
+    private suspend fun seasonLoadedById(id: F1TvSeasonId) =
         loaded(season(id))
 
     private suspend fun loaded(season: Flow<Season>) {

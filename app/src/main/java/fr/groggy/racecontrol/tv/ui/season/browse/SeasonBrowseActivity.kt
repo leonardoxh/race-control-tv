@@ -15,7 +15,6 @@ import fr.groggy.racecontrol.tv.utils.coroutines.schedule
 import javax.inject.Inject
 import kotlin.time.minutes
 
-
 @AndroidEntryPoint
 class SeasonBrowseActivity : FragmentActivity() {
 
@@ -43,9 +42,8 @@ class SeasonBrowseActivity : FragmentActivity() {
         setContentView(R.layout.activity_season_browse)
         val viewModel: SeasonBrowseViewModel by viewModels()
         lifecycleScope.launchWhenCreated {
-            SeasonBrowseFragment.findSeasonId(this@SeasonBrowseActivity)
-                ?.let { viewModel.seasonLoaded(it) }
-                ?: viewModel.currentSeasonLoaded()
+            val sessionId = SeasonBrowseFragment.findSeasonId(this@SeasonBrowseActivity)
+            viewModel.seasonLoaded(sessionId)
             supportFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, SeasonBrowseFragment::class.java, null)
                 .commit()
@@ -57,9 +55,8 @@ class SeasonBrowseActivity : FragmentActivity() {
         super.onStart()
         lifecycleScope.launchWhenStarted {
             schedule(1.minutes) {
-                SeasonBrowseFragment.findSeasonId(this@SeasonBrowseActivity)
-                    ?.let { seasonService.loadSeason(it) }
-                    ?: seasonService.loadCurrentSeason()
+                val seasonId = SeasonBrowseFragment.findSeasonId(this@SeasonBrowseActivity)
+                seasonService.loadSeason(seasonId)
             }
         }
     }
