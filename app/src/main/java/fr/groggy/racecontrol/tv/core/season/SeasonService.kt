@@ -5,6 +5,7 @@ import fr.groggy.racecontrol.tv.core.event.EventService
 import fr.groggy.racecontrol.tv.f1tv.F1TvClient
 import fr.groggy.racecontrol.tv.f1tv.F1TvSeasonId
 import fr.groggy.racecontrol.tv.f1tv.F1TvSeasonId.Companion.CURRENT
+import java.time.Year
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -18,6 +19,11 @@ class SeasonService @Inject constructor(
 
     companion object {
         private val TAG = SeasonService::class.simpleName
+    }
+
+    suspend fun listArchive() {
+        Log.d(TAG, "listSeasons")
+        val seasonList = f1Tv.listArchive(Year.now().value)
     }
 
     suspend fun loadCurrentSeason() {

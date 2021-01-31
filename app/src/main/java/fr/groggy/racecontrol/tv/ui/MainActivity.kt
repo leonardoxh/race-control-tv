@@ -19,7 +19,7 @@ import fr.groggy.racecontrol.tv.core.credentials.CredentialsService
 import fr.groggy.racecontrol.tv.core.release.ApkService
 import fr.groggy.racecontrol.tv.core.release.Release
 import fr.groggy.racecontrol.tv.core.release.ReleaseService
-import fr.groggy.racecontrol.tv.ui.season.browse.SeasonBrowseActivity
+import fr.groggy.racecontrol.tv.ui.season.archive.SeasonArchiveActivity
 import fr.groggy.racecontrol.tv.ui.signin.SignInActivity
 import io.noties.markwon.Markwon
 import javax.inject.Inject
@@ -94,7 +94,8 @@ class MainActivity : FragmentActivity() {
 
     private suspend fun startHomeActivity() {
         val intent = if (credentialsService.hasValidF1Credentials()) {
-            SeasonBrowseActivity.intent(this)
+            SeasonArchiveActivity.intent(this)
+        //SeasonBrowseActivity.intent(this)
         } else {
             SignInActivity.intent(this)
         }
