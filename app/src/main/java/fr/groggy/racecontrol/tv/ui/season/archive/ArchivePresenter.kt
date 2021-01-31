@@ -1,39 +1,34 @@
 package fr.groggy.racecontrol.tv.ui.season.archive
 
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.leanback.widget.ImageCardView
+import android.widget.TextView
 import androidx.leanback.widget.Presenter
+import fr.groggy.racecontrol.tv.R
 import fr.groggy.racecontrol.tv.f1tv.Archive
 import fr.groggy.racecontrol.tv.ui.channel.ChannelCardPresenter
 
 class ArchivePresenter: Presenter() {
     companion object {
         private val TAG = ChannelCardPresenter::class.simpleName
-
-        private const val WIDTH = 313
-        private const val HEIGHT = 274
     }
 
     override fun onCreateViewHolder(parent: ViewGroup): ViewHolder {
         Log.d(TAG, "onCreateViewHolder")
-        val view = ImageCardView(parent.context)
-        view.setMainImageDimensions(
-            WIDTH,
-            HEIGHT
-        )
-        view.cardType = ImageCardView.CARD_TYPE_FLAG_TITLE
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_archive_text, parent, false)
         return ViewHolder(view)
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder?, item: Any?) {
-        val view = viewHolder?.view as ImageCardView
+        val view = viewHolder?.view as TextView
         val archiveItem = item as Archive
-        view.titleText = archiveItem.year.toString()
+        view.text = archiveItem.year.toString()
     }
 
     override fun onUnbindViewHolder(viewHolder: ViewHolder?) {
-        val view = viewHolder?.view as ImageCardView
-        view.titleText = null
+        val view = viewHolder?.view as TextView
+        view.text = null
     }
 }
