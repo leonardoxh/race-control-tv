@@ -1,11 +1,4 @@
 <resources>
-    <string name="update_version_dialog_title">New version %1$s available</string>
-    <string name="update">Update</string>
-    <string name="skip">Skip</string>
-    <string name="cancel">Cancel</string>
-    <string name="new_version_installed">New version installed</string>
-    <string name="new_version_download_install_failed">Fail to download and install new version</string>
-
     <string name="login">Login</string>
     <string name="password">Password</string>
     <string name="signin">Sign in</string>

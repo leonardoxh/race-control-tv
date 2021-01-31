@@ -7,7 +7,6 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ApplicationComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
-import fr.groggy.racecontrol.tv.db.RaceControlTvDatabase.Companion.MIGRATION_1_2
 import fr.groggy.racecontrol.tv.f1tv.F1TvChannelId
 import fr.groggy.racecontrol.tv.f1tv.F1TvEventId
 import fr.groggy.racecontrol.tv.f1tv.F1TvImageId
@@ -22,7 +21,6 @@ class DatabaseModule {
     @Provides
     fun database(@ApplicationContext context: Context): RaceControlTvDatabase =
         Room.databaseBuilder(context, RaceControlTvDatabase::class.java, "race-control-tv")
-            .addMigrations(MIGRATION_1_2)
             .build()
 
     @Singleton

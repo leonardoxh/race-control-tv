@@ -8,14 +8,12 @@ import fr.groggy.racecontrol.tv.core.channel.ChannelRepository
 import fr.groggy.racecontrol.tv.core.driver.DriverRepository
 import fr.groggy.racecontrol.tv.core.event.EventRepository
 import fr.groggy.racecontrol.tv.core.image.ImageRepository
-import fr.groggy.racecontrol.tv.core.release.ReleaseRepository
 import fr.groggy.racecontrol.tv.core.season.SeasonRepository
 import fr.groggy.racecontrol.tv.core.session.SessionRepository
 import fr.groggy.racecontrol.tv.db.channel.RoomChannelRepository
 import fr.groggy.racecontrol.tv.db.driver.RoomDriverRepository
 import fr.groggy.racecontrol.tv.db.event.RoomEventRepository
 import fr.groggy.racecontrol.tv.db.image.RoomImageRepository
-import fr.groggy.racecontrol.tv.db.release.RoomReleaseRepository
 import fr.groggy.racecontrol.tv.db.season.RoomSeasonRepository
 import fr.groggy.racecontrol.tv.db.session.RoomSessionRepository
 
@@ -34,9 +32,6 @@ abstract class DatabaseBindingsModule {
 
     @Binds
     abstract fun imageRepository(repository: RoomImageRepository): ImageRepository
-
-    @Binds
-    abstract fun releaseRepository(repository: RoomReleaseRepository): ReleaseRepository
 
     @Binds
     abstract fun seasonRepository(repository: RoomSeasonRepository): SeasonRepository
