@@ -10,14 +10,10 @@ class SeasonArchiveViewModel @ViewModelInject constructor(
     private val seasonService: SeasonService
 ): ViewModel() {
     suspend fun listArchive(): List<Archive> {
-        val currentYear = Year.now().value
-        return listOf(currentArchive(currentYear)) +
-            seasonService.listArchive(currentYear).filter { it.hasContent }
+        val year = Year.now().value
+        return seasonService.listArchive()
+            .filter { it.hasContent }
+            .filter { it.year <= year}
+            .sortedByDescending { it.year }
     }
-
-    private fun currentArchive(year: Int) = Archive(
-        uid = "current",
-        year = year,
-        hasContent = true
-    )
 }

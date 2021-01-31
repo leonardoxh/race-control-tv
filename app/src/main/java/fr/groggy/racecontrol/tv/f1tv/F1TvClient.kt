@@ -152,13 +152,8 @@ class F1TvClient @Inject constructor(
         )
     }
 
-    suspend fun listArchive(year: Int): List<Archive> {
-        val request = Request.Builder()
-            .url("https://f1tv-api.formula1.com/agl/1.0/nld/en/all_devices/global/archive-filters/$year")
-            .get()
-            .build()
-
-        return request.execute(httpClient).parseJsonBody(archiveResponseJsonAdapter).objects
+    suspend fun listArchive(): List<Archive> {
+        return get("/api/race-season", archiveResponseJsonAdapter).objects
     }
 
     private suspend fun <T> get(apiUrl: String, jsonAdapter: JsonAdapter<T>): T {

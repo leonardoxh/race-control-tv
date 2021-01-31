@@ -21,9 +21,9 @@ class SeasonService @Inject constructor(
         private val TAG = SeasonService::class.simpleName
     }
 
-    suspend fun listArchive(ofYear: Int): List<Archive> {
+    suspend fun listArchive(): List<Archive> {
         Log.d(TAG, "listSeasons")
-        return f1Tv.listArchive(ofYear)
+        return f1Tv.listArchive()
     }
 
     suspend fun loadCurrentSeason() {
