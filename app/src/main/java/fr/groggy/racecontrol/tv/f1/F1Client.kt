@@ -33,6 +33,7 @@ class F1Client @Inject constructor(
             .url("${ROOT_URL}/v2/account/subscriber/authenticate/by-password")
             .post(body)
             .header("apiKey", API_KEY)
+            .header("User-Agent", "RaceControl f1viewer")
             .build()
         val response = request.execute(httpClient).parseJsonBody(authenticateResponseJsonAdapter)
         return F1Token(JWT(response.data.subscriptionToken))
