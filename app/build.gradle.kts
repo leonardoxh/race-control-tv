@@ -11,11 +11,11 @@ android {
     buildToolsVersion("30.0.3")
 
     defaultConfig {
-        applicationId = "fr.groggy.racecontrol.tv"
+        applicationId = "com.github.leonardoxh.f1"
         minSdkVersion(26)
         targetSdkVersion(30)
-        versionCode = 4
-        versionName = "1.2.0"
+        versionCode = 5
+        versionName = "1.2.1"
     }
 
     signingConfigs {
@@ -30,7 +30,7 @@ android {
     }
 
     buildTypes {
-        val appName = "Race Control TV"
+        val appName = "F1 TV Player"
         getByName("debug") {
             applicationIdSuffix = ".debug"
             versionNameSuffix = "-DEBUG"
@@ -107,10 +107,6 @@ dependencies {
     kapt("androidx.room:room-compiler:$roomVersion")
 
     implementation("com.google.android.material:material:1.3.0-rc01")
-
-    implementation("net.swiftzer.semver:semver:1.1.1")
-
-    implementation("io.noties.markwon:core:4.6.0")
 }
 
 kapt {

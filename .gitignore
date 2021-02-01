@@ -29,3 +29,5 @@ output.json
 
 # Sensitive data
 release-key.p12
+
+release-keystore.jks

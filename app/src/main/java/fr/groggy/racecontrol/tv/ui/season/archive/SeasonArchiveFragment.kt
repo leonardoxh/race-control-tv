@@ -2,6 +2,7 @@ package fr.groggy.racecontrol.tv.ui.season.archive
 
 import android.os.Bundle
 import android.view.View
+import androidx.annotation.Keep
 import androidx.fragment.app.viewModels
 import androidx.leanback.app.VerticalGridSupportFragment
 import androidx.leanback.widget.*
@@ -11,6 +12,7 @@ import fr.groggy.racecontrol.tv.f1tv.Archive
 import fr.groggy.racecontrol.tv.f1tv.F1TvSeasonId
 import fr.groggy.racecontrol.tv.ui.season.browse.SeasonBrowseActivity
 
+@Keep
 @AndroidEntryPoint
 class SeasonArchiveFragment: VerticalGridSupportFragment(), OnItemViewClickedListener {
     private val itemAdapter: ArrayObjectAdapter by lazy {
