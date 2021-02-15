@@ -62,13 +62,14 @@ class ChannelPlaybackFragment : VideoSupportFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d(TAG, "onCreate")
         super.onCreate(savedInstanceState)
-        val glue = ExoPlayerPlaybackTransportControlGlue(requireActivity(), player, trackSelector)
-        glue.host = VideoSupportFragmentGlueHost(this)
+
+        startPlayer()
     }
 
-    override fun onStart() {
-        Log.d(TAG, "onStart")
-        super.onStart()
+    private fun startPlayer() {
+        val glue = ExoPlayerPlaybackTransportControlGlue(requireActivity(), player, trackSelector)
+        glue.host = VideoSupportFragmentGlueHost(this)
+
         val channelId = findChannelId(requireActivity())!!
         lifecycleScope.launchWhenStarted {
             val viewing = viewingService.getViewing(channelId)
@@ -77,8 +78,10 @@ class ChannelPlaybackFragment : VideoSupportFragment() {
     }
 
     private fun onViewingCreated(viewing: F1TvViewing) {
-        val mediaSource = mediaSourceFactory.createMediaSource(viewing.url)
-        player.prepare(mediaSource)
+        if (!player.isPlaying) { //IF is playing already just ignore these calls
+            val mediaSource = mediaSourceFactory.createMediaSource(viewing.url)
+            player.prepare(mediaSource)
+        }
     }
 
     override fun onStop() {
@@ -91,5 +94,4 @@ class ChannelPlaybackFragment : VideoSupportFragment() {
         player.release()
         super.onDestroy()
     }
-
 }
