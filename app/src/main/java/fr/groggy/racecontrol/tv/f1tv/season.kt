@@ -22,13 +22,13 @@ data class F1TvSeasonResultContainer(
 
 @JsonClass(generateAdapter = true)
 data class F1TvSeasonMetadata(
-    val emfAttributes: F1TvSeasonEmfAttributes,
-    val title: String
+    val emfAttributes: F1TvSeasonEmfAttributes
 )
 
 @JsonClass(generateAdapter = true)
 data class F1TvSeasonEmfAttributes(
-    @Json(name = "MeetingKey") val meetingKey: String
+    @Json(name = "MeetingKey") val meetingKey: String,
+    @Json(name = "Global_Meeting_Name") val title: String
 )
 
 

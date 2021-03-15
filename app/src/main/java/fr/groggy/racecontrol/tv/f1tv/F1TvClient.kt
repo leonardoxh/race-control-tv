@@ -69,13 +69,13 @@ class F1TvClient @Inject constructor(
                 F1TvSeasonEvent(
                     id = it.id,
                     meetingKey = it.metadata.emfAttributes.meetingKey,
-                    title = it.metadata.title
+                    title = it.metadata.emfAttributes.title
                 )
             }
         )
     }
 
-    suspend fun getSessions(event: F1TvSeasonEvent): List<F1TvSession> { //TODO !!!! FUCK THIS CRAP
+    suspend fun getSessions(event: F1TvSeasonEvent): List<F1TvSession> {
         try {
             val response = get(LIST_SESSIONS.format(event.meetingKey), sessionResponseJsonAdapter)
             Log.d(TAG, "Fetched session ${event.id}")

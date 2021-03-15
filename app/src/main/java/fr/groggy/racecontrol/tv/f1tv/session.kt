@@ -39,8 +39,6 @@ data class F1TvSessionEmfAttributes(
     @Json(name = "MeetingKey") val meetingKey: String
 )
 
-
-
 inline class F1TvSessionId(val value: String)
 
 sealed class F1TvSessionStatus {
