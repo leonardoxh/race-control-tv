@@ -63,6 +63,7 @@ sealed class F1TvSessionStatus {
 data class F1TvSession(
     val id: F1TvSessionId,
     val name: String,
+    val eventId: String,
     val status: F1TvSessionStatus,
     val period: InstantPeriod,
     val available: Boolean,

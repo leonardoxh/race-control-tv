@@ -8,6 +8,7 @@ import androidx.room.PrimaryKey
 data class SessionEntity(
     @PrimaryKey val id: String,
     @ColumnInfo(name = "name") val name: String,
+    @ColumnInfo(name = "event_id") val eventId: String,
     @ColumnInfo(name = "status") val status: String,
     @ColumnInfo(name = "start_time") val startTime: Long,
     @ColumnInfo(name = "end_time") val endTime: Long,

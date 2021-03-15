@@ -20,24 +20,25 @@ class SessionBrowseActivity : FragmentActivity() {
     companion object {
         private val TAG = SessionBrowseActivity::class.simpleName
 
-        fun intent(context: Context, sessionId: F1TvSessionId): Intent {
+        fun intent(context: Context, sessionId: F1TvSessionId): Intent { //TODO?
             val intent = Intent(context, SessionBrowseActivity::class.java)
-            SessionGridFragment.putSessionId(intent, sessionId)
+            //SessionGridFragment.putSession(intent, sessionId)
             return intent
         }
     }
 
     @Inject lateinit var sessionService: SessionService
 
-    private val sessionId: F1TvSessionId by lazy { SessionGridFragment.findSessionId(this)!! }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d(TAG, "onCreate")
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_session_browse)
+
+        val eventId = SessionGridFragment.findEventId(this@SessionBrowseActivity)
+            ?: return finish()
         val viewModel: SessionBrowseViewModel by viewModels()
         lifecycleScope.launchWhenCreated {
-            when (val session = viewModel.sessionLoaded(sessionId)) {
+            when (val session = viewModel.sessionLoaded(eventId)) {
                 is SingleChannelSession -> {
                     val intent = ChannelPlaybackActivity.intent(this@SessionBrowseActivity, session.channel)
                     startActivity(intent)
@@ -55,7 +56,8 @@ class SessionBrowseActivity : FragmentActivity() {
     override fun onStart() {
         Log.d(TAG, "onStart")
         super.onStart()
-        lifecycleScope.launchWhenStarted { sessionService.loadSessionWithImagesAndChannels(sessionId) }
+        //TODO whatft?
+        //lifecycleScope.launchWhenStarted { sessionService.loadSessionWithImagesAndChannels(sessionId) }
     }
 
 }

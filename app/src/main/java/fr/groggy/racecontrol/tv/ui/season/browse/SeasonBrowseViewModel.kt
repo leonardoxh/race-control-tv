@@ -35,7 +35,7 @@ class SeasonBrowseViewModel @ViewModelInject constructor(
         season.filter { it.events.isNotEmpty() }.first()
     }
 
-    private suspend fun season(archive: Archive): Flow<Season> =
+    suspend fun season(archive: Archive): Flow<Season> =
         seasonRepository.observe(archive)
             .onEach { Log.d(TAG, "Season changed") }
             .filterNotNull()
@@ -54,7 +54,7 @@ class SeasonBrowseViewModel @ViewModelInject constructor(
             .flatMapLatest { events -> events
                 .filter { it.sessions.isNotEmpty() }
                 .sortedByDescending { it.period.start }
-                .traverse { event -> sessions(event.sessions)
+                .traverse { event -> sessions(listOf(event.id))
                     .map { sessions -> Event(
                         id = event.id,
                         name = event.name,
@@ -65,7 +65,7 @@ class SeasonBrowseViewModel @ViewModelInject constructor(
             .distinctUntilChanged()
             .onEach { Log.d(TAG, "VM events changed") }
 
-    private fun sessions(ids: List<F1TvSessionId>): Flow<List<Session>> =
+    private fun sessions(ids: List<F1TvEventId>): Flow<List<Session>> =
         sessionRepository.observe(ids)
             .onEach { Log.d(TAG, "Sessions changed") }
             .flatMapLatest { sessions -> sessions

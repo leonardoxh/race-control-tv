@@ -10,7 +10,8 @@ import androidx.leanback.app.VerticalGridSupportFragment
 import androidx.leanback.widget.*
 import androidx.lifecycle.asLiveData
 import dagger.hilt.android.AndroidEntryPoint
-import fr.groggy.racecontrol.tv.f1tv.F1TvSessionId
+import fr.groggy.racecontrol.tv.f1tv.F1TvEventId
+import fr.groggy.racecontrol.tv.f1tv.F1TvSession
 import fr.groggy.racecontrol.tv.ui.channel.ChannelCardPresenter
 import fr.groggy.racecontrol.tv.ui.channel.playback.ChannelPlaybackActivity
 import javax.inject.Inject
@@ -25,19 +26,17 @@ class SessionGridFragment : VerticalGridSupportFragment(), OnItemViewClickedList
 
         private const val COLUMNS = 5
 
-        private val SESSION_ID = "${SessionGridFragment::class}.SESSION_ID"
+        private val EVENT_ID = "${SessionGridFragment::class}.EVENT_ID"
 
-        fun putSessionId(intent: Intent, sessionId: F1TvSessionId) {
-            intent.putExtra(SESSION_ID, sessionId.value)
+        fun putSession(intent: Intent, session: F1TvSession) {
+            intent.putExtra(EVENT_ID, session.eventId)
         }
 
-        fun findSessionId(activity: Activity): F1TvSessionId? =
-            activity.intent.getStringExtra(SESSION_ID)?.let { F1TvSessionId(it) }
+        fun findEventId(activity: Activity): F1TvEventId? =
+            activity.intent.getStringExtra(EVENT_ID)?.let(::F1TvEventId)
     }
 
     @Inject lateinit var channelsCardPresenter: ChannelCardPresenter
-
-    private val sessionId: F1TvSessionId by lazy { findSessionId(requireActivity())!! }
 
     private lateinit var channelsAdapter: ArrayObjectAdapter
 
@@ -46,8 +45,10 @@ class SessionGridFragment : VerticalGridSupportFragment(), OnItemViewClickedList
         super.onCreate(savedInstanceState)
         setupUIElements()
         setupEventListeners()
+
+        val eventId = findEventId(requireActivity()) ?: return requireActivity().finish()
         val viewModel: SessionBrowseViewModel by viewModels({ requireActivity() })
-        viewModel.session(sessionId).asLiveData().observe(this, this::onUpdatedSession)
+        viewModel.session(eventId).asLiveData().observe(this, this::onUpdatedSession)
     }
 
     private fun setupUIElements() {

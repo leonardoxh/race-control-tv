@@ -27,7 +27,7 @@ class SessionBrowseViewModel @ViewModelInject constructor(
         private val TAG = SessionBrowseViewModel::class.simpleName
     }
 
-    suspend fun sessionLoaded(id: F1TvSessionId): Session =
+    suspend fun sessionLoaded(id: F1TvEventId): Session =
         session(id)
             .filter { session -> when(session) {
                 is SingleChannelSession -> true
@@ -35,7 +35,7 @@ class SessionBrowseViewModel @ViewModelInject constructor(
             } }
             .first()
 
-    fun session(id: F1TvSessionId): Flow<Session> =
+    fun session(id: F1TvEventId): Flow<Session> =
         sessionRepository.observe(id)
             .onEach { Log.d(TAG, "Session changed") }
             .flatMapLatest { session ->

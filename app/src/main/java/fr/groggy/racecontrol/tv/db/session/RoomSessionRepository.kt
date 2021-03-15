@@ -4,10 +4,7 @@ import fr.groggy.racecontrol.tv.core.InstantPeriod
 import fr.groggy.racecontrol.tv.core.session.SessionRepository
 import fr.groggy.racecontrol.tv.db.IdListMapper
 import fr.groggy.racecontrol.tv.db.RaceControlTvDatabase
-import fr.groggy.racecontrol.tv.f1tv.F1TvChannelId
-import fr.groggy.racecontrol.tv.f1tv.F1TvImageId
-import fr.groggy.racecontrol.tv.f1tv.F1TvSession
-import fr.groggy.racecontrol.tv.f1tv.F1TvSessionId
+import fr.groggy.racecontrol.tv.f1tv.*
 import fr.groggy.racecontrol.tv.f1tv.F1TvSessionStatus.Companion.Live
 import fr.groggy.racecontrol.tv.f1tv.F1TvSessionStatus.Companion.Replay
 import fr.groggy.racecontrol.tv.f1tv.F1TvSessionStatus.Companion.Unknown
@@ -34,12 +31,12 @@ class RoomSessionRepository @Inject constructor(
 
     private val dao = database.sessionDao()
 
-    override fun observe(id: F1TvSessionId): Flow<F1TvSession> =
+    override fun observe(id: F1TvEventId): Flow<F1TvSession> =
         dao.observeById(id.value)
             .map { toSession(it) }
             .distinctUntilChanged()
 
-    override fun observe(ids: List<F1TvSessionId>): Flow<List<F1TvSession>> =
+    override fun observe(ids: List<F1TvEventId>): Flow<List<F1TvSession>> =
         dao.observeById(ids.map { it.value })
             .map { sessions -> sessions.map { toSession(it) } }
             .distinctUntilChanged()
@@ -48,6 +45,7 @@ class RoomSessionRepository @Inject constructor(
         F1TvSession(
             id = F1TvSessionId(session.id),
             name = session.name,
+            eventId = session.eventId,
             status = when (session.status) {
                 REPLAY -> Replay
                 LIVE -> Live
@@ -77,6 +75,7 @@ class RoomSessionRepository @Inject constructor(
         SessionEntity(
             id = session.id.value,
             name = session.name,
+            eventId = session.eventId,
             status = when (session.status) {
                 Replay -> REPLAY
                 Live -> LIVE
