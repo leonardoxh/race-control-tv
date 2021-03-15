@@ -6,11 +6,9 @@ import androidx.annotation.Keep
 import androidx.fragment.app.viewModels
 import androidx.leanback.app.VerticalGridSupportFragment
 import androidx.leanback.widget.*
-import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import fr.groggy.racecontrol.tv.R
 import fr.groggy.racecontrol.tv.f1tv.Archive
-import fr.groggy.racecontrol.tv.f1tv.F1TvSeasonId
 import fr.groggy.racecontrol.tv.ui.season.browse.SeasonBrowseActivity
 
 @Keep
@@ -35,10 +33,8 @@ class SeasonArchiveFragment: VerticalGridSupportFragment(), OnItemViewClickedLis
         super.onViewCreated(view, savedInstanceState)
 
         val viewModel: SeasonArchiveViewModel by viewModels()
-        lifecycleScope.launchWhenStarted {
-            val archives = viewModel.listArchive()
-            itemAdapter.setItems(archives, null)
-        }
+        val archives = viewModel.listArchive()
+        itemAdapter.setItems(archives, null)
     }
 
     override fun onItemClicked(
@@ -47,9 +43,8 @@ class SeasonArchiveFragment: VerticalGridSupportFragment(), OnItemViewClickedLis
         rowViewHolder: RowPresenter.ViewHolder?,
         row: Row?
     ) {
-        val archiveItem = item as Archive
         val browseActivity = SeasonBrowseActivity
-            .intent(requireContext(), F1TvSeasonId.ofUid(archiveItem.uid))
+            .intent(requireContext(), item as Archive)
         startActivity(browseActivity)
     }
 }

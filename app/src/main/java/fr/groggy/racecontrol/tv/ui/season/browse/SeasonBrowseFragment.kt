@@ -10,13 +10,15 @@ import androidx.fragment.app.viewModels
 import androidx.leanback.app.BrowseSupportFragment
 import androidx.leanback.widget.*
 import androidx.lifecycle.asLiveData
+import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import fr.groggy.racecontrol.tv.R
-import fr.groggy.racecontrol.tv.f1tv.F1TvSeasonId
+import fr.groggy.racecontrol.tv.f1tv.Archive
 import fr.groggy.racecontrol.tv.ui.channel.playback.ChannelPlaybackActivity
 import fr.groggy.racecontrol.tv.ui.event.EventListRowDiffCallback
 import fr.groggy.racecontrol.tv.ui.session.SessionCardPresenter
 import fr.groggy.racecontrol.tv.ui.session.browse.SessionBrowseActivity
+import org.threeten.bp.Year
 import javax.inject.Inject
 
 @Keep
@@ -26,14 +28,18 @@ class SeasonBrowseFragment : BrowseSupportFragment(), OnItemViewClickedListener 
     companion object {
         private val TAG = SeasonBrowseFragment::class.simpleName
 
-        private val SEASON_ID = "${SeasonBrowseFragment::class}.SEASON_ID"
+        private val YEAR = "${SeasonBrowseFragment::class}.YEAR"
 
-        fun putSeasonId(intent: Intent, seasonId: F1TvSeasonId) {
-            intent.putExtra(SEASON_ID, seasonId.value)
+        fun putArchive(intent: Intent, archive: Archive) {
+            intent.putExtra(YEAR, archive.year)
         }
 
-        fun findSeasonId(activity: Activity): F1TvSeasonId? =
-            activity.intent.getStringExtra(SEASON_ID)?.let { F1TvSeasonId(it) }
+        fun findArchive(activity: Activity): Archive {
+            val year = activity.intent.getIntExtra(
+                YEAR, Year.now().value
+            )
+            return Archive(year)
+        }
     }
 
     @Inject lateinit var eventListRowDiffCallback: EventListRowDiffCallback
@@ -48,10 +54,10 @@ class SeasonBrowseFragment : BrowseSupportFragment(), OnItemViewClickedListener 
         setupEventListeners()
 
         val viewModel: SeasonBrowseViewModel by viewModels({ requireActivity() })
-        val season = findSeasonId(requireActivity())
-            ?.let { viewModel.season(it) }
-            ?: viewModel.currentSeason
-        season.asLiveData().observe(this, this::onUpdatedSeason)
+        val archive = findArchive(requireActivity())
+        lifecycleScope.launchWhenStarted {
+            viewModel.season(archive).asLiveData().observe(viewLifecycleOwner, ::onUpdatedSeason)
+        }
     }
 
     private fun setupUIElements() {

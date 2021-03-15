@@ -6,8 +6,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "seasons")
 data class SeasonEntity(
-    @PrimaryKey val id: String,
+    @PrimaryKey @ColumnInfo(name = "year") val year: Int,
     @ColumnInfo(name = "name") val name: String,
-    @ColumnInfo(name = "year") val year: Int,
     @ColumnInfo(name = "events") val events: String
 )

@@ -10,7 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import fr.groggy.racecontrol.tv.R
 import fr.groggy.racecontrol.tv.core.season.SeasonService
-import fr.groggy.racecontrol.tv.f1tv.F1TvSeasonId
+import fr.groggy.racecontrol.tv.f1tv.Archive
 import fr.groggy.racecontrol.tv.utils.coroutines.schedule
 import javax.inject.Inject
 import kotlin.time.minutes
@@ -24,11 +24,11 @@ class SeasonBrowseActivity : FragmentActivity() {
         fun intent(context: Context): Intent =
             Intent(context, SeasonBrowseActivity::class.java)
 
-        fun intent(context: Context, seasonId: F1TvSeasonId): Intent {
+        fun intent(context: Context, archive: Archive): Intent {
             val intent = intent(context)
-            SeasonBrowseFragment.putSeasonId(
+            SeasonBrowseFragment.putArchive(
                 intent,
-                seasonId
+                archive
             )
             return intent
         }
@@ -42,8 +42,8 @@ class SeasonBrowseActivity : FragmentActivity() {
         setContentView(R.layout.activity_season_browse)
         val viewModel: SeasonBrowseViewModel by viewModels()
         lifecycleScope.launchWhenCreated {
-            val sessionId = SeasonBrowseFragment.findSeasonId(this@SeasonBrowseActivity)
-            viewModel.seasonLoaded(sessionId)
+            val archive = SeasonBrowseFragment.findArchive(this@SeasonBrowseActivity)
+            viewModel.archiveLoaded(archive)
             supportFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, SeasonBrowseFragment::class.java, null)
                 .commit()
@@ -54,9 +54,10 @@ class SeasonBrowseActivity : FragmentActivity() {
         Log.d(TAG, "onStart")
         super.onStart()
         lifecycleScope.launchWhenStarted {
+            //TODO not sure if this schedule thing is needed
             schedule(1.minutes) {
-                val seasonId = SeasonBrowseFragment.findSeasonId(this@SeasonBrowseActivity)
-                seasonService.loadSeason(seasonId)
+                val archive = SeasonBrowseFragment.findArchive(this@SeasonBrowseActivity)
+                seasonService.loadSeason(archive)
             }
         }
     }

@@ -6,6 +6,7 @@ import fr.groggy.racecontrol.tv.db.IdListMapper
 import fr.groggy.racecontrol.tv.db.RaceControlTvDatabase
 import fr.groggy.racecontrol.tv.f1tv.F1TvEvent
 import fr.groggy.racecontrol.tv.f1tv.F1TvEventId
+import fr.groggy.racecontrol.tv.f1tv.F1TvSeasonEvent
 import fr.groggy.racecontrol.tv.f1tv.F1TvSessionId
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -22,8 +23,8 @@ class RoomEventRepository @Inject constructor(
 
     private val dao = database.eventDao()
 
-    override fun observe(ids: List<F1TvEventId>): Flow<List<F1TvEvent>> =
-        dao.observeById(ids.map { it.value })
+    override fun observe(ids: List<F1TvSeasonEvent>): Flow<List<F1TvEvent>> =
+        dao.observeById(ids.map { it.id })
             .map { events -> events.map { toEvent(it) } }
             .distinctUntilChanged()
 
@@ -47,6 +48,7 @@ class RoomEventRepository @Inject constructor(
         EventEntity(
             id = event.id.value,
             name = event.name,
+            meetingKey = "", //TODO FUCK~
             startDate = event.period.start.toEpochDay(),
             endDate = event.period.end.toEpochDay(),
             sessions = sessionIdListMapper.toDto(event.sessions)

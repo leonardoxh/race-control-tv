@@ -15,4 +15,6 @@ interface EventDao {
     @Query("SELECT * FROM events WHERE id IN (:ids)")
     fun observeById(ids: List<String>): Flow<List<EventEntity>>
 
+    @Query("SELECT * FROM events WHERE id = :id")
+    suspend fun findEventsById(id: String): List<EventEntity>
 }

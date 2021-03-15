@@ -4,6 +4,7 @@ import android.util.Log
 import fr.groggy.racecontrol.tv.core.channel.ChannelService
 import fr.groggy.racecontrol.tv.core.image.ImageService
 import fr.groggy.racecontrol.tv.f1tv.F1TvClient
+import fr.groggy.racecontrol.tv.f1tv.F1TvSeason
 import fr.groggy.racecontrol.tv.f1tv.F1TvSessionId
 import fr.groggy.racecontrol.tv.utils.coroutines.concurrentMap
 import javax.inject.Inject
@@ -21,8 +22,9 @@ class SessionService @Inject constructor(
         private val TAG = SessionService::class.simpleName
     }
 
-    suspend fun loadSessionsWithImages(ids: List<F1TvSessionId>) {
+    suspend fun loadSessionsWithImages(season: F1TvSeason) {
         Log.d(TAG, "loadSessionsWithImages")
+
         val sessions = ids.concurrentMap { f1Tv.getSession(it) }
         repository.save(sessions)
         val (available, unavailable) = sessions.partition { it.available }

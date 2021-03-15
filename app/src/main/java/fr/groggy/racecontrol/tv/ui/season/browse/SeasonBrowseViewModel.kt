@@ -6,7 +6,6 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 import fr.groggy.racecontrol.tv.core.event.EventRepository
 import fr.groggy.racecontrol.tv.core.image.ImageRepository
-import fr.groggy.racecontrol.tv.core.season.CurrentSeasonIdRepository
 import fr.groggy.racecontrol.tv.core.season.SeasonRepository
 import fr.groggy.racecontrol.tv.core.session.SessionRepository
 import fr.groggy.racecontrol.tv.f1tv.*
@@ -18,7 +17,6 @@ import fr.groggy.racecontrol.tv.utils.coroutines.traverse
 import kotlinx.coroutines.flow.*
 
 class SeasonBrowseViewModel @ViewModelInject constructor(
-    private val currentSeasonIdRepository: CurrentSeasonIdRepository,
     private val eventRepository: EventRepository,
     private val imageRepository: ImageRepository,
     private val seasonRepository: SeasonRepository,
@@ -29,51 +27,28 @@ class SeasonBrowseViewModel @ViewModelInject constructor(
         private val TAG = SeasonBrowseViewModel::class.simpleName
     }
 
-    init {
-        Log.d(TAG, "init")
+    suspend fun archiveLoaded(archive: Archive) {
+        loaded(season(archive))
     }
-
-    suspend fun seasonLoaded(id: F1TvSeasonId?) {
-        if (id == null) {
-            currentSeasonLoaded()
-        } else {
-            seasonLoadedById(id)
-        }
-    }
-
-    private suspend fun currentSeasonLoaded() =
-        loaded(currentSeason)
-
-    private suspend fun seasonLoadedById(id: F1TvSeasonId) =
-        loaded(season(id))
 
     private suspend fun loaded(season: Flow<Season>) {
         season.filter { it.events.isNotEmpty() }.first()
     }
 
-    val currentSeason: Flow<Season> by lazy {
-        currentSeasonIdRepository.observe()
-            .onEach { Log.d(TAG, "Current season id changed") }
-            .filterNotNull()
-            .flatMapLatest { season(it) }
-            .onEach { Log.d(TAG, "Current VM season changed") }
-    }
-
-    fun season(id: F1TvSeasonId): Flow<Season> =
-        seasonRepository.observe(id)
+    suspend fun season(archive: Archive): Flow<Season> =
+        seasonRepository.observe(archive)
             .onEach { Log.d(TAG, "Season changed") }
             .filterNotNull()
             .flatMapLatest { season -> events(season.events)
                 .map { events -> Season(
-                    id = season.id,
-                    name = season.name,
+                    name = season.title,
                     events = events
                 ) }
             }
             .distinctUntilChanged()
             .onEach { Log.d(TAG, "VM season changed") }
 
-    private fun events(ids: List<F1TvEventId>): Flow<List<Event>> =
+    private fun events(ids: List<F1TvSeasonEvent>): Flow<List<Event>> =
         eventRepository.observe(ids)
             .onEach { Log.d(TAG, "Events changed") }
             .flatMapLatest { events -> events
@@ -125,7 +100,6 @@ class SeasonBrowseViewModel @ViewModelInject constructor(
 }
 
 data class Season(
-    val id: F1TvSeasonId,
     val name: String,
     val events: List<Event>
 )

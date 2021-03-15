@@ -22,24 +22,17 @@ class EventService @Inject constructor(
 
     suspend fun loadEvents(ids: List<F1TvEventId>) {
         Log.d(TAG, "loadEvents")
-        val events = ids.mapNotNull {
-            try {
-                f1Tv.getEvent(it)
-            } catch (e: Exception) {
-                e.printStackTrace()
-                null
-            }
-        }
-        repository.save(events)
-        val (future, pastAndCurrent) = events.partition { it.isFutureEvent(clock) }
-        (pastAndCurrent.sortedByDescending { it.period.start } + future)
-            .forEach {
-                try {
-                    sessionService.loadSessionsWithImages(it.sessions)
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-            }
+
+        //TODO this logic might be reused
+//        val (future, pastAndCurrent) = events.partition { it.isFutureEvent(clock) }
+//        (pastAndCurrent.sortedByDescending { it.period.start } + future)
+//            .forEach {
+//                try {
+//                    sessionService.loadSessionsWithImages(it.sessions)
+//                } catch (e: Exception) {
+//                    e.printStackTrace()
+//                }
+//            }
     }
 
 }

@@ -12,7 +12,7 @@ interface SeasonDao {
     @Insert(onConflict = REPLACE)
     suspend fun upsert(season: SeasonEntity)
 
-    @Query("SELECT * FROM seasons WHERE id = :id")
-    fun observeById(id: String): Flow<SeasonEntity?>
+    @Query("SELECT * FROM seasons WHERE year = :year")
+    fun observeByYear(year: Int): Flow<SeasonEntity?>
 
 }

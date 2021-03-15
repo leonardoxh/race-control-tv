@@ -6,14 +6,12 @@ import com.auth0.android.jwt.JWT
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import fr.groggy.racecontrol.tv.core.InstantPeriod
-import fr.groggy.racecontrol.tv.core.LocalDatePeriod
 import fr.groggy.racecontrol.tv.f1.F1Token
 import fr.groggy.racecontrol.tv.utils.http.execute
 import fr.groggy.racecontrol.tv.utils.http.parseJsonBody
 import fr.groggy.racecontrol.tv.utils.http.toJsonRequestBody
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import org.threeten.bp.LocalDate
 import org.threeten.bp.OffsetDateTime
 import org.threeten.bp.Year
 import javax.inject.Inject
@@ -29,21 +27,23 @@ class F1TvClient @Inject constructor(
         private val TAG = F1TvClient::class.simpleName
         private const val IDENTITY_PROVIDER_URL = "/api/identity-providers/iden_732298a17f9c458890a1877880d140f3/"
         private const val AUTHENTICATE_URL = "https://f1tv-api.formula1.com/agl/1.0/unk/en/all_devices/global/authenticate"
-        private const val ROOT_URL = "https://f1tv.formula1.com"
+        private const val ROOT_URL = "https://f1tv.formula1.com/2.0/R/ENG/BIG_SCREEN_HLS"
+
+        private const val GROUP_ID = 14 //TODO this might need to be migrated to the correct ONE
+        private const val LIST_SEASON = "/ALL/PAGE/SEARCH/VOD/F1_TV_Pro_Monthly/$GROUP_ID?filter_objectSubtype=Meeting&filter_season=%s&filter_fetchAll=Y&filter_orderByFom=Y"
+
     }
 
     private val authenticateRequestJsonAdapter = moshi.adapter(F1TvAuthenticateRequest::class.java)
     private val authenticateResponseJsonAdapter =
         moshi.adapter(F1TvAuthenticateResponse::class.java)
     private val seasonResponseJsonAdapter = moshi.adapter(F1TvSeasonResponse::class.java)
-    private val eventResponseJsonAdapter = moshi.adapter(F1TvEventResponse::class.java)
     private val sessionResponseJsonAdapter = moshi.adapter(F1TvSessionResponse::class.java)
     private val imageResponseJsonAdapter = moshi.adapter(F1TvImageResponse::class.java)
     private val channelResponseJsonAdapter = moshi.adapter(F1TvChannelResponse::class.java)
     private val driverResponseJsonAdapter = moshi.adapter(F1TvDriverResponse::class.java)
     private val viewingRequestJsonAdapter = moshi.adapter(F1TvViewingRequest::class.java)
     private val viewingResponseJsonAdapter = moshi.adapter(F1TvViewingResponse::class.java)
-    private val archiveResponseJsonAdapter = moshi.adapter(ArchiveResponse::class.java)
 
     suspend fun authenticate(f1Token: F1Token): F1TvToken {
         val body = F1TvAuthenticateRequest(
@@ -59,34 +59,24 @@ class F1TvClient @Inject constructor(
         return F1TvToken(JWT(response.token))
     }
 
-    suspend fun getSeason(id: F1TvSeasonId): F1TvSeason {
-        val response = get(id.value, seasonResponseJsonAdapter)
-        Log.d(TAG, "Fetched season $id")
+    suspend fun getSeason(archive: Archive): F1TvSeason {
+        val response = get(LIST_SEASON.format(archive.year), seasonResponseJsonAdapter)
+        Log.d(TAG, "Fetched season $archive")
         return F1TvSeason(
-            id = F1TvSeasonId(response.self),
-            name = response.name,
-            year = Year.of(response.year),
-            events = response.eventOccurrenceUrls.map { F1TvEventId(it) }
+            year = Year.of(archive.year),
+            title = archive.year.toString(), //TODO - Use a proper name somehow
+            events = response.resultObj.containers.map {
+                F1TvSeasonEvent(
+                    id = it.id,
+                    meetingKey = it.metadata.emfAttributes.meetingKey,
+                    title = it.metadata.title
+                )
+            }
         )
     }
 
-    suspend fun getEvent(id: F1TvEventId): F1TvEvent {
-        val response = get(id.value, eventResponseJsonAdapter)
-        Log.d(TAG, "Fetched event $id")
-        return F1TvEvent(
-            id = F1TvEventId(response.self),
-            name = response.name,
-            period = LocalDatePeriod(
-                start = LocalDate.parse(response.startDate),
-                end = LocalDate.parse(response.endDate)
-            ),
-            sessions = response.sessionOcurrenceUrls.map { F1TvSessionId(it) }
-        )
-    }
-
-    suspend fun getSession(id: F1TvSessionId): F1TvSession {
+    suspend fun getSession(id: F1TvSessionId): F1TvSession { //TODO !!!! FUCK THIS CRAP
         val response = get(id.value, sessionResponseJsonAdapter)
-        //TODO might not be available?
         Log.d(TAG, "Fetched session $id")
         return F1TvSession(
             id = F1TvSessionId(response.self),
@@ -151,10 +141,6 @@ class F1TvClient @Inject constructor(
         return F1TvViewing(
             url = Uri.parse(response.tokenisedUrl)
         )
-    }
-
-    suspend fun listArchive(): List<Archive> {
-        return get("/api/race-season", archiveResponseJsonAdapter).objects
     }
 
     private suspend fun <T> get(apiUrl: String, jsonAdapter: JsonAdapter<T>): T {

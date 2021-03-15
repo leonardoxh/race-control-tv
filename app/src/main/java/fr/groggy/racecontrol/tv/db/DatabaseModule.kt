@@ -21,6 +21,7 @@ class DatabaseModule {
     @Provides
     fun database(@ApplicationContext context: Context): RaceControlTvDatabase =
         Room.databaseBuilder(context, RaceControlTvDatabase::class.java, "race-control-tv")
+            .fallbackToDestructiveMigration()
             .build()
 
     @Singleton

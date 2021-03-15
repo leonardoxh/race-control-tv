@@ -2,51 +2,40 @@ package fr.groggy.racecontrol.tv.core.season
 
 import android.util.Log
 import fr.groggy.racecontrol.tv.core.event.EventService
+import fr.groggy.racecontrol.tv.core.session.SessionService
 import fr.groggy.racecontrol.tv.f1tv.Archive
 import fr.groggy.racecontrol.tv.f1tv.F1TvClient
-import fr.groggy.racecontrol.tv.f1tv.F1TvSeason
-import fr.groggy.racecontrol.tv.f1tv.F1TvSeasonId
-import fr.groggy.racecontrol.tv.f1tv.F1TvSeasonId.Companion.CURRENT
+import org.threeten.bp.Year
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class SeasonService @Inject constructor(
-    private val currentSeasonIdRepository: CurrentSeasonIdRepository,
     private val seasonRepository: SeasonRepository,
     private val f1Tv: F1TvClient,
-    private val eventService: EventService
+    private val eventService: EventService,
+    private val sessionService: SessionService
 ) {
-
     companion object {
         private val TAG = SeasonService::class.simpleName
+        private const val F1_ARCHIVE_START_YEAR = 1981
     }
 
-    suspend fun listArchive(): List<Archive> {
+    fun listArchive(): List<Archive> {
         Log.d(TAG, "listSeasons")
-        return f1Tv.listArchive()
-    }
-
-    suspend fun loadSeason(id: F1TvSeasonId?) {
-        if (id == null) {
-            loadCurrentSeason()
-        } else {
-            loadSeasonById(id)
+        val currentYear = Year.now().value
+        val archive = mutableListOf<Archive>()
+        for (year in currentYear downTo F1_ARCHIVE_START_YEAR) {
+            archive.add(Archive(year))
         }
+        return archive
     }
 
-    private suspend fun loadCurrentSeason() {
-        val season = loadSeasonById(CURRENT)
-        currentSeasonIdRepository.save(season.id)
-    }
-
-    private suspend fun loadSeasonById(id: F1TvSeasonId): F1TvSeason {
-        Log.d(TAG, "loadSeason ${id.value}")
-        val season = f1Tv.getSeason(id)
+    suspend fun loadSeason(archive: Archive) {
+        Log.d(TAG, "loadSeason ${archive.year}")
+        val season = f1Tv.getSeason(archive)
         seasonRepository.save(season)
-        eventService.loadEvents(season.events)
-
-        return season
+//        eventService.loadEvents(season.events) //TODO will be discarded
+        sessionService.loadSessionsWithImages(season)
     }
-
 }
