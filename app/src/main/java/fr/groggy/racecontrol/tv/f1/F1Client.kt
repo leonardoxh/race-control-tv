@@ -53,7 +53,7 @@ class F1Client @Inject constructor(
         val request = Request.Builder()
             .url(PLAY_URL.format(contentId) + if (channelId != null) "&channelId=$channelId" else "")
             .get()
-            .header("apiKey", F1Client.API_KEY)
+            .header("apiKey", API_KEY)
             .header("User-Agent", "RaceControl f1viewer")
             .header("ascendontoken", token.toString())
             .build()
