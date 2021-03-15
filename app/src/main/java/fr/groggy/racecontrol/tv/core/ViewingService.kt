@@ -2,14 +2,14 @@ package fr.groggy.racecontrol.tv.core
 
 import android.util.Log
 import fr.groggy.racecontrol.tv.core.token.TokenService
-import fr.groggy.racecontrol.tv.f1tv.F1TvClient
+import fr.groggy.racecontrol.tv.f1.F1Client
 import fr.groggy.racecontrol.tv.f1tv.F1TvViewing
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class ViewingService @Inject constructor(
-    private val f1Tv: F1TvClient,
+    private val f1Tv: F1Client,
     private val tokenService: TokenService
 ) {
 

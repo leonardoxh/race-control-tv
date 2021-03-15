@@ -1,7 +1,10 @@
 package fr.groggy.racecontrol.tv.f1
 
+import android.net.Uri
 import com.auth0.android.jwt.JWT
 import com.squareup.moshi.Moshi
+import fr.groggy.racecontrol.tv.f1tv.F1TvViewing
+import fr.groggy.racecontrol.tv.f1tv.F1TvViewingResponse
 import fr.groggy.racecontrol.tv.utils.http.execute
 import fr.groggy.racecontrol.tv.utils.http.parseJsonBody
 import fr.groggy.racecontrol.tv.utils.http.toJsonRequestBody
@@ -19,10 +22,13 @@ class F1Client @Inject constructor(
     companion object {
         private const val ROOT_URL = "https://api.formula1.com"
         const val API_KEY = "fCUCjWrKPu9ylJwRAv8BpGLEgiAuThx7"
+
+        private const val PLAY_URL = "https://f1tv.formula1.com/1.0/R/ENG/BIG_SCREEN_HLS/ALL/CONTENT/PLAY?contentId=%s"
     }
 
     private val authenticateRequestJsonAdapter = moshi.adapter(F1AuthenticateRequest::class.java)
     private val authenticateResponseJsonAdapter = moshi.adapter(F1AuthenticateResponse::class.java)
+    private val viewingResponseJsonAdapter = moshi.adapter(F1TvViewingResponse::class.java)
 
     suspend fun authenticate(credentials: F1Credentials): F1Token {
         val body = F1AuthenticateRequest(
@@ -39,4 +45,21 @@ class F1Client @Inject constructor(
         return F1Token(JWT(response.data.subscriptionToken))
     }
 
+    suspend fun getViewing(
+        channelId: String?,
+        contentId: String,
+        token: JWT
+    ): F1TvViewing {
+        val request = Request.Builder()
+            .url(PLAY_URL.format(contentId) + if (channelId != null) "&channelId=$channelId" else "")
+            .get()
+            .header("apiKey", F1Client.API_KEY)
+            .header("User-Agent", "RaceControl f1viewer")
+            .header("ascendontoken", token.toString())
+            .build()
+        val response = request.execute(httpClient).parseJsonBody(viewingResponseJsonAdapter)
+        return F1TvViewing(
+            url = Uri.parse(response.resultObj.url)
+        )
+    }
 }

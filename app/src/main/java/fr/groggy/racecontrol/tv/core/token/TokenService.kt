@@ -5,8 +5,6 @@ import com.auth0.android.jwt.JWT
 import fr.groggy.racecontrol.tv.core.credentials.CredentialsService
 import fr.groggy.racecontrol.tv.f1.F1Client
 import fr.groggy.racecontrol.tv.f1.F1Token
-import fr.groggy.racecontrol.tv.f1tv.F1TvClient
-import fr.groggy.racecontrol.tv.f1tv.F1TvToken
 import org.threeten.bp.Duration
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -14,10 +12,8 @@ import javax.inject.Singleton
 @Singleton
 class TokenService @Inject constructor(
     private val f1TokenRepository: F1TokenRepository,
-    private val f1TvTokenRepository: F1TvTokenRepository,
     private val credentialsService: CredentialsService,
-    private val f1: F1Client,
-    private val f1Tv: F1TvClient
+    private val f1: F1Client
 ) {
 
     companion object {
@@ -30,14 +26,6 @@ class TokenService @Inject constructor(
         return loadAndGetToken(f1TokenRepository, { it.value }) {
             val credentials = credentialsService.getF1Credentials()
             f1.authenticate(credentials)
-        }
-    }
-
-    suspend fun loadAndGetF1TvToken(): F1TvToken {
-        Log.d(TAG, "loadAndGetF1TvToken")
-        return loadAndGetToken(f1TvTokenRepository, { it.value }) {
-            val f1Token = loadAndGetF1Token()
-            f1Tv.authenticate(f1Token)
         }
     }
 
