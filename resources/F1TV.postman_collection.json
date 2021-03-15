@@ -1,0 +1,339 @@
+{
+	"info": {
+		"_postman_id": "91d31c7e-cc0b-4cce-a277-55dad6978f58",
+		"name": "F1TV",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Obtain Api key",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://account.formula1.com/scripts/main.min.js",
+					"protocol": "https",
+					"host": [
+						"account",
+						"formula1",
+						"com"
+					],
+					"path": [
+						"scripts",
+						"main.min.js"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get group",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://f1tv.formula1.com/1.0/R/ENG/BIG_SCREEN_HLS/ALL/USER/LOCATION",
+					"protocol": "https",
+					"host": [
+						"f1tv",
+						"formula1",
+						"com"
+					],
+					"path": [
+						"1.0",
+						"R",
+						"ENG",
+						"BIG_SCREEN_HLS",
+						"ALL",
+						"USER",
+						"LOCATION"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json, text/javascript, */*; q=0.01",
+						"type": "text"
+					},
+					{
+						"key": "User-Agent",
+						"value": "RaceControl f1viewer",
+						"type": "text"
+					},
+					{
+						"key": "apiKey",
+						"value": "fCUCjWrKPu9ylJwRAv8BpGLEgiAuThx7",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"Login\": \"LOGIN_GOES_HERE\",\n    \"Password\": \"PASSWORD_GOES_HERE\"\n}"
+				},
+				"url": {
+					"raw": "https://api.formula1.com/v2/account/subscriber/authenticate/by-password",
+					"protocol": "https",
+					"host": [
+						"api",
+						"formula1",
+						"com"
+					],
+					"path": [
+						"v2",
+						"account",
+						"subscriber",
+						"authenticate",
+						"by-password"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List years content",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://f1tv.formula1.com/2.0/R/ENG/BIG_SCREEN_HLS/ALL/PAGE/SEARCH/VOD/F1_TV_Pro_Monthly/14?filter_objectSubtype=Meeting&filter_season=2020&filter_fetchAll=Y&filter_orderByFom=Y",
+					"protocol": "https",
+					"host": [
+						"f1tv",
+						"formula1",
+						"com"
+					],
+					"path": [
+						"2.0",
+						"R",
+						"ENG",
+						"BIG_SCREEN_HLS",
+						"ALL",
+						"PAGE",
+						"SEARCH",
+						"VOD",
+						"F1_TV_Pro_Monthly",
+						"14"
+					],
+					"query": [
+						{
+							"key": "filter_objectSubtype",
+							"value": "Meeting"
+						},
+						{
+							"key": "filter_season",
+							"value": "2020"
+						},
+						{
+							"key": "filter_fetchAll",
+							"value": "Y"
+						},
+						{
+							"key": "filter_orderByFom",
+							"value": "Y"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List sessions based on meeting key (meeting id)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://f1tv.formula1.com/2.0/R/ENG/BIG_SCREEN_HLS/ALL/PAGE/SANDWICH/F1_TV_Pro_Monthly/2?meetingId=1045&title=weekend-sessions",
+					"protocol": "https",
+					"host": [
+						"f1tv",
+						"formula1",
+						"com"
+					],
+					"path": [
+						"2.0",
+						"R",
+						"ENG",
+						"BIG_SCREEN_HLS",
+						"ALL",
+						"PAGE",
+						"SANDWICH",
+						"F1_TV_Pro_Monthly",
+						"2"
+					],
+					"query": [
+						{
+							"key": "meetingId",
+							"value": "1045"
+						},
+						{
+							"key": "title",
+							"value": "weekend-sessions"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Check additional streams, eg. onboarding cams",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://f1tv.formula1.com/2.0/R/ENG/BIG_SCREEN_HLS/ALL/CONTENT/VIDEO/1000003818/F1_TV_Pro_Monthly/2",
+					"protocol": "https",
+					"host": [
+						"f1tv",
+						"formula1",
+						"com"
+					],
+					"path": [
+						"2.0",
+						"R",
+						"ENG",
+						"BIG_SCREEN_HLS",
+						"ALL",
+						"CONTENT",
+						"VIDEO",
+						"1000003818",
+						"F1_TV_Pro_Monthly",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Play content",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "ascendontoken",
+						"value": "TOKEN_GOES_HERE",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json, text/javascript, */*; q=0.01",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "User-Agent",
+						"value": "RaceControl f1viewer",
+						"type": "text"
+					},
+					{
+						"key": "apiKey",
+						"value": "fCUCjWrKPu9ylJwRAv8BpGLEgiAuThx7",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "https://f1tv.formula1.com/1.0/R/ENG/BIG_SCREEN_HLS/ALL/CONTENT/PLAY?contentId=1000003818",
+					"protocol": "https",
+					"host": [
+						"f1tv",
+						"formula1",
+						"com"
+					],
+					"path": [
+						"1.0",
+						"R",
+						"ENG",
+						"BIG_SCREEN_HLS",
+						"ALL",
+						"CONTENT",
+						"PLAY"
+					],
+					"query": [
+						{
+							"key": "channelId",
+							"value": "1019",
+							"disabled": true
+						},
+						{
+							"key": "contentId",
+							"value": "1000003818"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Image",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Accept",
+						"value": "application/json, text/javascript, */*; q=0.01",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "User-Agent",
+						"value": "RaceControl f1viewer",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "https://ott.formula1.com/image-resizer/image/1000003742-4d241800-d65a-406b-b56c-d7724830f641?w=384&h=384&o=L",
+					"protocol": "https",
+					"host": [
+						"ott",
+						"formula1",
+						"com"
+					],
+					"path": [
+						"image-resizer",
+						"image",
+						"1000003742-4d241800-d65a-406b-b56c-d7724830f641"
+					],
+					"query": [
+						{
+							"key": "w",
+							"value": "384"
+						},
+						{
+							"key": "h",
+							"value": "384"
+						},
+						{
+							"key": "o",
+							"value": "L"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
