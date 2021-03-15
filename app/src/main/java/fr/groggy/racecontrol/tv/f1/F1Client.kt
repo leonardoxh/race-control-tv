@@ -18,7 +18,7 @@ class F1Client @Inject constructor(
 
     companion object {
         private const val ROOT_URL = "https://api.formula1.com"
-        private const val API_KEY = "fCUCjWrKPu9ylJwRAv8BpGLEgiAuThx7"
+        const val API_KEY = "fCUCjWrKPu9ylJwRAv8BpGLEgiAuThx7"
     }
 
     private val authenticateRequestJsonAdapter = moshi.adapter(F1AuthenticateRequest::class.java)

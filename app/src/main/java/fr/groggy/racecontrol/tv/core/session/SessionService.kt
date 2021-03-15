@@ -27,9 +27,9 @@ class SessionService @Inject constructor(
 
         val sessions = season.events.map { f1Tv.getSessions(it) }.flatten()
         repository.save(sessions)
-        val (available, unavailable) = sessions.partition { it.available }
-        (available.sortedByDescending { it.period.start } + unavailable)
-            .forEach { imageService.loadImages(it.images) }
+//        val (available, unavailable) = sessions.partition { it.available }
+//        (available.sortedByDescending { it.period.start } + unavailable)
+//            .forEach { imageService.loadImages(it.images) }
     }
 
     suspend fun loadSessionWithImagesAndChannels(id: F1TvSessionId) {

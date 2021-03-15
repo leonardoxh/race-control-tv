@@ -6,6 +6,7 @@ import com.auth0.android.jwt.JWT
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import fr.groggy.racecontrol.tv.core.InstantPeriod
+import fr.groggy.racecontrol.tv.f1.F1Client
 import fr.groggy.racecontrol.tv.f1.F1Token
 import fr.groggy.racecontrol.tv.utils.http.execute
 import fr.groggy.racecontrol.tv.utils.http.parseJsonBody
@@ -32,6 +33,8 @@ class F1TvClient @Inject constructor(
         private const val GROUP_ID = 14 //TODO this might need to be migrated to the correct ONE
         private const val LIST_SEASON = "/ALL/PAGE/SEARCH/VOD/F1_TV_Pro_Monthly/$GROUP_ID?filter_objectSubtype=Meeting&filter_season=%s&filter_fetchAll=Y&filter_orderByFom=Y"
         private const val LIST_SESSIONS = "/ALL/PAGE/SANDWICH/F1_TV_Pro_Monthly/$GROUP_ID?meetingId=%s&title=weekend-sessions"
+        private const val PICTURE_URL = "https://ott.formula1.com/image-resizer/image/%s?w=384&h=384&o=L"
+        private const val PLAY_URL = "https://f1tv.formula1.com/1.0/R/ENG/BIG_SCREEN_HLS/ALL/CONTENT/PLAY?contentId=%s"
     }
 
     private val authenticateRequestJsonAdapter = moshi.adapter(F1TvAuthenticateRequest::class.java)
@@ -42,7 +45,6 @@ class F1TvClient @Inject constructor(
     private val imageResponseJsonAdapter = moshi.adapter(F1TvImageResponse::class.java)
     private val channelResponseJsonAdapter = moshi.adapter(F1TvChannelResponse::class.java)
     private val driverResponseJsonAdapter = moshi.adapter(F1TvDriverResponse::class.java)
-    private val viewingRequestJsonAdapter = moshi.adapter(F1TvViewingRequest::class.java)
     private val viewingResponseJsonAdapter = moshi.adapter(F1TvViewingResponse::class.java)
 
     suspend fun authenticate(f1Token: F1Token): F1TvToken {
@@ -84,6 +86,8 @@ class F1TvClient @Inject constructor(
                 F1TvSession(
                     id = F1TvSessionId(it.id),
                     eventId = event.id,
+                    pictureUrl = PICTURE_URL.format(it.metadata.pictureUrl),
+                    contentId = it.metadata.contentId,
                     name = it.metadata.title,
                     status = F1TvSessionStatus.from(it.metadata.contentSubtype),
                     period = InstantPeriod( //TODO derive this?
@@ -137,19 +141,22 @@ class F1TvClient @Inject constructor(
         )
     }
 
-    suspend fun getViewing(channelId: F1TvChannelId, token: F1TvToken): F1TvViewing {
-        val body = F1TvViewingRequest(
-            channelUrl = channelId.value
-        ).toJsonRequestBody(viewingRequestJsonAdapter)
+    suspend fun getViewing(
+        channelId: String?,
+        contentId: String,
+        token: JWT
+    ): F1TvViewing {
         val request = Request.Builder()
-            .url("$ROOT_URL/api/viewings")
-            .post(body)
-            .header("Authorization", "JWT ${token.value}")
+            .url(PLAY_URL.format(contentId) + if (channelId != null) "&channelId=$channelId" else "")
+            .get()
+            .header("apiKey", F1Client.API_KEY)
+            .header("User-Agent", "RaceControl f1viewer")
+            .header("ascendontoken", token.toString())
             .build()
         val response = request.execute(httpClient).parseJsonBody(viewingResponseJsonAdapter)
-        Log.d(TAG, "Fetched viewing url for channel $channelId")
+        Log.d(TAG, "Fetched viewing url for channel $channelId - $contentId")
         return F1TvViewing(
-            url = Uri.parse(response.tokenisedUrl)
+            url = Uri.parse(response.resultObj.url)
         )
     }
 

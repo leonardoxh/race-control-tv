@@ -16,7 +16,6 @@ import com.google.android.exoplayer2.upstream.HttpDataSource
 import com.google.android.exoplayer2.util.EventLogger
 import dagger.hilt.android.AndroidEntryPoint
 import fr.groggy.racecontrol.tv.core.ViewingService
-import fr.groggy.racecontrol.tv.f1tv.F1TvChannelId
 import fr.groggy.racecontrol.tv.f1tv.F1TvViewing
 import fr.groggy.racecontrol.tv.ui.player.ExoPlayerPlaybackTransportControlGlue
 import javax.inject.Inject
@@ -29,13 +28,22 @@ class ChannelPlaybackFragment : VideoSupportFragment() {
         private val TAG = ChannelPlaybackFragment::class.simpleName
 
         private val CHANNEL_ID = "${ChannelPlaybackFragment::class}.CHANNEL_ID"
+        private val CONTENT_ID = "${ChannelPlaybackFragment::class}.CONTENT_ID"
 
-        fun putChannelId(intent: Intent, channelId: F1TvChannelId) {
-            intent.putExtra(CHANNEL_ID, channelId.value)
+        fun putChannelId(intent: Intent, channelId: String?) {
+            intent.putExtra(CHANNEL_ID, channelId)
         }
 
-        fun findChannelId(activity: Activity): F1TvChannelId? =
-            activity.intent.getStringExtra(CHANNEL_ID)?.let { F1TvChannelId(it) }
+        fun putContentId(intent: Intent, contentId: String) {
+            intent.putExtra(CONTENT_ID, contentId)
+        }
+
+        fun findChannelId(activity: Activity): String? =
+            activity.intent.getStringExtra(CHANNEL_ID)
+
+        fun findContentId(activity: Activity): String? {
+            return activity.intent.getStringExtra(CONTENT_ID)
+        }
     }
 
     @Inject lateinit var viewingService: ViewingService
@@ -70,14 +78,16 @@ class ChannelPlaybackFragment : VideoSupportFragment() {
         val glue = ExoPlayerPlaybackTransportControlGlue(requireActivity(), player, trackSelector)
         glue.host = VideoSupportFragmentGlueHost(this)
 
-        val channelId = findChannelId(requireActivity())!!
+        val contentId = findContentId(requireActivity()) ?: return requireActivity().finish()
+        val channelId = findChannelId(requireActivity())
         lifecycleScope.launchWhenStarted {
-            val viewing = viewingService.getViewing(channelId)
+            val viewing = viewingService.getViewing(channelId, contentId)
             onViewingCreated(viewing)
         }
     }
 
     private fun onViewingCreated(viewing: F1TvViewing) {
+        Log.d("ChannelPlayback", "Viewing is ready $viewing")
         if (!player.isPlaying) { //IF is playing already just ignore these calls
             val mediaSource = mediaSourceFactory.createMediaSource(viewing.url)
             player.prepare(mediaSource)

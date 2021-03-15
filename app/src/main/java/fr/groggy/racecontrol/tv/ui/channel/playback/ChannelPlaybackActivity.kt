@@ -7,7 +7,6 @@ import android.util.Log
 import androidx.fragment.app.FragmentActivity
 import dagger.hilt.android.AndroidEntryPoint
 import fr.groggy.racecontrol.tv.R
-import fr.groggy.racecontrol.tv.f1tv.F1TvChannelId
 
 @AndroidEntryPoint
 class ChannelPlaybackActivity : FragmentActivity() {
@@ -15,11 +14,15 @@ class ChannelPlaybackActivity : FragmentActivity() {
     companion object {
         private val TAG = ChannelPlaybackActivity::class.simpleName
 
-        fun intent(context: Context, channelId: F1TvChannelId): Intent {
+        fun intent(context: Context, channelId: String?, contentId: String): Intent {
             val intent = Intent(context, ChannelPlaybackActivity::class.java)
             ChannelPlaybackFragment.putChannelId(
                 intent,
                 channelId
+            )
+            ChannelPlaybackFragment.putContentId(
+                intent,
+                contentId
             )
             return intent
         }

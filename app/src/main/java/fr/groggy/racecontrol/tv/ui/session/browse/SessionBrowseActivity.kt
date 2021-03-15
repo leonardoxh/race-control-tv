@@ -40,7 +40,11 @@ class SessionBrowseActivity : FragmentActivity() {
         lifecycleScope.launchWhenCreated {
             when (val session = viewModel.sessionLoaded(eventId)) {
                 is SingleChannelSession -> {
-                    val intent = ChannelPlaybackActivity.intent(this@SessionBrowseActivity, session.channel)
+                    val intent = ChannelPlaybackActivity.intent(
+                        this@SessionBrowseActivity,
+                        session.channel.value,
+                        session.contentId
+                    )
                     startActivity(intent)
                     finish()
                 }
@@ -56,7 +60,7 @@ class SessionBrowseActivity : FragmentActivity() {
     override fun onStart() {
         Log.d(TAG, "onStart")
         super.onStart()
-        //TODO whatft?
+        //TODO - Load the channels check_additional_streams
         //lifecycleScope.launchWhenStarted { sessionService.loadSessionWithImagesAndChannels(sessionId) }
     }
 

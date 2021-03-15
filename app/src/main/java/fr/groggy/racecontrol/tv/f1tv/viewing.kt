@@ -11,7 +11,12 @@ data class F1TvViewingRequest(
 
 @JsonClass(generateAdapter = true)
 data class F1TvViewingResponse(
-    @Json(name = "tokenised_url") val tokenisedUrl: String
+    val resultObj: F1TvViewingResponseResultObject
+)
+
+@JsonClass(generateAdapter = true)
+data class F1TvViewingResponseResultObject(
+    val url: String
 )
 
 data class F1TvViewing(

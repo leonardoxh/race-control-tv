@@ -22,7 +22,7 @@ data class F1TvSessionResult(
 
 @JsonClass(generateAdapter = true)
 data class F1TvSessionResultContainer(
-    val id: String, //ID to play
+    val id: String,
     val metadata: F1TvSessionMetadata
 )
 
@@ -30,8 +30,9 @@ data class F1TvSessionResultContainer(
 data class F1TvSessionMetadata(
     val emfAttributes: F1TvSessionEmfAttributes,
     val title: String,
-    val pictureUrl: String,
-    val contentSubtype: String
+    val pictureUrl: String?,
+    val contentSubtype: String,
+    val contentId: String
 )
 
 @JsonClass(generateAdapter = true)
@@ -62,6 +63,8 @@ data class F1TvSession(
     val id: F1TvSessionId,
     val name: String,
     val eventId: String,
+    val pictureUrl: String,
+    val contentId: String,
     val status: F1TvSessionStatus,
     val period: InstantPeriod,
     val available: Boolean,

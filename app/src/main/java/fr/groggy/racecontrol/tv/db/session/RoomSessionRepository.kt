@@ -46,6 +46,8 @@ class RoomSessionRepository @Inject constructor(
             id = F1TvSessionId(session.id),
             name = session.name,
             eventId = session.eventId,
+            pictureUrl = session.pictureUrl,
+            contentId = session.contentId,
             status = when (session.status) {
                 REPLAY -> Replay
                 LIVE -> Live
@@ -76,6 +78,8 @@ class RoomSessionRepository @Inject constructor(
             id = session.id.value,
             name = session.name,
             eventId = session.eventId,
+            contentId = session.contentId,
+            pictureUrl = session.pictureUrl,
             status = when (session.status) {
                 Replay -> REPLAY
                 Live -> LIVE

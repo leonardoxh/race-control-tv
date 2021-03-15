@@ -65,7 +65,11 @@ class SessionGridFragment : VerticalGridSupportFragment(), OnItemViewClickedList
     private fun onUpdatedSession(session: Session) {
         when(session) {
             is SingleChannelSession -> {
-                val intent = ChannelPlaybackActivity.intent(requireActivity(), session.channel)
+                val intent = ChannelPlaybackActivity.intent(
+                    requireActivity(),
+                    session.channel.value,
+                    session.contentId
+                )
                 startActivity(intent)
                 requireActivity().finish()
             }
@@ -77,9 +81,10 @@ class SessionGridFragment : VerticalGridSupportFragment(), OnItemViewClickedList
     }
 
     override fun onItemClicked(itemViewHolder: Presenter.ViewHolder?, item: Any, rowViewHolder: RowPresenter.ViewHolder?, row: Row?) {
-        val channel = item as Channel
-        val intent = ChannelPlaybackActivity.intent(requireActivity(), channel.id)
-        startActivity(intent)
+//TODO - channels
+//        val channel = item as Channel
+//        val intent = ChannelPlaybackActivity.intent(requireActivity(), channel.id)
+//        startActivity(intent)
     }
 
 }

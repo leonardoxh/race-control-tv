@@ -25,7 +25,7 @@ class TokenService @Inject constructor(
         private val JWT_LEEWAY = Duration.ofMinutes(1)
     }
 
-    private suspend fun loadAndGetF1Token(): F1Token {
+    suspend fun loadAndGetF1Token(): F1Token {
         Log.d(TAG, "loadAndGetF1Token")
         return loadAndGetToken(f1TokenRepository, { it.value }) {
             val credentials = credentialsService.getF1Credentials()

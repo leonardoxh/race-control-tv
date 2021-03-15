@@ -5,11 +5,9 @@ import android.util.Log
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 import fr.groggy.racecontrol.tv.core.event.EventRepository
-import fr.groggy.racecontrol.tv.core.image.ImageRepository
 import fr.groggy.racecontrol.tv.core.season.SeasonRepository
 import fr.groggy.racecontrol.tv.core.session.SessionRepository
 import fr.groggy.racecontrol.tv.f1tv.*
-import fr.groggy.racecontrol.tv.f1tv.F1TvImageType.Companion.Thumbnail
 import fr.groggy.racecontrol.tv.f1tv.F1TvSessionStatus.Companion.Live
 import fr.groggy.racecontrol.tv.ui.DataClassByIdDiffCallback
 import fr.groggy.racecontrol.tv.ui.session.SessionCard
@@ -18,7 +16,6 @@ import kotlinx.coroutines.flow.*
 
 class SeasonBrowseViewModel @ViewModelInject constructor(
     private val eventRepository: EventRepository,
-    private val imageRepository: ImageRepository,
     private val seasonRepository: SeasonRepository,
     private val sessionRepository: SessionRepository
 ) : ViewModel() {
@@ -71,9 +68,10 @@ class SeasonBrowseViewModel @ViewModelInject constructor(
             .flatMapLatest { sessions -> sessions
                 .filter { it.available && it.channels.isNotEmpty() }
                 .sortedByDescending { it.period.start }
-                .traverse { session -> thumbnail(session.images)
+                .traverse { session -> thumbnail(session)
                     .map { thumbnail -> Session(
                         id = session.id,
+                        contentId = session.contentId,
                         name = session.name,
                         live = session.status == Live,
                         thumbnail = thumbnail,
@@ -84,18 +82,11 @@ class SeasonBrowseViewModel @ViewModelInject constructor(
             .distinctUntilChanged()
             .onEach { Log.d(TAG, "VM sessions changed") }
 
-    private fun thumbnail(ids: List<F1TvImageId>): Flow<Image?> =
-        imageRepository.observe(ids)
-            .onEach { Log.d(TAG, "Images changed") }
-            .map { images -> images
-                .find { it.type == Thumbnail }
-                ?.let { Image(
-                    id = it.id,
-                    url = it.url
-                ) }
-            }
-            .distinctUntilChanged()
-            .onEach { Log.d(TAG, "VM thumbnail changed") }
+    private fun thumbnail(session: F1TvSession): Flow<Image> {
+        return flowOf(
+            Image(Uri.parse(session.pictureUrl))
+        )
+    }
 
 }
 
@@ -112,6 +103,7 @@ data class Event(
 
 data class Session(
     val id: F1TvSessionId,
+    val contentId: String,
     override val name: String,
     override val live: Boolean,
     override val thumbnail: Image?,
@@ -125,6 +117,5 @@ data class Session(
 }
 
 data class Image(
-    val id: F1TvImageId,
     override val url: Uri
 ) : SessionCard.Image

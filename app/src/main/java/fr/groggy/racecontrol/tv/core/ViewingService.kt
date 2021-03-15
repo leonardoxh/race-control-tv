@@ -2,7 +2,6 @@ package fr.groggy.racecontrol.tv.core
 
 import android.util.Log
 import fr.groggy.racecontrol.tv.core.token.TokenService
-import fr.groggy.racecontrol.tv.f1tv.F1TvChannelId
 import fr.groggy.racecontrol.tv.f1tv.F1TvClient
 import fr.groggy.racecontrol.tv.f1tv.F1TvViewing
 import javax.inject.Inject
@@ -18,10 +17,10 @@ class ViewingService @Inject constructor(
         private val TAG = ViewingService::class.simpleName
     }
 
-    suspend fun getViewing(channelId: F1TvChannelId): F1TvViewing {
-        Log.d(TAG, "getViewing")
-        val token = tokenService.loadAndGetF1TvToken()
-        return f1Tv.getViewing(channelId, token)
+    suspend fun getViewing(channelId: String?, contentId: String): F1TvViewing {
+        Log.d(TAG, "getViewing $channelId - $contentId")
+        val token = tokenService.loadAndGetF1Token()
+        return f1Tv.getViewing(channelId, contentId, token.value)
     }
 
 }

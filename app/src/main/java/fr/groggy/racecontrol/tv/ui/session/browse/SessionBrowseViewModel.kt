@@ -41,12 +41,12 @@ class SessionBrowseViewModel @ViewModelInject constructor(
             .flatMapLatest { session ->
                 session.channels.singleOrNull()
                     ?.let { channel -> flowOf(SingleChannelSession(
-                        id = session.id,
+                        contentId = session.contentId,
                         channel = channel
                     )) }
                     ?: channels(session.channels)
                         .map { channels -> MultiChannelsSession(
-                            id = session.id,
+                            contentId = session.contentId,
                             name = session.name,
                             channels = channels
                         ) }
@@ -105,16 +105,16 @@ class SessionBrowseViewModel @ViewModelInject constructor(
 }
 
 sealed class Session {
-    abstract val id: F1TvSessionId
+    abstract val contentId: String
 }
 
 data class SingleChannelSession(
-    override val id: F1TvSessionId,
+    override val contentId: String,
     val channel: F1TvChannelId
 ) : Session()
 
 data class MultiChannelsSession(
-    override val id: F1TvSessionId,
+    override val contentId: String,
     val name: String,
     val channels: List<Channel>
 ) : Session()
