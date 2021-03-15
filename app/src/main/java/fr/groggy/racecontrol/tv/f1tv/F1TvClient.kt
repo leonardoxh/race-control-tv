@@ -31,7 +31,7 @@ class F1TvClient @Inject constructor(
 
         private const val GROUP_ID = 14 //TODO this might need to be migrated to the correct ONE
         private const val LIST_SEASON = "/ALL/PAGE/SEARCH/VOD/F1_TV_Pro_Monthly/$GROUP_ID?filter_objectSubtype=Meeting&filter_season=%s&filter_fetchAll=Y&filter_orderByFom=Y"
-
+        private const val LIST_SESSIONS = "/ALL/PAGE/SANDWICH/F1_TV_Pro_Monthly/$GROUP_ID?meetingId=%s&title=weekend-sessions"
     }
 
     private val authenticateRequestJsonAdapter = moshi.adapter(F1TvAuthenticateRequest::class.java)
@@ -75,21 +75,31 @@ class F1TvClient @Inject constructor(
         )
     }
 
-    suspend fun getSession(id: F1TvSessionId): F1TvSession { //TODO !!!! FUCK THIS CRAP
-        val response = get(id.value, sessionResponseJsonAdapter)
-        Log.d(TAG, "Fetched session $id")
-        return F1TvSession(
-            id = F1TvSessionId(response.self),
-            name = response.name,
-            status = F1TvSessionStatus.from(response.status),
-            period = InstantPeriod(
-                start = OffsetDateTime.parse(response.startTime).toInstant(),
-                end = OffsetDateTime.parse(response.endTime).toInstant()
-            ),
-            available = response.availabilityDetails.isAvailable,
-            images = response.imageUrls.map { F1TvImageId(it) },
-            channels = response.channelUrls.map { F1TvChannelId(it) }
-        )
+    suspend fun getSessions(event: F1TvSeasonEvent): List<F1TvSession> { //TODO !!!! FUCK THIS CRAP
+        try {
+            val response = get(LIST_SESSIONS.format(event.meetingKey), sessionResponseJsonAdapter)
+            Log.d(TAG, "Fetched session ${event.id}")
+
+            return response.resultObj.containers.map {
+                F1TvSession(
+                    id = F1TvSessionId(it.id),
+                    eventId = event.id,
+                    name = it.metadata.title,
+                    status = F1TvSessionStatus.from(it.metadata.contentSubtype),
+                    period = InstantPeriod( //TODO derive this?
+                        start = OffsetDateTime.now().toInstant(),
+                        end = OffsetDateTime.now().toInstant()
+                    ),
+                    available = true,
+                    images = listOf(),
+                    channels = listOf() //TODO get of channels url
+                )
+            }
+        } catch (e: Exception) {
+            /* The pre seasons for example are not available to query */
+            //TODO what do we do here?
+            return listOf()
+        }
     }
 
     suspend fun getImage(id: F1TvImageId): F1TvImage {

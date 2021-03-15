@@ -25,7 +25,7 @@ class SessionService @Inject constructor(
     suspend fun loadSessionsWithImages(season: F1TvSeason) {
         Log.d(TAG, "loadSessionsWithImages")
 
-        val sessions = ids.concurrentMap { f1Tv.getSession(it) }
+        val sessions = season.events.map { f1Tv.getSessions(it) }.flatten()
         repository.save(sessions)
         val (available, unavailable) = sessions.partition { it.available }
         (available.sortedByDescending { it.period.start } + unavailable)
@@ -34,10 +34,10 @@ class SessionService @Inject constructor(
 
     suspend fun loadSessionWithImagesAndChannels(id: F1TvSessionId) {
         Log.d(TAG, "loadSessionWithImagesAndChannels")
-        val session = f1Tv.getSession(id)
-        repository.save(session)
-        imageService.loadImages(session.images)
-        channelService.loadChannelsWithDrivers(session.channels)
+//        val session = f1Tv.getSession(id)
+//        repository.save(session)
+//        imageService.loadImages(session.images)
+//        channelService.loadChannelsWithDrivers(session.channels)
     }
 
 }

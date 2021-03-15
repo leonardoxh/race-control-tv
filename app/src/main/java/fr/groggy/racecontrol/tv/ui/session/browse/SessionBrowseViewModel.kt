@@ -27,10 +27,6 @@ class SessionBrowseViewModel @ViewModelInject constructor(
         private val TAG = SessionBrowseViewModel::class.simpleName
     }
 
-    init {
-        Log.d(TAG, "init")
-    }
-
     suspend fun sessionLoaded(id: F1TvSessionId): Session =
         session(id)
             .filter { session -> when(session) {

@@ -35,7 +35,7 @@ class SeasonBrowseViewModel @ViewModelInject constructor(
         season.filter { it.events.isNotEmpty() }.first()
     }
 
-    suspend fun season(archive: Archive): Flow<Season> =
+    private suspend fun season(archive: Archive): Flow<Season> =
         seasonRepository.observe(archive)
             .onEach { Log.d(TAG, "Season changed") }
             .filterNotNull()

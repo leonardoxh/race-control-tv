@@ -52,7 +52,7 @@ class RoomSeasonRepository @Inject constructor(
                 name = it.title,
                 startDate = 0,
                 endDate = 0,
-                sessions = "0" //TODO
+                sessions = "season.year.toString()" //TODO
             )
         }
         database.eventDao().upsert(entities)

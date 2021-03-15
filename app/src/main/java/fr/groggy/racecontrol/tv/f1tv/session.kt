@@ -3,6 +3,7 @@ package fr.groggy.racecontrol.tv.f1tv
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import fr.groggy.racecontrol.tv.core.InstantPeriod
+import java.util.*
 
 @JsonClass(generateAdapter = true)
 data class F1TVSessionAvailabilityDetailsResponse(
@@ -11,15 +12,34 @@ data class F1TVSessionAvailabilityDetailsResponse(
 
 @JsonClass(generateAdapter = true)
 data class F1TvSessionResponse(
-    val self: String,
-    val name: String,
-    val status: String,
-    @Json(name = "image_urls") val imageUrls: List<String>,
-    @Json(name = "channel_urls") val channelUrls: List<String>,
-    @Json(name = "start_time") val startTime: String,
-    @Json(name = "end_time") val endTime: String,
-    @Json(name = "availability_details") val availabilityDetails: F1TVSessionAvailabilityDetailsResponse
+    val resultObj: F1TvSessionResult
 )
+
+@JsonClass(generateAdapter = true)
+data class F1TvSessionResult(
+    val containers: List<F1TvSessionResultContainer>
+)
+
+@JsonClass(generateAdapter = true)
+data class F1TvSessionResultContainer(
+    val id: String, //ID to play
+    val metadata: F1TvSessionMetadata
+)
+
+@JsonClass(generateAdapter = true)
+data class F1TvSessionMetadata(
+    val emfAttributes: F1TvSessionEmfAttributes,
+    val title: String,
+    val pictureUrl: String,
+    val contentSubtype: String
+)
+
+@JsonClass(generateAdapter = true)
+data class F1TvSessionEmfAttributes(
+    @Json(name = "MeetingKey") val meetingKey: String
+)
+
+
 
 inline class F1TvSessionId(val value: String)
 
@@ -31,7 +51,7 @@ sealed class F1TvSessionStatus {
         data class Unknown(val value: String) : F1TvSessionStatus()
 
         fun from(value: String): F1TvSessionStatus =
-            when(value) {
+            when (value.toLowerCase(Locale.ROOT)) {
                 "replay" -> Replay
                 "live" -> Live
                 "upcoming" -> Upcoming
