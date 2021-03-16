@@ -106,27 +106,31 @@ class F1TvClient @Inject constructor(
     }
 
     suspend fun getChannels(contentId: String): List<F1TvChannel> {
-        val response = get(LIST_CHANNELS.format(contentId), channelResponseJsonAdapter)
-        return response.resultObj.containers.firstOrNull()?.metadata?.additionalStreams?.map {
-            val channelIdAndContentId = it.playbackUrl.split("CONTENT/PLAY?")
-                .last()
-                .split('&')
+        try {
+            val response = get(LIST_CHANNELS.format(contentId), channelResponseJsonAdapter)
+            return response.resultObj.containers.firstOrNull()?.metadata?.additionalStreams?.map {
+                val channelIdAndContentId = it.playbackUrl.split("CONTENT/PLAY?")
+                    .last()
+                    .split('&')
 
-            if (it.type == "obc") {
-                F1TvOnboardChannel(
-                    channelId = channelIdAndContentId.first().split("=").last(),
-                    contentId = channelIdAndContentId.last().split("=").last(),
-                    name = it.title,
-                    driver = F1TvDriverId("") //TODO - do we have to load the driver ?
-                )
-            } else {
-                F1TvBasicChannel(
-                    channelId = channelIdAndContentId.first().split("=").last(),
-                    contentId = channelIdAndContentId.last().split("=").last(),
-                    type = F1TvBasicChannelType.from(it.type, it.title)
-                )
-            }
-        } ?: listOf()
+                if (it.type == "obc") {
+                    F1TvOnboardChannel(
+                        channelId = channelIdAndContentId.first().split("=").last(),
+                        contentId = channelIdAndContentId.last().split("=").last(),
+                        name = it.title,
+                        driver = F1TvDriverId("") //TODO - do we have to load the driver ?
+                    )
+                } else {
+                    F1TvBasicChannel(
+                        channelId = channelIdAndContentId.first().split("=").last(),
+                        contentId = channelIdAndContentId.last().split("=").last(),
+                        type = F1TvBasicChannelType.from(it.type, it.title)
+                    )
+                }
+            } ?: listOf()
+        } catch (e: Exception) {
+            return listOf()
+        }
     }
 
 
