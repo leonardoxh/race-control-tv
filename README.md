@@ -9,9 +9,6 @@ Multiple channels playback is not supported. Audio selection (language or no com
 
 Application is not translated and only available in english.
 
-## Attention
-F1 has now (on Google Chrome) a native cast button, that works pretty decent, and also works with the new APIs (witch this app currently **does not** support
-
 ## Install
 
 The app is available on [Google Playstore](https://play.google.com/store/apps/details?id=com.github.leonardoxh.f1)
