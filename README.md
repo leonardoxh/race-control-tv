@@ -5,9 +5,11 @@ Android TV application to watch content from [F1 TV](https://f1tv.formula1.com).
 At this time, content from the current session and old sessions are availble, including F1, F2, F3...
 Onboard channels when available are supported, as well as technical channels like the tracker channel.
 
-Multiple channels playback is not supported. Audio selection (language or no commentary) is supported.
+This app currently use the F1TV 2.0 apis and support stream content of 1080p at 50FPS
 
-Application is not translated and only available in english.
+Audio selection (language or no commentary) is supported.
+
+Application is not translated and only available in english. Feel free to translate it an open a PR :D
 
 ## Install
 
