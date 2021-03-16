@@ -1,14 +1,36 @@
 package fr.groggy.racecontrol.tv.f1tv
 
-import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import java.util.*
 
 @JsonClass(generateAdapter = true)
 data class F1TvChannelResponse(
-    val self: String,
-    val name: String,
-    @Json(name = "channel_type") val channelType: String,
-    @Json(name = "driveroccurrence_urls") val driverOccurrenceUrls: List<String>
+    val resultObj: F1TvChannelResultObject
+)
+
+@JsonClass(generateAdapter = true)
+data class F1TvChannelResultObject(
+    val containers: List<F1TvChannelContainer>
+)
+
+@JsonClass(generateAdapter = true)
+data class F1TvChannelContainer(
+    val metadata: F1TvChannelMetadata
+)
+
+@JsonClass(generateAdapter = true)
+data class F1TvChannelMetadata(
+    val additionalStreams: List<F1TvChannelAdditionalStream>?
+)
+
+@JsonClass(generateAdapter = true)
+data class F1TvChannelAdditionalStream(
+    val title: String,
+    val driverFirstName: String?,
+    val driverLastName: String?,
+    val driverImg: String?, //For some reason this is always empty
+    val playbackUrl: String,
+    val type: String
 )
 
 inline class F1TvChannelId(val value: String)
@@ -24,7 +46,7 @@ sealed class F1TvBasicChannelType {
         fun from(type: String, name: String): F1TvBasicChannelType =
             when(type) {
                 "wif" -> Wif
-                "other" -> when(name) {
+                "additional" -> when(name.toLowerCase(Locale.ROOT)) {
                     "pit lane" -> PitLane
                     "driver" -> Tracker
                     "data" -> Data
@@ -36,16 +58,19 @@ sealed class F1TvBasicChannelType {
 }
 
 sealed class F1TvChannel {
-    abstract val id: F1TvChannelId
+    abstract val channelId: String?
+    abstract val contentId: String
 }
 
 data class F1TvBasicChannel(
-    override val id: F1TvChannelId,
+    override val channelId: String,
+    override val contentId: String,
     val type: F1TvBasicChannelType
 ) : F1TvChannel()
 
 data class F1TvOnboardChannel(
-    override val id: F1TvChannelId,
+    override val channelId: String,
+    override val contentId: String,
     val name: String,
     val driver: F1TvDriverId
 ) : F1TvChannel()

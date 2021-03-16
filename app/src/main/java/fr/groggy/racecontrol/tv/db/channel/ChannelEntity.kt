@@ -6,7 +6,8 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "channels")
 data class ChannelEntity(
-    @PrimaryKey val id: String,
+    @PrimaryKey val channelId: String,
+    @ColumnInfo(name = "contentId") val contentId: String,
     @ColumnInfo(name = "type") val type: String,
     @ColumnInfo(name = "name") val name: String?,
     @ColumnInfo(name = "driver") val driver: String?

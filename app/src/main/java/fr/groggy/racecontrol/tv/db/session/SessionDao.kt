@@ -15,7 +15,7 @@ interface SessionDao {
     @Insert(onConflict = REPLACE)
     suspend fun upsert(sessions: List<SessionEntity>)
 
-    @Query("SELECT * FROM sessions WHERE event_id = :id")
+    @Query("SELECT * FROM sessions WHERE id = :id")
     fun observeById(id: String): Flow<SessionEntity>
 
     @Query("SELECT * FROM sessions WHERE event_id IN (:ids)")

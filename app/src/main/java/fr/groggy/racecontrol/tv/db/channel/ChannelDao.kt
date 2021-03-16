@@ -12,7 +12,7 @@ interface ChannelDao {
     @Insert(onConflict = REPLACE)
     suspend fun upsert(channels: List<ChannelEntity>)
 
-    @Query("SELECT * FROM channels WHERE id IN (:ids)")
-    fun observeById(ids: List<String>): Flow<List<ChannelEntity>>
+    @Query("SELECT * FROM channels WHERE contentId = :contentId")
+    fun observeByContentId(contentId: String): Flow<List<ChannelEntity>>
 
 }

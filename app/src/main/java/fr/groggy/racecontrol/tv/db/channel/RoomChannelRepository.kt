@@ -29,19 +29,21 @@ class RoomChannelRepository @Inject constructor(
 
     private val dao = database.channelDao()
 
-    override fun observe(ids: List<F1TvChannelId>): Flow<List<F1TvChannel>> =
-        dao.observeById(ids.map { it.value })
+    override fun observe(contentId: String): Flow<List<F1TvChannel>> {
+        return dao.observeByContentId(contentId)
             .map { channels -> channels.map { toChannel(it) } }
             .distinctUntilChanged()
+    }
 
     private fun toChannel(channel: ChannelEntity): F1TvChannel {
-        val id = F1TvChannelId(channel.id)
         return if (channel.type == ONBOARD) F1TvOnboardChannel(
-            id = id,
+            channelId = channel.channelId,
+            contentId = channel.contentId,
             name = channel.name!!,
             driver = F1TvDriverId(channel.driver!!)
         ) else F1TvBasicChannel(
-            id = id,
+            channelId = channel.channelId,
+            contentId = channel.contentId,
             type = when (channel.type) {
                 WIF -> Wif
                 PIT_LANE -> PitLane
@@ -57,8 +59,8 @@ class RoomChannelRepository @Inject constructor(
         dao.upsert(entities)
     }
 
-    private fun toEntity(channel: F1TvChannel): ChannelEntity =
-        when (channel) {
+    private fun toEntity(channel: F1TvChannel): ChannelEntity {
+        return when (channel) {
             is F1TvBasicChannel -> {
                 val (type, name) = when (channel.type) {
                     Wif -> WIF to null
@@ -68,18 +70,21 @@ class RoomChannelRepository @Inject constructor(
                     is Unknown -> channel.type.type to channel.type.name
                 }
                 ChannelEntity(
-                    id = channel.id.value,
+                    channelId = channel.channelId,
+                    contentId = channel.contentId,
                     type = type,
                     name = name,
                     driver = null
                 )
             }
             is F1TvOnboardChannel -> ChannelEntity(
-                id = channel.id.value,
+                channelId = channel.channelId,
+                contentId = channel.contentId,
                 type = ONBOARD,
                 name = channel.name,
                 driver = channel.driver.value
             )
         }
+    }
 
 }

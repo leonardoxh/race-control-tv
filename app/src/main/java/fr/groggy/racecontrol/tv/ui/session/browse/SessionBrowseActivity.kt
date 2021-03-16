@@ -9,10 +9,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import fr.groggy.racecontrol.tv.R
-import fr.groggy.racecontrol.tv.core.session.SessionService
-import fr.groggy.racecontrol.tv.f1tv.F1TvSessionId
 import fr.groggy.racecontrol.tv.ui.channel.playback.ChannelPlaybackActivity
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class SessionBrowseActivity : FragmentActivity() {
@@ -20,25 +17,31 @@ class SessionBrowseActivity : FragmentActivity() {
     companion object {
         private val TAG = SessionBrowseActivity::class.simpleName
 
-        fun intent(context: Context, sessionId: F1TvSessionId): Intent { //TODO?
+        fun intent(
+            context: Context,
+            sessionId: String,
+            contentId: String
+        ): Intent {
             val intent = Intent(context, SessionBrowseActivity::class.java)
-            //SessionGridFragment.putSession(intent, sessionId)
+            SessionGridFragment.putContentId(intent, contentId)
+            SessionGridFragment.putSessionId(intent, sessionId)
             return intent
         }
     }
-
-    @Inject lateinit var sessionService: SessionService
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d(TAG, "onCreate")
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_session_browse)
 
-        val eventId = SessionGridFragment.findEventId(this@SessionBrowseActivity)
+        val contentId = SessionGridFragment.findContentId(this)
+            ?: return finish()
+        val sessionId = SessionGridFragment.findSessionId(this)
             ?: return finish()
         val viewModel: SessionBrowseViewModel by viewModels()
-        lifecycleScope.launchWhenCreated {
-            when (val session = viewModel.sessionLoaded(eventId)) {
+
+        lifecycleScope.launchWhenStarted {
+            when (val session = viewModel.sessionLoaded(sessionId, contentId)) {
                 is SingleChannelSession -> {
                     val intent = ChannelPlaybackActivity.intent(
                         this@SessionBrowseActivity,
@@ -55,13 +58,6 @@ class SessionBrowseActivity : FragmentActivity() {
                 }
             }
         }
-    }
-
-    override fun onStart() {
-        Log.d(TAG, "onStart")
-        super.onStart()
-        //TODO - Load the channels check_additional_streams
-        //lifecycleScope.launchWhenStarted { sessionService.loadSessionWithImagesAndChannels(sessionId) }
     }
 
 }

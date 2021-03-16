@@ -97,10 +97,7 @@ class SeasonBrowseFragment : BrowseSupportFragment(), OnItemViewClickedListener 
 
     override fun onItemClicked(itemViewHolder: Presenter.ViewHolder, item: Any, rowViewHolder: RowPresenter.ViewHolder, row: Row) {
         val session = item as Session
-        val intent = session.channels.singleOrNull()
-            ?.run { ChannelPlaybackActivity.intent(requireActivity(), value, session.contentId) }
-            //TODO MULTIPLE CHANNELS
-            ?: SessionBrowseActivity.intent(requireActivity(), session.id)
+        val intent = SessionBrowseActivity.intent(requireActivity(), session.id.value, session.contentId)
         startActivity(intent)
     }
 

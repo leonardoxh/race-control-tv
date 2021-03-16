@@ -10,8 +10,6 @@ import androidx.leanback.app.VerticalGridSupportFragment
 import androidx.leanback.widget.*
 import androidx.lifecycle.asLiveData
 import dagger.hilt.android.AndroidEntryPoint
-import fr.groggy.racecontrol.tv.f1tv.F1TvEventId
-import fr.groggy.racecontrol.tv.f1tv.F1TvSession
 import fr.groggy.racecontrol.tv.ui.channel.ChannelCardPresenter
 import fr.groggy.racecontrol.tv.ui.channel.playback.ChannelPlaybackActivity
 import javax.inject.Inject
@@ -26,14 +24,24 @@ class SessionGridFragment : VerticalGridSupportFragment(), OnItemViewClickedList
 
         private const val COLUMNS = 5
 
-        private val EVENT_ID = "${SessionGridFragment::class}.EVENT_ID"
+        private val CONTENT_ID = "${SessionGridFragment::class}.CONTENT_ID"
+        private val SESSION_ID = "${SessionGridFragment::class}.SESSION_ID"
 
-        fun putSession(intent: Intent, session: F1TvSession) {
-            intent.putExtra(EVENT_ID, session.eventId)
+        fun putContentId(intent: Intent, contentId: String) {
+            intent.putExtra(CONTENT_ID, contentId)
         }
 
-        fun findEventId(activity: Activity): F1TvEventId? =
-            activity.intent.getStringExtra(EVENT_ID)?.let(::F1TvEventId)
+        fun putSessionId(intent: Intent, sessionId: String) {
+            intent.putExtra(SESSION_ID, sessionId)
+        }
+
+        fun findSessionId(activity: Activity): String? {
+            return activity.intent.getStringExtra(SESSION_ID)
+        }
+
+        fun findContentId(activity: Activity): String? {
+            return activity.intent.getStringExtra(CONTENT_ID)
+        }
     }
 
     @Inject lateinit var channelsCardPresenter: ChannelCardPresenter
@@ -46,9 +54,10 @@ class SessionGridFragment : VerticalGridSupportFragment(), OnItemViewClickedList
         setupUIElements()
         setupEventListeners()
 
-        val eventId = findEventId(requireActivity()) ?: return requireActivity().finish()
+        val sessionId = findSessionId(requireActivity()) ?: return requireActivity().finish()
+        val contentId = findContentId(requireActivity()) ?: return requireActivity().finish()
         val viewModel: SessionBrowseViewModel by viewModels({ requireActivity() })
-        viewModel.session(eventId).asLiveData().observe(this, this::onUpdatedSession)
+        viewModel.session(sessionId, contentId).asLiveData().observe(this, this::onUpdatedSession)
     }
 
     private fun setupUIElements() {
@@ -63,7 +72,7 @@ class SessionGridFragment : VerticalGridSupportFragment(), OnItemViewClickedList
     }
 
     private fun onUpdatedSession(session: Session) {
-        when(session) {
+        when (session) {
             is SingleChannelSession -> {
                 val intent = ChannelPlaybackActivity.intent(
                     requireActivity(),
@@ -81,10 +90,9 @@ class SessionGridFragment : VerticalGridSupportFragment(), OnItemViewClickedList
     }
 
     override fun onItemClicked(itemViewHolder: Presenter.ViewHolder?, item: Any, rowViewHolder: RowPresenter.ViewHolder?, row: Row?) {
-//TODO - channels
-//        val channel = item as Channel
-//        val intent = ChannelPlaybackActivity.intent(requireActivity(), channel.id)
-//        startActivity(intent)
+        val channel = item as Channel
+        val intent = ChannelPlaybackActivity.intent(requireActivity(), channel.id.value, channel.contentId)
+        startActivity(intent)
     }
 
 }

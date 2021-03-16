@@ -32,12 +32,9 @@ class SessionService @Inject constructor(
 //            .forEach { imageService.loadImages(it.images) }
     }
 
-    suspend fun loadSessionWithImagesAndChannels(id: F1TvSessionId) {
+    suspend fun loadChannels(contentId: String) {
         Log.d(TAG, "loadSessionWithImagesAndChannels")
-//        val session = f1Tv.getSession(id)
-//        repository.save(session)
-//        imageService.loadImages(session.images)
-//        channelService.loadChannelsWithDrivers(session.channels)
+        channelService.loadChannelsWithDrivers(contentId)
     }
 
 }

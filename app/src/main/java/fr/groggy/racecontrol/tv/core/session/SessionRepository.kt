@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface SessionRepository {
 
-    fun observe(id: F1TvEventId): Flow<F1TvSession>
+    fun observeById(sessionId: String): Flow<F1TvSession>
 
     fun observe(ids: List<F1TvEventId>): Flow<List<F1TvSession>>
 

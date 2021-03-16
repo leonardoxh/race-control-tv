@@ -9,6 +9,7 @@ import fr.groggy.racecontrol.tv.f1tv.F1TvSessionStatus.Companion.Live
 import fr.groggy.racecontrol.tv.f1tv.F1TvSessionStatus.Companion.Replay
 import fr.groggy.racecontrol.tv.f1tv.F1TvSessionStatus.Companion.Unknown
 import fr.groggy.racecontrol.tv.f1tv.F1TvSessionStatus.Companion.Upcoming
+import fr.groggy.racecontrol.tv.ui.session.browse.Session
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -31,9 +32,9 @@ class RoomSessionRepository @Inject constructor(
 
     private val dao = database.sessionDao()
 
-    override fun observe(id: F1TvEventId): Flow<F1TvSession> =
-        dao.observeById(id.value)
-            .map { toSession(it) }
+    override fun observeById(sessionId: String): Flow<F1TvSession> =
+        dao.observeById(sessionId)
+            .map(::toSession)
             .distinctUntilChanged()
 
     override fun observe(ids: List<F1TvEventId>): Flow<List<F1TvSession>> =
