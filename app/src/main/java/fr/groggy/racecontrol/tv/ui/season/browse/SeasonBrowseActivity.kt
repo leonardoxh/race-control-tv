@@ -54,11 +54,10 @@ class SeasonBrowseActivity : FragmentActivity() {
         Log.d(TAG, "onStart")
         super.onStart()
         lifecycleScope.launchWhenStarted {
-            //TODO not sure if this schedule thing is needed
-//            schedule(1.minutes) {
-//                val archive = SeasonBrowseFragment.findArchive(this@SeasonBrowseActivity)
-//                seasonService.loadSeason(archive)
-//            }
+            schedule(1.minutes) {
+                val archive = SeasonBrowseFragment.findArchive(this@SeasonBrowseActivity)
+                seasonService.loadSeason(archive)
+            }
         }
     }
 

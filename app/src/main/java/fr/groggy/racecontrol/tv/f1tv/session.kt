@@ -37,7 +37,9 @@ data class F1TvSessionMetadata(
 
 @JsonClass(generateAdapter = true)
 data class F1TvSessionEmfAttributes(
-    @Json(name = "MeetingKey") val meetingKey: String
+    @Json(name = "MeetingKey") val meetingKey: String,
+    @Json(name = "Meeting_Start_Date") val startDate: String,
+    @Json(name = "Meeting_End_Date") val endDate: String
 )
 
 inline class F1TvSessionId(val value: String)

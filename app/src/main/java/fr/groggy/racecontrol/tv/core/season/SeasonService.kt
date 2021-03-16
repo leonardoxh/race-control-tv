@@ -35,7 +35,6 @@ class SeasonService @Inject constructor(
         Log.d(TAG, "loadSeason ${archive.year}")
         val season = f1Tv.getSeason(archive)
         seasonRepository.save(season)
-//        eventService.loadEvents(season.events) //TODO will be discarded
         sessionService.loadSessionsWithImages(season)
     }
 }

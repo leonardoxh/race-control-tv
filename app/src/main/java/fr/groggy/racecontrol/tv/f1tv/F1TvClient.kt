@@ -66,9 +66,9 @@ class F1TvClient @Inject constructor(
                     contentId = it.metadata.contentId,
                     name = it.metadata.title,
                     status = F1TvSessionStatus.from(it.metadata.contentSubtype),
-                    period = InstantPeriod( //TODO derive this?
-                        start = OffsetDateTime.now().toInstant(),
-                        end = OffsetDateTime.now().toInstant()
+                    period = InstantPeriod(
+                        start = OffsetDateTime.parse(it.metadata.emfAttributes.startDate).toInstant(),
+                        end = OffsetDateTime.parse(it.metadata.emfAttributes.endDate).toInstant()
                     ),
                     available = true,
                     images = listOf(),
