@@ -37,6 +37,7 @@ class RoomSeasonRepository @Inject constructor(
         return F1TvSeason(
             year = Year.of(season.year),
             title = season.name,
+            detailAction = season.detailAction,
             events = seasonEvents
         )
     }
@@ -52,7 +53,7 @@ class RoomSeasonRepository @Inject constructor(
                 name = it.title,
                 startDate = 0,
                 endDate = 0,
-                sessions = "season.year.toString()" //TODO
+                sessions = "season.year.toString()"
             )
         }
         database.eventDao().upsert(entities)
@@ -61,6 +62,7 @@ class RoomSeasonRepository @Inject constructor(
     private fun toEntity(season: F1TvSeason): SeasonEntity =
         SeasonEntity(
             year = season.year.value,
+            detailAction = season.detailAction,
             name = season.title,
             events = season.events.joinToString(separator = ",", transform = { it.id })
         )

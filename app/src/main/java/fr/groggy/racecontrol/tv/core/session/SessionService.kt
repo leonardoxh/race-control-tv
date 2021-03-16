@@ -21,7 +21,7 @@ class SessionService @Inject constructor(
     suspend fun loadSessionsWithImages(season: F1TvSeason) {
         Log.d(TAG, "loadSessionsWithImages")
 
-        val sessions = season.events.map { f1Tv.getSessions(it) }.flatten()
+        val sessions = season.events.map { f1Tv.getSessions(it, season) }.flatten()
         repository.save(sessions)
     }
 

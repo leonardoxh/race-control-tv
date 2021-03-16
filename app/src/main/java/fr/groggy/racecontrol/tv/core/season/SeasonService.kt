@@ -16,7 +16,7 @@ class SeasonService @Inject constructor(
 ) {
     companion object {
         private val TAG = SeasonService::class.simpleName
-        private const val F1_ARCHIVE_START_YEAR = 2018
+        private const val F1_ARCHIVE_START_YEAR = 1981
     }
 
     fun listArchive(): List<Archive> {

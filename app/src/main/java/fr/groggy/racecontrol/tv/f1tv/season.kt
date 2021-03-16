@@ -17,7 +17,14 @@ data class F1TvSeasonResult(
 @JsonClass(generateAdapter = true)
 data class F1TvSeasonResultContainer(
     val id: String,
-    val metadata: F1TvSeasonMetadata
+    val metadata: F1TvSeasonMetadata,
+    val actions: List<F1TvSeasonAction>
+)
+
+@JsonClass(generateAdapter = true)
+data class F1TvSeasonAction(
+    val targetType: String,
+    val uri: String
 )
 
 @JsonClass(generateAdapter = true)
@@ -37,7 +44,8 @@ inline class F1TvSeasonId(val value: String)
 data class F1TvSeason(
     val year: Year,
     val title: String,
-    val events: List<F1TvSeasonEvent>
+    val events: List<F1TvSeasonEvent>,
+    val detailAction: String?
 )
 
 data class F1TvSeasonEvent(
