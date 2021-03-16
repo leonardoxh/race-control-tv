@@ -9,6 +9,7 @@ import fr.groggy.racecontrol.tv.utils.http.execute
 import fr.groggy.racecontrol.tv.utils.http.parseJsonBody
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import org.threeten.bp.Instant
 import org.threeten.bp.OffsetDateTime
 import org.threeten.bp.Year
 import javax.inject.Inject
@@ -36,6 +37,7 @@ class F1TvClient @Inject constructor(
     private val imageResponseJsonAdapter = moshi.adapter(F1TvImageResponse::class.java)
     private val channelResponseJsonAdapter = moshi.adapter(F1TvChannelResponse::class.java)
     private val driverResponseJsonAdapter = moshi.adapter(F1TvDriverResponse::class.java)
+    private val fallbackFetchInterval = Instant.now()
 
     suspend fun getSeason(archive: Archive): F1TvSeason {
         val response = get(LIST_SEASON.format(archive.year), seasonResponseJsonAdapter)
@@ -67,8 +69,8 @@ class F1TvClient @Inject constructor(
                     name = it.metadata.title,
                     status = F1TvSessionStatus.from(it.metadata.contentSubtype),
                     period = InstantPeriod(
-                        start = OffsetDateTime.parse(it.metadata.emfAttributes.startDate).toInstant(),
-                        end = OffsetDateTime.parse(it.metadata.emfAttributes.endDate).toInstant()
+                        start = parseOffsetDateSafely(it.metadata.emfAttributes.startDate),
+                        end = parseOffsetDateSafely(it.metadata.emfAttributes.endDate)
                     ),
                     available = true,
                     images = listOf(),
@@ -78,6 +80,18 @@ class F1TvClient @Inject constructor(
         } catch (e: Exception) {
             /* The pre seasons for example are not available to query */
             return listOf()
+        }
+    }
+
+    /*
+     * Addresses issues with F1 dates
+     * sometimes the start date is missing
+     */
+    private fun parseOffsetDateSafely(date: String): Instant {
+        return try {
+            OffsetDateTime.parse(date).toInstant()
+        } catch (_: Exception) {
+            fallbackFetchInterval //Less than ideal but at least we can see something
         }
     }
 

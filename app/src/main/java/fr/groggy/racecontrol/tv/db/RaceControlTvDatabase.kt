@@ -24,7 +24,7 @@ import fr.groggy.racecontrol.tv.db.session.SessionEntity
         SeasonEntity::class,
         SessionEntity::class
     ],
-    version = 1
+    version = 2
 )
 abstract class RaceControlTvDatabase : RoomDatabase() {
 
