@@ -3,6 +3,7 @@ package fr.groggy.racecontrol.tv.ui.session
 import android.net.Uri
 import android.util.Log
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.leanback.widget.ImageCardView
 import androidx.leanback.widget.ImageCardView.CARD_TYPE_FLAG_CONTENT
 import androidx.leanback.widget.ImageCardView.CARD_TYPE_FLAG_TITLE
@@ -27,6 +28,9 @@ class SessionCardPresenter: Presenter() {
             HEIGHT
         )
         view.cardType = CARD_TYPE_FLAG_TITLE or CARD_TYPE_FLAG_CONTENT
+
+        view.findViewById<TextView>(R.id.title_text)?.setLines(2)
+
         return ViewHolder(view)
     }
 
@@ -44,7 +48,6 @@ class SessionCardPresenter: Presenter() {
 
         Glide.with(viewHolder.view.context)
             .load(session.thumbnail?.url)
-            .centerCrop()
             .into(view.mainImageView)
     }
 
