@@ -4,11 +4,8 @@ import androidx.leanback.widget.ArrayObjectAdapter
 import androidx.leanback.widget.DiffCallback
 import androidx.leanback.widget.ListRow
 import fr.groggy.racecontrol.tv.ui.session.SessionCard
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-class EventListRowDiffCallback @Inject constructor() : DiffCallback<ListRow>() {
+class EventListRowDiffCallback: DiffCallback<ListRow>() {
 
     override fun areItemsTheSame(oldItem: ListRow, newItem: ListRow): Boolean =
         oldItem.headerItem.name == newItem.headerItem.name

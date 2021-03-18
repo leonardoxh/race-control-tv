@@ -14,12 +14,10 @@ import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import fr.groggy.racecontrol.tv.R
 import fr.groggy.racecontrol.tv.f1tv.Archive
-import fr.groggy.racecontrol.tv.ui.channel.playback.ChannelPlaybackActivity
 import fr.groggy.racecontrol.tv.ui.event.EventListRowDiffCallback
 import fr.groggy.racecontrol.tv.ui.session.SessionCardPresenter
 import fr.groggy.racecontrol.tv.ui.session.browse.SessionBrowseActivity
 import org.threeten.bp.Year
-import javax.inject.Inject
 
 @Keep
 @AndroidEntryPoint
@@ -42,10 +40,10 @@ class SeasonBrowseFragment : BrowseSupportFragment(), OnItemViewClickedListener 
         }
     }
 
-    @Inject lateinit var eventListRowDiffCallback: EventListRowDiffCallback
-    @Inject lateinit var sessionCardPresenter: SessionCardPresenter
+    private val eventListRowDiffCallback = EventListRowDiffCallback()
+    private val sessionCardPresenter = SessionCardPresenter()
 
-    private lateinit var eventsAdapter: ArrayObjectAdapter
+    private val eventsAdapter = ArrayObjectAdapter(ListRowPresenter())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d(TAG, "onCreate")
@@ -64,7 +62,6 @@ class SeasonBrowseFragment : BrowseSupportFragment(), OnItemViewClickedListener 
         headersState = HEADERS_ENABLED
         isHeadersTransitionOnBackEnabled = true
         brandColor = ContextCompat.getColor(requireContext(), R.color.fastlane_background)
-        eventsAdapter = ArrayObjectAdapter(ListRowPresenter())
         adapter = eventsAdapter
     }
 

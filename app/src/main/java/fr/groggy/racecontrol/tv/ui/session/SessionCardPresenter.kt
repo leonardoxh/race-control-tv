@@ -9,11 +9,8 @@ import androidx.leanback.widget.ImageCardView.CARD_TYPE_FLAG_TITLE
 import androidx.leanback.widget.Presenter
 import com.bumptech.glide.Glide
 import fr.groggy.racecontrol.tv.R
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-class SessionCardPresenter @Inject constructor() : Presenter() {
+class SessionCardPresenter: Presenter() {
 
     companion object {
         private val TAG = SessionCardPresenter::class.simpleName
