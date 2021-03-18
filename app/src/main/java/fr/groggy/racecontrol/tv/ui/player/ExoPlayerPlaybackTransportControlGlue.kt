@@ -1,6 +1,7 @@
 package fr.groggy.racecontrol.tv.ui.player
 
 import android.util.Log
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.leanback.media.PlaybackTransportControlGlue
 import androidx.leanback.media.PlayerAdapter
@@ -39,7 +40,7 @@ class ExoPlayerPlaybackTransportControlGlue(
         Action.NO_ID,
         activity.getString(R.string.audio_selection_dialog_title),
         null,
-        activity.getDrawable(R.drawable.lb_ic_search_mic_out)
+        ContextCompat.getDrawable(context, R.drawable.lb_ic_search_mic_out)
     )
 
     private var currentVideoFormat: Format? = null
