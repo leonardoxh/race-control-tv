@@ -14,8 +14,8 @@ android {
         applicationId = "com.github.leonardoxh.f1"
         minSdkVersion(21)
         targetSdkVersion(30)
-        versionCode = 12
-        versionName = "2.0.0"
+        versionCode = 13
+        versionName = "2.0.1"
     }
 
     signingConfigs {
@@ -67,15 +67,14 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinCoroutinesVersion")
 
     implementation("androidx.core:core-ktx:1.3.2")
-    implementation("androidx.fragment:fragment-ktx:1.3.0")
+    implementation("androidx.fragment:fragment-ktx:1.3.1")
     implementation("androidx.leanback:leanback:1.0.0")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.3.0")
 
     val hiltVersion = rootProject.extra["hiltVersion"]
-    val androidxHiltVersion = "1.0.0-alpha02"
+    val androidxHiltVersion = "1.0.0-beta01"
     implementation("com.google.dagger:hilt-android:$hiltVersion")
     kapt("com.google.dagger:hilt-android-compiler:$hiltVersion")
-    implementation("androidx.hilt:hilt-lifecycle-viewmodel:$androidxHiltVersion")
     kapt("androidx.hilt:hilt-compiler:$androidxHiltVersion")
 
     val okHttpVersion = "4.9.0"

@@ -2,8 +2,8 @@ package fr.groggy.racecontrol.tv.ui.session.browse
 
 import android.net.Uri
 import android.util.Log
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import fr.groggy.racecontrol.tv.core.channel.ChannelRepository
 import fr.groggy.racecontrol.tv.core.image.ImageRepository
 import fr.groggy.racecontrol.tv.core.session.SessionRepository
@@ -15,8 +15,10 @@ import fr.groggy.racecontrol.tv.ui.channel.BasicChannelCard
 import fr.groggy.racecontrol.tv.ui.channel.OnboardChannelCard
 import fr.groggy.racecontrol.tv.utils.coroutines.traverse
 import kotlinx.coroutines.flow.*
+import javax.inject.Inject
 
-class SessionBrowseViewModel @ViewModelInject constructor(
+@HiltViewModel
+class SessionBrowseViewModel @Inject constructor(
     private val channelRepository: ChannelRepository,
     private val imageRepository: ImageRepository,
     private val sessionRepository: SessionRepository,

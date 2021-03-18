@@ -3,7 +3,7 @@ package fr.groggy.racecontrol.tv.db
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ApplicationComponent
+import dagger.hilt.components.SingletonComponent
 import fr.groggy.racecontrol.tv.core.channel.ChannelRepository
 import fr.groggy.racecontrol.tv.core.driver.DriverRepository
 import fr.groggy.racecontrol.tv.core.event.EventRepository
@@ -18,7 +18,7 @@ import fr.groggy.racecontrol.tv.db.season.RoomSeasonRepository
 import fr.groggy.racecontrol.tv.db.session.RoomSessionRepository
 
 @Module
-@InstallIn(ApplicationComponent::class)
+@InstallIn(SingletonComponent::class)
 abstract class DatabaseBindingsModule {
 
     @Binds
