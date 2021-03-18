@@ -24,9 +24,11 @@ import kotlin.math.roundToInt
 class ExoPlayerPlaybackTransportControlGlue(
     private val activity: FragmentActivity,
     player: SimpleExoPlayer,
-    private val trackSelector: DefaultTrackSelector) :
-    PlaybackTransportControlGlue<LeanbackPlayerAdapter>(activity, LeanbackPlayerAdapter(activity, player, 1_000)),
-    AnalyticsListener {
+    private val trackSelector: DefaultTrackSelector
+) : PlaybackTransportControlGlue<LeanbackPlayerAdapter>(
+    activity,
+    LeanbackPlayerAdapter(activity, player, 1_000)
+), AnalyticsListener {
 
     companion object {
         private val TAG = ExoPlayerPlaybackTransportControlGlue::class.simpleName
@@ -48,6 +50,7 @@ class ExoPlayerPlaybackTransportControlGlue(
 
     init {
         player.addAnalyticsListener(this)
+        isSeekEnabled = true
     }
 
     override fun onCreatePrimaryActions(adapter: ArrayObjectAdapter) {
