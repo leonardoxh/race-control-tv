@@ -45,12 +45,10 @@ class SessionCardPresenter @Inject constructor() : Presenter() {
             viewHolder.view.context.getText(R.string.replay)
         }
 
-        session.thumbnail?.let {
-            Glide.with(viewHolder.view.context)
-                .load(it.url)
-                .centerCrop()
-                .into(view.mainImageView)
-        }
+        Glide.with(viewHolder.view.context)
+            .load(session.thumbnail?.url)
+            .centerCrop()
+            .into(view.mainImageView)
     }
 
     override fun onUnbindViewHolder(viewHolder: ViewHolder) {
