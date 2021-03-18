@@ -24,12 +24,12 @@ class SeasonBrowseViewModel @ViewModelInject constructor(
         private val TAG = SeasonBrowseViewModel::class.simpleName
     }
 
-    suspend fun archiveLoaded(archive: Archive) {
-        loaded(season(archive))
+    suspend fun archiveLoaded(archive: Archive): Season {
+        return loaded(season(archive))
     }
 
-    private suspend fun loaded(season: Flow<Season>) {
-        season.filter { it.events.isNotEmpty() }.first()
+    private suspend fun loaded(season: Flow<Season>): Season {
+        return season.filter { it.events.isNotEmpty() }.first()
     }
 
     suspend fun season(archive: Archive): Flow<Season> =

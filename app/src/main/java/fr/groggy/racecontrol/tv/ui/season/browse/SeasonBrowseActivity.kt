@@ -44,9 +44,6 @@ class SeasonBrowseActivity : FragmentActivity() {
         lifecycleScope.launchWhenCreated {
             val archive = SeasonBrowseFragment.findArchive(this@SeasonBrowseActivity)
             viewModel.archiveLoaded(archive)
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, SeasonBrowseFragment::class.java, null)
-                .commit()
         }
     }
 
@@ -57,6 +54,12 @@ class SeasonBrowseActivity : FragmentActivity() {
             schedule(1.minutes) {
                 val archive = SeasonBrowseFragment.findArchive(this@SeasonBrowseActivity)
                 seasonService.loadSeason(archive)
+
+                if (supportFragmentManager.findFragmentByTag(TAG) !is SeasonBrowseFragment) {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, SeasonBrowseFragment(), TAG)
+                        .commit()
+                }
             }
         }
     }
