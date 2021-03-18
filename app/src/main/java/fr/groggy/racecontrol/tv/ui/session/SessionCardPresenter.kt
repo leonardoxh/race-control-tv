@@ -8,6 +8,7 @@ import androidx.leanback.widget.ImageCardView.CARD_TYPE_FLAG_CONTENT
 import androidx.leanback.widget.ImageCardView.CARD_TYPE_FLAG_TITLE
 import androidx.leanback.widget.Presenter
 import com.bumptech.glide.Glide
+import fr.groggy.racecontrol.tv.R
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -38,7 +39,11 @@ class SessionCardPresenter @Inject constructor() : Presenter() {
         val session = item as SessionCard
 
         view.titleText = session.name
-        view.contentText = if (session.live) "Live" else "Replay"
+        view.contentText = if (session.live) {
+            viewHolder.view.context.getText(R.string.live)
+        } else {
+            viewHolder.view.context.getText(R.string.replay)
+        }
 
         session.thumbnail?.let {
             Glide.with(viewHolder.view.context)
