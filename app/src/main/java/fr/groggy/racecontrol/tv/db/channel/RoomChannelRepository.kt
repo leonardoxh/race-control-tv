@@ -37,9 +37,11 @@ class RoomChannelRepository @Inject constructor(
 
     private fun toChannel(channel: ChannelEntity): F1TvChannel {
         return if (channel.type == ONBOARD) F1TvOnboardChannel(
-            channelId = channel.channelId,
+            channelId = channel.channelId!!,
             contentId = channel.contentId,
             name = channel.name!!,
+            subTitle = channel.subTitle,
+            background = channel.background,
             driver = F1TvDriverId(channel.driver!!)
         ) else F1TvBasicChannel(
             channelId = channel.channelId,
@@ -54,12 +56,14 @@ class RoomChannelRepository @Inject constructor(
         )
     }
 
-    override suspend fun save(channels: List<F1TvChannel>) {
-        val entities = channels.map { toEntity(it) }
+    override suspend fun save(contentId: String, channels: List<F1TvChannel>) {
+        dao.deleteOld(contentId)
+
+        val entities = channels.mapIndexed { index, f1TvChannel -> toEntity(index, f1TvChannel) }
         dao.upsert(entities)
     }
 
-    private fun toEntity(channel: F1TvChannel): ChannelEntity {
+    private fun toEntity(orderIndex: Int, channel: F1TvChannel): ChannelEntity {
         return when (channel) {
             is F1TvBasicChannel -> {
                 val (type, name) = when (channel.type) {
@@ -70,18 +74,26 @@ class RoomChannelRepository @Inject constructor(
                     is Unknown -> channel.type.type to channel.type.name
                 }
                 ChannelEntity(
+                    id = channel.hashCode(),
+                    orderIndex = orderIndex,
                     channelId = channel.channelId,
                     contentId = channel.contentId,
                     type = type,
                     name = name,
+                    subTitle = "",
+                    background = null,
                     driver = null
                 )
             }
             is F1TvOnboardChannel -> ChannelEntity(
+                id = channel.hashCode(),
+                orderIndex = orderIndex,
                 channelId = channel.channelId,
                 contentId = channel.contentId,
                 type = ONBOARD,
                 name = channel.name,
+                subTitle = channel.subTitle,
+                background = channel.background,
                 driver = channel.driver.value
             )
         }

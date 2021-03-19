@@ -7,6 +7,6 @@ interface ChannelRepository {
 
     fun observe(contentId: String): Flow<List<F1TvChannel>>
 
-    suspend fun save(channels: List<F1TvChannel>)
+    suspend fun save(contentId: String, channels: List<F1TvChannel>)
 
 }

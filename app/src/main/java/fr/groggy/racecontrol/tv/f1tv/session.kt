@@ -3,12 +3,6 @@ package fr.groggy.racecontrol.tv.f1tv
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import fr.groggy.racecontrol.tv.core.InstantPeriod
-import java.util.*
-
-@JsonClass(generateAdapter = true)
-data class F1TVSessionAvailabilityDetailsResponse(
-    @Json(name = "is_available") val isAvailable: Boolean
-)
 
 @JsonClass(generateAdapter = true)
 data class F1TvSessionResponse(
@@ -44,30 +38,13 @@ data class F1TvSessionEmfAttributes(
 
 inline class F1TvSessionId(val value: String)
 
-sealed class F1TvSessionStatus {
-    companion object {
-        object Replay : F1TvSessionStatus()
-        object Live : F1TvSessionStatus()
-        object Upcoming : F1TvSessionStatus()
-        data class Unknown(val value: String) : F1TvSessionStatus()
-
-        fun from(value: String): F1TvSessionStatus =
-            when (value.toLowerCase(Locale.ROOT)) {
-                "replay" -> Replay
-                "live" -> Live
-                "upcoming" -> Upcoming
-                else -> Unknown(value)
-            }
-    }
-}
-
 data class F1TvSession(
     val id: F1TvSessionId,
     val name: String,
     val eventId: String,
     val pictureUrl: String,
     val contentId: String,
-    val status: F1TvSessionStatus,
+    val contentSubtype: String,
     val period: InstantPeriod,
     val available: Boolean,
     val images: List<F1TvImageId>,

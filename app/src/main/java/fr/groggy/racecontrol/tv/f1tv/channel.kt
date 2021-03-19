@@ -28,8 +28,11 @@ data class F1TvChannelAdditionalStream(
     val title: String,
     val driverFirstName: String?,
     val driverLastName: String?,
+    val racingNumber: Int?,
     val driverImg: String?, //For some reason this is always empty
     val playbackUrl: String,
+    val teamName: String?,
+    val hex: String?,
     val type: String
 )
 
@@ -48,7 +51,7 @@ sealed class F1TvBasicChannelType {
                 "wif" -> Wif
                 "additional" -> when(name.toLowerCase(Locale.ROOT)) {
                     "pit lane" -> PitLane
-                    "driver" -> Tracker
+                    "tracker" -> Tracker
                     "data" -> Data
                     else -> Unknown(type, name)
                 }
@@ -63,7 +66,7 @@ sealed class F1TvChannel {
 }
 
 data class F1TvBasicChannel(
-    override val channelId: String,
+    override val channelId: String?,
     override val contentId: String,
     val type: F1TvBasicChannelType
 ) : F1TvChannel()
@@ -72,5 +75,7 @@ data class F1TvOnboardChannel(
     override val channelId: String,
     override val contentId: String,
     val name: String,
+    val background: String?,
+    val subTitle: String?,
     val driver: F1TvDriverId
 ) : F1TvChannel()

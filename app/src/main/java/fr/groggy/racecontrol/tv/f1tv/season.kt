@@ -38,9 +38,6 @@ data class F1TvSeasonEmfAttributes(
     @Json(name = "Global_Meeting_Name") val title: String
 )
 
-
-inline class F1TvSeasonId(val value: String)
-
 data class F1TvSeason(
     val year: Year,
     val title: String,

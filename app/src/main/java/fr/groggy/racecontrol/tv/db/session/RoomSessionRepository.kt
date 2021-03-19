@@ -5,11 +5,6 @@ import fr.groggy.racecontrol.tv.core.session.SessionRepository
 import fr.groggy.racecontrol.tv.db.IdListMapper
 import fr.groggy.racecontrol.tv.db.RaceControlTvDatabase
 import fr.groggy.racecontrol.tv.f1tv.*
-import fr.groggy.racecontrol.tv.f1tv.F1TvSessionStatus.Companion.Live
-import fr.groggy.racecontrol.tv.f1tv.F1TvSessionStatus.Companion.Replay
-import fr.groggy.racecontrol.tv.f1tv.F1TvSessionStatus.Companion.Unknown
-import fr.groggy.racecontrol.tv.f1tv.F1TvSessionStatus.Companion.Upcoming
-import fr.groggy.racecontrol.tv.ui.session.browse.Session
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -23,13 +18,6 @@ class RoomSessionRepository @Inject constructor(
     private val channelIdListMapper: IdListMapper<F1TvChannelId>,
     private val imageIdListMapper: IdListMapper<F1TvImageId>
 ) : SessionRepository {
-
-    companion object {
-        private const val REPLAY = "REPLAY"
-        private const val LIVE = "LIVE"
-        private const val UPCOMING = "UPCOMING"
-    }
-
     private val dao = database.sessionDao()
 
     override fun observeById(sessionId: String): Flow<F1TvSession> =
@@ -49,12 +37,7 @@ class RoomSessionRepository @Inject constructor(
             eventId = session.eventId,
             pictureUrl = session.pictureUrl,
             contentId = session.contentId,
-            status = when (session.status) {
-                REPLAY -> Replay
-                LIVE -> Live
-                UPCOMING -> Upcoming
-                else -> Unknown(session.status)
-            },
+            contentSubtype = session.contentSubtype,
             period = InstantPeriod(
                 start = Instant.ofEpochMilli(session.startTime),
                 end = Instant.ofEpochMilli(session.endTime)
@@ -81,12 +64,7 @@ class RoomSessionRepository @Inject constructor(
             eventId = session.eventId,
             contentId = session.contentId,
             pictureUrl = session.pictureUrl,
-            status = when (session.status) {
-                Replay -> REPLAY
-                Live -> LIVE
-                Upcoming -> UPCOMING
-                is Unknown -> session.status.value
-            },
+            contentSubtype = session.contentSubtype,
             startTime = session.period.start.toEpochMilli(),
             endTime = session.period.end.toEpochMilli(),
             available = session.available,

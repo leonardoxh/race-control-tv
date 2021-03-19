@@ -12,8 +12,6 @@ import androidx.lifecycle.asLiveData
 import dagger.hilt.android.AndroidEntryPoint
 import fr.groggy.racecontrol.tv.ui.channel.ChannelCardPresenter
 import fr.groggy.racecontrol.tv.ui.channel.playback.ChannelPlaybackActivity
-import javax.inject.Inject
-
 
 @Keep
 @AndroidEntryPoint
@@ -44,9 +42,7 @@ class SessionGridFragment : VerticalGridSupportFragment(), OnItemViewClickedList
         }
     }
 
-    @Inject lateinit var channelsCardPresenter: ChannelCardPresenter
-
-    private lateinit var channelsAdapter: ArrayObjectAdapter
+    private val channelsAdapter = ArrayObjectAdapter(ChannelCardPresenter())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d(TAG, "onCreate")
@@ -63,7 +59,6 @@ class SessionGridFragment : VerticalGridSupportFragment(), OnItemViewClickedList
     private fun setupUIElements() {
         gridPresenter = VerticalGridPresenter()
         gridPresenter.numberOfColumns = COLUMNS
-        channelsAdapter = ArrayObjectAdapter(channelsCardPresenter)
         adapter = channelsAdapter
     }
 
@@ -76,7 +71,7 @@ class SessionGridFragment : VerticalGridSupportFragment(), OnItemViewClickedList
             is SingleChannelSession -> {
                 val intent = ChannelPlaybackActivity.intent(
                     requireActivity(),
-                    session.channel.value,
+                    session.channel?.value,
                     session.contentId
                 )
                 startActivity(intent)
@@ -91,7 +86,7 @@ class SessionGridFragment : VerticalGridSupportFragment(), OnItemViewClickedList
 
     override fun onItemClicked(itemViewHolder: Presenter.ViewHolder?, item: Any, rowViewHolder: RowPresenter.ViewHolder?, row: Row?) {
         val channel = item as Channel
-        val intent = ChannelPlaybackActivity.intent(requireActivity(), channel.id.value, channel.contentId)
+        val intent = ChannelPlaybackActivity.intent(requireActivity(), channel.id?.value, channel.contentId)
         startActivity(intent)
     }
 

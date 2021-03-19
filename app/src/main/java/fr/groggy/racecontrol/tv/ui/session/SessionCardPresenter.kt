@@ -40,11 +40,7 @@ class SessionCardPresenter: Presenter() {
         val session = item as SessionCard
 
         view.titleText = session.name
-        view.contentText = if (session.live) {
-            viewHolder.view.context.getText(R.string.live)
-        } else {
-            viewHolder.view.context.getText(R.string.replay)
-        }
+        view.contentText = session.contentSubtype
 
         Glide.with(viewHolder.view.context)
             .load(session.thumbnail?.url)
@@ -63,7 +59,7 @@ class SessionCardPresenter: Presenter() {
 interface SessionCard {
 
     val name: String
-    val live: Boolean
+    val contentSubtype: String
     val thumbnail: Image?
 
     interface Image {

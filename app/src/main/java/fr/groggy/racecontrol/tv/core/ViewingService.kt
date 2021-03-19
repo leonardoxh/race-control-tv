@@ -20,8 +20,7 @@ class ViewingService @Inject constructor(
     suspend fun getViewing(channelId: String?, contentId: String): F1TvViewing {
         Log.d(TAG, "getViewing $channelId - $contentId")
         val token = tokenService.loadAndGetF1Token()
-        //Small work around until I can find a good solution for it
-        return f1Tv.getViewing(if (channelId == contentId) null else channelId, contentId, token.value)
+        return f1Tv.getViewing(channelId, contentId, token.value)
     }
 
 }

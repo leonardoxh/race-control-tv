@@ -45,7 +45,7 @@ class SessionBrowseActivity : FragmentActivity() {
                 is SingleChannelSession -> {
                     val intent = ChannelPlaybackActivity.intent(
                         this@SessionBrowseActivity,
-                        session.channel.value,
+                        session.channel?.value,
                         session.contentId
                     )
                     startActivity(intent)

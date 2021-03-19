@@ -1,8 +1,10 @@
 package fr.groggy.racecontrol.tv.ui.channel
 
+import android.graphics.Color
 import android.net.Uri
 import android.util.Log
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.leanback.widget.ImageCardView
 import androidx.leanback.widget.ImageCardView.CARD_TYPE_FLAG_CONTENT
 import androidx.leanback.widget.ImageCardView.CARD_TYPE_FLAG_TITLE
@@ -14,11 +16,8 @@ import fr.groggy.racecontrol.tv.f1tv.F1TvBasicChannelType.Companion.PitLane
 import fr.groggy.racecontrol.tv.f1tv.F1TvBasicChannelType.Companion.Tracker
 import fr.groggy.racecontrol.tv.f1tv.F1TvBasicChannelType.Companion.Unknown
 import fr.groggy.racecontrol.tv.f1tv.F1TvBasicChannelType.Companion.Wif
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-class ChannelCardPresenter @Inject constructor() : Presenter() {
+class ChannelCardPresenter: Presenter() {
 
     companion object {
         private val TAG = ChannelCardPresenter::class.simpleName
@@ -51,10 +50,17 @@ class ChannelCardPresenter @Inject constructor() : Presenter() {
                     Data -> "Data"
                     is Unknown -> type.name
                 }
+                view.setBackgroundColor(ContextCompat.getColor(viewHolder.view.context, android.R.color.black))
+                view.contentText = null
             }
             is OnboardChannelCard -> {
                 view.titleText = item.name
-                view.contentText = item.driver?.racingNumber?.toString()
+                view.contentText = item.subTitle
+                if (item.background != null) {
+                    view.setBackgroundColor(Color.parseColor(item.background))
+                } else {
+                    view.setBackgroundColor(ContextCompat.getColor(viewHolder.view.context, android.R.color.black))
+                }
                 item.driver?.headshot?.let {
                     Glide.with(viewHolder.view.context)
                         .load(it.url)
@@ -93,4 +99,6 @@ interface OnboardChannelCard {
 
     val name: String
     val driver: Driver?
+    val background: String?
+    val subTitle: String?
 }

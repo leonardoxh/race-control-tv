@@ -2,15 +2,13 @@
     <string name="login">Login</string>
     <string name="password">Password</string>
     <string name="signin">Sign in</string>
-    <string name="signin_required_f1_tv_pro_account">A F1TvPro account is required to login</string>
+    <string name="signin_required_f1_tv_pro_account">A F1Tv/F1TvPro account is required to login</string>
     <string name="invalid_credentials">Credentials invalid</string>
     <string name="rejected_credentials">Credentials rejected by F1.com</string>
 
     <string name="video_quality">%1$dp%2$d</string>
     <string name="audio_selection_dialog_title">Audio</string>
     <string name="choose_a_season">Select a season</string>
-    <string name="live">Live</string>
-    <string name="replay">Replay</string>
 
     <string name="data_key_value_store">fr.groggy.racecontrol.tv.DATA_KEY_VALUE_STORE</string>
 </resources>

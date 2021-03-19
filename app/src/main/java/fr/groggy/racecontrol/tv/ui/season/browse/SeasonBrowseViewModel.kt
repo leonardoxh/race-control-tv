@@ -8,7 +8,6 @@ import fr.groggy.racecontrol.tv.core.event.EventRepository
 import fr.groggy.racecontrol.tv.core.season.SeasonRepository
 import fr.groggy.racecontrol.tv.core.session.SessionRepository
 import fr.groggy.racecontrol.tv.f1tv.*
-import fr.groggy.racecontrol.tv.f1tv.F1TvSessionStatus.Companion.Live
 import fr.groggy.racecontrol.tv.ui.DataClassByIdDiffCallback
 import fr.groggy.racecontrol.tv.ui.session.SessionCard
 import fr.groggy.racecontrol.tv.utils.coroutines.traverse
@@ -75,7 +74,7 @@ class SeasonBrowseViewModel @Inject constructor(
                         id = session.id,
                         contentId = session.contentId,
                         name = session.name,
-                        live = session.status == Live,
+                        contentSubtype = session.contentSubtype,
                         thumbnail = thumbnail,
                         channels = session.channels
                     ) }
@@ -107,7 +106,7 @@ data class Session(
     val id: F1TvSessionId,
     val contentId: String,
     override val name: String,
-    override val live: Boolean,
+    override val contentSubtype: String,
     override val thumbnail: Image?,
     val channels: List<F1TvChannelId>
 ) : SessionCard {

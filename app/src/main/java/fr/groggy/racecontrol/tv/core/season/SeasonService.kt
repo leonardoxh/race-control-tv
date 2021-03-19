@@ -4,6 +4,8 @@ import android.util.Log
 import fr.groggy.racecontrol.tv.core.session.SessionService
 import fr.groggy.racecontrol.tv.f1tv.Archive
 import fr.groggy.racecontrol.tv.f1tv.F1TvClient
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.threeten.bp.Year
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -29,7 +31,7 @@ class SeasonService @Inject constructor(
         return archive
     }
 
-    suspend fun loadSeason(archive: Archive) {
+    suspend fun loadSeason(archive: Archive) = withContext(Dispatchers.IO) {
         Log.d(TAG, "loadSeason ${archive.year}")
         val season = f1Tv.getSeason(archive)
         seasonRepository.save(season)

@@ -11,7 +11,7 @@ data class SessionEntity(
     @ColumnInfo(name = "event_id") val eventId: String,
     @ColumnInfo(name = "picture_url") val pictureUrl: String,
     @ColumnInfo(name = "content_id") val contentId: String,
-    @ColumnInfo(name = "status") val status: String,
+    @ColumnInfo(name = "content_subtype") val contentSubtype: String,
     @ColumnInfo(name = "start_time") val startTime: Long,
     @ColumnInfo(name = "end_time") val endTime: Long,
     @ColumnInfo(name = "available") val available: Boolean,

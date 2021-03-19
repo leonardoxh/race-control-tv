@@ -12,7 +12,10 @@ interface ChannelDao {
     @Insert(onConflict = REPLACE)
     suspend fun upsert(channels: List<ChannelEntity>)
 
-    @Query("SELECT * FROM channels WHERE contentId = :contentId")
+    @Query("DELETE FROM channels WHERE contentId = :contentId")
+    suspend fun deleteOld(contentId: String)
+
+    @Query("SELECT * FROM channels WHERE contentId = :contentId ORDER BY order_index")
     fun observeByContentId(contentId: String): Flow<List<ChannelEntity>>
 
 }

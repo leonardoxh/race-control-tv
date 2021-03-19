@@ -5,22 +5,21 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import fr.groggy.racecontrol.tv.core.channel.ChannelRepository
-import fr.groggy.racecontrol.tv.core.image.ImageRepository
 import fr.groggy.racecontrol.tv.core.session.SessionRepository
 import fr.groggy.racecontrol.tv.core.session.SessionService
 import fr.groggy.racecontrol.tv.f1tv.*
-import fr.groggy.racecontrol.tv.f1tv.F1TvImageType.Companion.Headshot
 import fr.groggy.racecontrol.tv.ui.DataClassByIdDiffCallback
 import fr.groggy.racecontrol.tv.ui.channel.BasicChannelCard
 import fr.groggy.racecontrol.tv.ui.channel.OnboardChannelCard
 import fr.groggy.racecontrol.tv.utils.coroutines.traverse
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
 class SessionBrowseViewModel @Inject constructor(
     private val channelRepository: ChannelRepository,
-    private val imageRepository: ImageRepository,
     private val sessionRepository: SessionRepository,
     private val sessionService: SessionService
 ) : ViewModel() {
@@ -29,9 +28,9 @@ class SessionBrowseViewModel @Inject constructor(
         private val TAG = SessionBrowseViewModel::class.simpleName
     }
 
-    suspend fun sessionLoaded(sessionId: String, contentId: String): Session {
+    suspend fun sessionLoaded(sessionId: String, contentId: String): Session = withContext(Dispatchers.IO) {
         sessionService.loadChannels(contentId)
-        return session(sessionId, contentId).first()
+        return@withContext session(sessionId, contentId).first()
     }
 
     fun session(sessionId: String, contentId: String): Flow<Session> {
@@ -66,7 +65,7 @@ class SessionBrowseViewModel @Inject constructor(
                 //.sortedBy { channel -> ids.indexOfFirst { it == channel.id } }
                 .traverse { channel -> when (channel) {
                     is F1TvBasicChannel -> flowOf(BasicChannel(
-                        id = F1TvChannelId(channel.channelId),
+                        id = if (channel.channelId == null) null else F1TvChannelId(channel.channelId!!),
                         contentId = channel.contentId,
                         type = channel.type
                     ))
@@ -75,6 +74,8 @@ class SessionBrowseViewModel @Inject constructor(
                             id = F1TvChannelId(channel.channelId),
                             contentId = channel.contentId,
                             name = channel.name,
+                            background = channel.background,
+                            subTitle = channel.subTitle,
                             driver = driver
                         ) }
                 } }
@@ -84,33 +85,7 @@ class SessionBrowseViewModel @Inject constructor(
 
     private fun driver(id: F1TvDriverId): Flow<Driver?> {
         return flowOf(null)
-//        return driverRepository.observe(id)
-//            .onEach { Log.d(TAG, "Driver changed") }
-//            .filterNotNull()
-//            .flatMapLatest { driver -> headshot(driver.images)
-//                .map { headshot -> Driver(
-//                    id = driver.id,
-//                    racingNumber = driver.racingNumber,
-//                    headshot = headshot
-//                ) }
-//            }
-//            .distinctUntilChanged()
-//            .onEach { Log.d(TAG, "VM driver changed") }
     }
-
-    private fun headshot(ids: List<F1TvImageId>): Flow<Image?> =
-        imageRepository.observe(ids)
-            .onEach { Log.d(TAG, "Images changed") }
-            .map { images -> images
-                .find { it.type == Headshot }
-                ?.let { Image(
-                    id = it.id,
-                    url = it.url
-                ) }
-            }
-            .distinctUntilChanged()
-            .onEach { Log.d(TAG, "VM headshot changed") }
-
 }
 
 sealed class Session {
@@ -119,7 +94,7 @@ sealed class Session {
 
 data class SingleChannelSession(
     override val contentId: String,
-    val channel: F1TvChannelId
+    val channel: F1TvChannelId?
 ) : Session()
 
 data class MultiChannelsSession(
@@ -134,13 +109,13 @@ sealed class Channel {
         val diffCallback = DataClassByIdDiffCallback { channel: Channel -> channel.id }
     }
 
-    abstract val id: F1TvChannelId
+    abstract val id: F1TvChannelId?
     abstract val contentId: String
 
 }
 
 data class BasicChannel(
-    override val id: F1TvChannelId,
+    override val id: F1TvChannelId?,
     override val contentId: String,
     override val type: F1TvBasicChannelType
 ) : Channel(), BasicChannelCard
@@ -149,6 +124,8 @@ data class OnboardChannel(
     override val id: F1TvChannelId,
     override val contentId: String,
     override val name: String,
+    override val background: String?,
+    override val subTitle: String?,
     override val driver: Driver?
 ) : Channel(), OnboardChannelCard
 
