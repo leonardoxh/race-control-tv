@@ -50,7 +50,6 @@ class SeasonBrowseViewModel @Inject constructor(
         eventRepository.observe(ids)
             .onEach { Log.d(TAG, "Events changed") }
             .flatMapLatest { events -> events
-                .filter { it.sessions.isNotEmpty() }
                 .sortedByDescending { it.period.start }
                 .traverse { event -> sessions(listOf(event.id))
                     .map { sessions -> Event(

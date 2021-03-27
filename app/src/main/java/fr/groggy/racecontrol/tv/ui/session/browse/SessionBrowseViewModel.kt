@@ -58,33 +58,27 @@ class SessionBrowseViewModel @Inject constructor(
             .onEach { Log.d(TAG, "VM session changed") }
     }
 
-    private fun channels(contentId: String): Flow<List<Channel>> =
-        channelRepository.observe(contentId)
+    private fun channels(contentId: String): Flow<List<Channel>> {
+        return channelRepository.observe(contentId)
             .onEach { Log.d(TAG, "Channels changed") }
-            .flatMapLatest { channels -> channels
-                //.sortedBy { channel -> ids.indexOfFirst { it == channel.id } }
-                .traverse { channel -> when (channel) {
-                    is F1TvBasicChannel -> flowOf(BasicChannel(
-                        id = if (channel.channelId == null) null else F1TvChannelId(channel.channelId!!),
-                        contentId = channel.contentId,
-                        type = channel.type
-                    ))
-                    is F1TvOnboardChannel -> driver(channel.driver)
-                        .map { driver -> OnboardChannel(
-                            id = F1TvChannelId(channel.channelId),
-                            contentId = channel.contentId,
-                            name = channel.name,
-                            background = channel.background,
-                            subTitle = channel.subTitle,
-                            driver = driver
-                        ) }
+            .flatMapLatest { channels -> channels.traverse { channel -> when (channel) {
+                is F1TvBasicChannel -> flowOf(BasicChannel(
+                    id = channel.channelId?.let(::F1TvChannelId),
+                    contentId = channel.contentId,
+                    type = channel.type
+                ))
+                is F1TvOnboardChannel -> flowOf(OnboardChannel(
+                    id = F1TvChannelId(channel.channelId),
+                    contentId = channel.contentId,
+                    name = channel.name,
+                    background = channel.background,
+                    subTitle = channel.subTitle,
+                    driver = null
+                ))
                 } }
             }
             .distinctUntilChanged()
             .onEach { Log.d(TAG, "VM channels changed") }
-
-    private fun driver(id: F1TvDriverId): Flow<Driver?> {
-        return flowOf(null)
     }
 }
 

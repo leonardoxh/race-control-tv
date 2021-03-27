@@ -51,6 +51,7 @@ class ExoPlayerPlaybackTransportControlGlue(
     init {
         player.addAnalyticsListener(this)
         isSeekEnabled = true
+        isControlsOverlayAutoHideEnabled = true
     }
 
     override fun onCreatePrimaryActions(adapter: ArrayObjectAdapter) {

@@ -47,7 +47,11 @@ class F1TvClient @Inject constructor(
                 F1TvSeasonEvent(
                     id = it.id,
                     meetingKey = it.metadata.emfAttributes.meetingKey,
-                    title = it.metadata.emfAttributes.title
+                    title = it.metadata.emfAttributes.title,
+                    period = InstantPeriod(
+                        start = parseOffsetDateSafely(it.metadata.emfAttributes.startDate),
+                        end = parseOffsetDateSafely(it.metadata.emfAttributes.endDate)
+                    )
                 )
             },
             detailAction = response.resultObj.containers.firstOrNull()?.actions?.firstOrNull { it.targetType == "DETAILS_PAGE" }?.uri
@@ -121,10 +125,11 @@ class F1TvClient @Inject constructor(
      * Addresses issues with F1 dates
      * sometimes the start date is missing
      */
-    private fun parseOffsetDateSafely(date: String): Instant {
+    private fun parseOffsetDateSafely(date: String?): Instant {
         return try {
             OffsetDateTime.parse(date).toInstant()
-        } catch (_: Exception) {
+        } catch (e: Exception) {
+            Log.d(TAG, "Unable to parse date ${e.message}")
             archiveSortInstant //Less than ideal but at least we can see something
         }
     }

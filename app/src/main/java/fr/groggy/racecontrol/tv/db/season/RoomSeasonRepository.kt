@@ -1,5 +1,6 @@
 package fr.groggy.racecontrol.tv.db.season
 
+import fr.groggy.racecontrol.tv.core.InstantPeriod
 import fr.groggy.racecontrol.tv.core.season.SeasonRepository
 import fr.groggy.racecontrol.tv.db.RaceControlTvDatabase
 import fr.groggy.racecontrol.tv.db.event.EventEntity
@@ -7,6 +8,7 @@ import fr.groggy.racecontrol.tv.f1tv.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
+import org.threeten.bp.Instant
 import org.threeten.bp.Year
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -30,7 +32,11 @@ class RoomSeasonRepository @Inject constructor(
                 F1TvSeasonEvent(
                     id = it.id,
                     meetingKey = it.meetingKey,
-                    title = it.name
+                    title = it.name,
+                    period = InstantPeriod(
+                        start = Instant.ofEpochMilli(it.startDate),
+                        end = Instant.ofEpochMilli(it.endDate)
+                    )
                 )
             }
         }
@@ -51,9 +57,8 @@ class RoomSeasonRepository @Inject constructor(
                 id = it.id,
                 meetingKey = it.meetingKey,
                 name = it.title,
-                startDate = 0,
-                endDate = 0,
-                sessions = "season.year.toString()"
+                startDate = it.period.start.toEpochMilli(),
+                endDate = it.period.end.toEpochMilli()
             )
         }
         database.eventDao().upsert(entities)

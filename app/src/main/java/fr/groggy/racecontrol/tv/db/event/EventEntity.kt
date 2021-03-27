@@ -10,6 +10,5 @@ data class EventEntity(
     @ColumnInfo(name = "meetingKey") val meetingKey: String,
     @ColumnInfo(name = "name") val name: String,
     @ColumnInfo(name = "start_date") val startDate: Long,
-    @ColumnInfo(name = "end_date") val endDate: Long,
-    @ColumnInfo(name = "sessions") val sessions: String
+    @ColumnInfo(name = "end_date") val endDate: Long
 )
