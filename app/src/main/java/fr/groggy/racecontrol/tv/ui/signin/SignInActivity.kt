@@ -1,12 +1,13 @@
 package fr.groggy.racecontrol.tv.ui.signin
 
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.view.WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN
 import android.view.WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE
-import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -32,13 +33,12 @@ class SignInActivity : ComponentActivity() {
 
     private val login by lazy { findViewById<EditText>(R.id.login) }
     private val password by lazy { findViewById<EditText>(R.id.password) }
-    private val signIn by lazy { findViewById<Button>(R.id.signin) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d(TAG, "onCreate")
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_signin)
-        signIn.setOnClickListener { onSignIn() }
+        findViewById<View>(R.id.signin).setOnClickListener { onSignIn() }
         window.setSoftInputMode(SOFT_INPUT_STATE_VISIBLE or SOFT_INPUT_ADJUST_PAN)
     }
 
@@ -56,7 +56,11 @@ class SignInActivity : ComponentActivity() {
                 startActivity(intent)
                 finish()
             } else {
-                Toast.makeText(applicationContext, R.string.rejected_credentials, Toast.LENGTH_SHORT).show()
+                AlertDialog.Builder(this@SignInActivity)
+                    .setTitle(R.string.rejected_credentials)
+                    .setMessage(R.string.rejected_credentials_message)
+                    .setPositiveButton(android.R.string.ok, null)
+                    .show()
             }
         }
     }

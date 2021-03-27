@@ -4,11 +4,15 @@
     <string name="signin">Sign in</string>
     <string name="signin_required_f1_tv_pro_account">A F1Tv/F1TvPro account is required to login</string>
     <string name="invalid_credentials">Credentials invalid</string>
-    <string name="rejected_credentials">Credentials rejected by F1.com</string>
+    <string name="rejected_credentials">Wrong login or password</string>
+    <string name="rejected_credentials_message">
+        Sometimes this might happen even if your login and password are correct due a <b>F1 API BUG</b>.\n\n
+        If that is the case a possible workaround is to <b>go to F1TV website on your computer</b>,
+        then login on your account and logout then come
+        back to the app and it will eventually work.
+    </string>
 
     <string name="video_quality">%1$dp%2$d</string>
     <string name="audio_selection_dialog_title">Audio</string>
     <string name="choose_a_season">Select a season</string>
-
-    <string name="data_key_value_store">fr.groggy.racecontrol.tv.DATA_KEY_VALUE_STORE</string>
 </resources>
