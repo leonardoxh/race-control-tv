@@ -14,8 +14,8 @@ android {
         applicationId = "com.github.leonardoxh.f1"
         minSdkVersion(21)
         targetSdkVersion(30)
-        versionCode = 15
-        versionName = "2.0.3"
+        versionCode = 16
+        versionName = "2.0.4"
     }
 
     signingConfigs {
