@@ -35,20 +35,4 @@ class RoomEventRepository @Inject constructor(
             )
         )
     }
-
-    override suspend fun save(events: List<F1TvEvent>) {
-        val entities = events.map { toEntity(it) }
-        dao.upsert(entities)
-    }
-
-    private fun toEntity(event: F1TvEvent): EventEntity {
-        return EventEntity(
-            id = event.id.value,
-            name = event.name,
-            meetingKey = "", //TODO FUCK~
-            startDate = event.period.start.toEpochMilli(),
-            endDate = event.period.end.toEpochMilli()
-        )
-    }
-
 }
