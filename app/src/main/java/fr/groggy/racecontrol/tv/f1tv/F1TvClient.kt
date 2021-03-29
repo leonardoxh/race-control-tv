@@ -115,12 +115,14 @@ class F1TvClient @Inject constructor(
                     channels = listOf()
                 )
             }
-        } catch (_: Exception) {
+        } catch (e: Exception) {
             /*
              * The pre seasons for example are not available to query
              * on the regular api, for this fallback to the archive
              */
-            return getSessionArchive(event, season)
+            Log.d(TAG, "getF1TvSessions failed with ${e.message}")
+            //return getSessionArchive(event, season)
+            return listOf()
         }
     }
 
