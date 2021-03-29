@@ -37,7 +37,7 @@ class TokenService @Inject constructor(
 
     private suspend fun <T> loadAndGetToken(repository: TokenRepository<T>, jwt: (T) -> JWT, fetch: suspend () -> T): T {
         val existingToken = repository.find()
-        return if (existingToken == null || jwt(existingToken).isExpired(expirationInSeconds(jwt(existingToken)).seconds)) {
+        return if (existingToken == null || jwt(existingToken).isExpired(JWT_LEEWAY.seconds)) {
             Log.d(TAG, "Token is expired fetching a new one")
             val token = fetch()
             repository.save(token)
@@ -45,12 +45,5 @@ class TokenService @Inject constructor(
         } else {
             existingToken
         }
-    }
-
-    private fun expirationInSeconds(jwt: JWT): Duration {
-        Log.d(TAG, "Token expires at ${jwt.expiresAt}")
-        val expiresAt = jwt.expiresAt ?: return JWT_LEEWAY
-        return Duration.ofMillis(expiresAt.time)
-            .minusHours(24)
     }
 }
