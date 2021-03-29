@@ -7,9 +7,11 @@
     <string name="rejected_credentials">Wrong login or password</string>
     <string name="rejected_credentials_message">
         Sometimes this might happen even if your login and password are correct due a <b>F1 API BUG</b>.\n\n
-        If that is the case a possible workaround is to <b>go to F1TV website on your computer</b>,
+        1. If that is the case a possible workaround is to <b>go to F1TV website on your computer</b>,
         then login on your account and logout then come
-        back to the app and it will eventually work.
+        back to the app and it will eventually work.\n
+        2. It is also possible that for some reason your IP is blocked (401 response) in this case try
+        to switch networks it might also work.
     </string>
 
     <string name="video_quality">%1$dp%2$d</string>
