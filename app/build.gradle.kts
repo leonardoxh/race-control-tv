@@ -14,7 +14,7 @@ android {
         applicationId = "com.github.leonardoxh.f1"
         minSdkVersion(21)
         targetSdkVersion(30)
-        versionCode = 17
+        versionCode = 18
         versionName = "2.0.4"
     }
 
