@@ -10,7 +10,6 @@ import androidx.leanback.media.PlayerAdapter
 import androidx.leanback.widget.*
 import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.Format
-import com.google.android.exoplayer2.RendererCapabilities
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.analytics.AnalyticsListener
 import com.google.android.exoplayer2.analytics.AnalyticsListener.EventTime
@@ -20,8 +19,6 @@ import com.google.android.exoplayer2.source.TrackGroupArray
 import com.google.android.exoplayer2.text.TextOutput
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray
-import com.google.android.exoplayer2.trackselection.TrackSelectionUtil
-import com.google.android.exoplayer2.ui.TrackSelectionDialogBuilder
 import fr.groggy.racecontrol.tv.R
 import kotlin.math.max
 import kotlin.math.min
@@ -52,9 +49,9 @@ class ExoPlayerPlaybackTransportControlGlue(
     )
     private val resolutionSelectionAction = Action(
         Action.NO_ID,
-        "Test",
+        activity.getText(R.string.video_selection_dialog_title),
         null,
-        ContextCompat.getDrawable(context, R.drawable.lb_ic_hq)
+        ContextCompat.getDrawable(context, R.drawable.ic_video_settings)
     )
     private val closedCaptionAction = PlaybackControlsRow.ClosedCaptioningAction(activity)
 
@@ -101,17 +98,13 @@ class ExoPlayerPlaybackTransportControlGlue(
 
     private fun openResolutionSelectionDialog() {
         trackSelector.currentMappedTrackInfo?.let {
-            val video = it.getTrackGroups(C.TRACK_TYPE_DEFAULT)
-            val dialog = ResolutionSelectionDialog(video)
-            //TODO - listener
-            dialog.show(activity.supportFragmentManager, null)
+            ResolutionSelectionDialog(it)
+                .setResolutionSelectedListener { width, height ->
+                    val newParams = trackSelector.buildUponParameters()
+                        .setMaxVideoSize(width, height)
+                    trackSelector.setParameters(newParams)
+                }.show(activity.supportFragmentManager, null)
         }
-
-//        //works
-//        val newParams = trackSelector.buildUponParameters()
-//            //.clearVideoSizeConstraints()
-//            .setMaxVideoSize(640, 360)
-//        trackSelector.setParameters(newParams)
     }
 
     private fun toggleClosedCaptions() {
