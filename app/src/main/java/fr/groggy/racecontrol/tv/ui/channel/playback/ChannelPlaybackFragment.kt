@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.annotation.Keep
+import androidx.appcompat.app.AlertDialog
 import androidx.leanback.app.VideoSupportFragment
 import androidx.leanback.app.VideoSupportFragmentGlueHost
 import androidx.lifecycle.lifecycleScope
@@ -15,6 +16,7 @@ import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.upstream.HttpDataSource
 import com.google.android.exoplayer2.util.EventLogger
 import dagger.hilt.android.AndroidEntryPoint
+import fr.groggy.racecontrol.tv.R
 import fr.groggy.racecontrol.tv.core.ViewingService
 import fr.groggy.racecontrol.tv.f1tv.F1TvViewing
 import fr.groggy.racecontrol.tv.ui.player.ExoPlayerPlaybackTransportControlGlue
@@ -81,9 +83,22 @@ class ChannelPlaybackFragment : VideoSupportFragment() {
         val contentId = findContentId(requireActivity()) ?: return requireActivity().finish()
         val channelId = findChannelId(requireActivity())
         lifecycleScope.launchWhenStarted {
-            val viewing = viewingService.getViewing(channelId, contentId)
-            onViewingCreated(viewing)
+            try {
+                val viewing = viewingService.getViewing(channelId, contentId)
+                onViewingCreated(viewing)
+            } catch (_: Exception) {
+                handleError()
+            }
         }
+    }
+
+    private fun handleError() {
+        AlertDialog.Builder(requireContext())
+            .setCancelable(false)
+            .setMessage(R.string.unable_to_play_video_message)
+            .setPositiveButton(android.R.string.ok) { _, _ ->
+                requireActivity().finish()
+            }
     }
 
     private fun onViewingCreated(viewing: F1TvViewing) {
