@@ -26,9 +26,9 @@ class ViewingService @Inject constructor(
 
     suspend fun getViewing(channelId: String?, contentId: String): F1TvViewing = withContext(Dispatchers.IO) {
         Log.d(TAG, "getViewing $channelId - $contentId")
-
         retryAttempts.set(0)
-        while (retryAttempts.getAndIncrement() <= MAX_RETRIES) {
+
+        while (retryAttempts.getAndIncrement() < MAX_RETRIES) {
             try {
                 return@withContext getViewingOrThrow(channelId, contentId)
             } catch (e: Exception) {
