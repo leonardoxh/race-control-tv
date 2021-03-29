@@ -51,5 +51,6 @@ class TokenService @Inject constructor(
         Log.d(TAG, "Token expires at ${jwt.expiresAt}")
         val expiresAt = jwt.expiresAt ?: return JWT_LEEWAY
         return Duration.ofMillis(expiresAt.time)
+            .minusHours(24)
     }
 }
