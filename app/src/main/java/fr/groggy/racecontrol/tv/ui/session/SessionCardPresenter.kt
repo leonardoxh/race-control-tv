@@ -14,14 +14,11 @@ import fr.groggy.racecontrol.tv.R
 class SessionCardPresenter: Presenter() {
 
     companion object {
-        private val TAG = SessionCardPresenter::class.simpleName
-
         private const val WIDTH = 313
         private const val HEIGHT = 176
     }
 
     override fun onCreateViewHolder(parent: ViewGroup): ViewHolder {
-        Log.d(TAG, "onCreateViewHolder")
         val view = ImageCardView(parent.context)
         view.setMainImageDimensions(
             WIDTH,
@@ -35,7 +32,6 @@ class SessionCardPresenter: Presenter() {
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, item: Any) {
-        Log.d(TAG, "onBindViewHolder")
         val view = viewHolder.view as ImageCardView
         val session = item as SessionCard
 
@@ -48,7 +44,6 @@ class SessionCardPresenter: Presenter() {
     }
 
     override fun onUnbindViewHolder(viewHolder: ViewHolder) {
-        Log.d(TAG, "onUnbindViewHolder")
         val view = viewHolder.view as ImageCardView
         view.badgeImage = null
         view.mainImage = null

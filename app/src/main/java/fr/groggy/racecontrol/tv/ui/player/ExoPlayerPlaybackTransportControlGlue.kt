@@ -10,6 +10,7 @@ import androidx.leanback.media.PlayerAdapter
 import androidx.leanback.widget.*
 import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.Format
+import com.google.android.exoplayer2.RendererCapabilities
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.analytics.AnalyticsListener
 import com.google.android.exoplayer2.analytics.AnalyticsListener.EventTime
@@ -19,6 +20,8 @@ import com.google.android.exoplayer2.source.TrackGroupArray
 import com.google.android.exoplayer2.text.TextOutput
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray
+import com.google.android.exoplayer2.trackselection.TrackSelectionUtil
+import com.google.android.exoplayer2.ui.TrackSelectionDialogBuilder
 import fr.groggy.racecontrol.tv.R
 import kotlin.math.max
 import kotlin.math.min
@@ -47,6 +50,12 @@ class ExoPlayerPlaybackTransportControlGlue(
         null,
         ContextCompat.getDrawable(context, R.drawable.lb_ic_search_mic_out)
     )
+    private val resolutionSelectionAction = Action(
+        Action.NO_ID,
+        "Test",
+        null,
+        ContextCompat.getDrawable(context, R.drawable.lb_ic_hq)
+    )
     private val closedCaptionAction = PlaybackControlsRow.ClosedCaptioningAction(activity)
 
     private val closedCaptionsTextView: TextView by lazy {
@@ -73,6 +82,7 @@ class ExoPlayerPlaybackTransportControlGlue(
             add(rewindAction)
             add(fastFormatAction)
             add(selectAudioAction)
+            add(resolutionSelectionAction)
             add(closedCaptionAction)
         }
     }
@@ -84,8 +94,24 @@ class ExoPlayerPlaybackTransportControlGlue(
             fastFormatAction -> playerAdapter.seekOffset(DEFAULT_SEEK_OFFSET)
             selectAudioAction -> openAudioSelectionDialog()
             closedCaptionAction -> toggleClosedCaptions()
+            resolutionSelectionAction -> openResolutionSelectionDialog()
             else -> super.onActionClicked(action)
         }
+    }
+
+    private fun openResolutionSelectionDialog() {
+        trackSelector.currentMappedTrackInfo?.let {
+            val video = it.getTrackGroups(C.TRACK_TYPE_DEFAULT)
+            val dialog = ResolutionSelectionDialog(video)
+            //TODO - listener
+            dialog.show(activity.supportFragmentManager, null)
+        }
+
+//        //works
+//        val newParams = trackSelector.buildUponParameters()
+//            //.clearVideoSizeConstraints()
+//            .setMaxVideoSize(640, 360)
+//        trackSelector.setParameters(newParams)
     }
 
     private fun toggleClosedCaptions() {
@@ -102,7 +128,7 @@ class ExoPlayerPlaybackTransportControlGlue(
 
     private fun openAudioSelectionDialog() {
         trackSelector.currentMappedTrackInfo?.let {
-            val audio = it.getTrackGroups(1)
+            val audio = it.getTrackGroups(C.TRACK_TYPE_AUDIO)
             val dialog = AudioSelectionDialogFragment(audio)
             dialog.onAudioLanguageSelected { language ->
                 val parameters = trackSelector.buildUponParameters()

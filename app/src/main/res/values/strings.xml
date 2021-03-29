@@ -17,5 +17,7 @@
     <string name="unable_to_play_video_message">Something went wrong while trying to play this video</string>
     <string name="video_quality">%1$dp%2$d</string>
     <string name="audio_selection_dialog_title">Audio</string>
+    <string name="video_selection_dialog_title">Video</string>
+
     <string name="choose_a_season">Select a season</string>
 </resources>

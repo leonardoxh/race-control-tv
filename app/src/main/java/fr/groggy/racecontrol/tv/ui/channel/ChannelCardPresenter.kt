@@ -2,7 +2,6 @@ package fr.groggy.racecontrol.tv.ui.channel
 
 import android.graphics.Color
 import android.net.Uri
-import android.util.Log
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.leanback.widget.ImageCardView
@@ -20,14 +19,11 @@ import fr.groggy.racecontrol.tv.f1tv.F1TvBasicChannelType.Companion.Wif
 class ChannelCardPresenter: Presenter() {
 
     companion object {
-        private val TAG = ChannelCardPresenter::class.simpleName
-
         private const val WIDTH = 313
         private const val HEIGHT = 274
     }
 
     override fun onCreateViewHolder(parent: ViewGroup): ViewHolder {
-        Log.d(TAG, "onCreateViewHolder")
         val view = ImageCardView(parent.context)
         view.setMainImageDimensions(
             WIDTH,
@@ -38,7 +34,6 @@ class ChannelCardPresenter: Presenter() {
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, item: Any) {
-        Log.d(TAG, "onBindViewHolder")
         val view = viewHolder.view as ImageCardView
         when(item) {
             is BasicChannelCard -> {
@@ -72,7 +67,6 @@ class ChannelCardPresenter: Presenter() {
     }
 
     override fun onUnbindViewHolder(viewHolder: ViewHolder) {
-        Log.d(TAG, "onUnbindViewHolder")
         val view = viewHolder.view as ImageCardView
         view.titleText = null
         view.contentText = null
