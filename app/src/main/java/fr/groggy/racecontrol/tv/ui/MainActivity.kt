@@ -5,7 +5,6 @@ import android.util.Log
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
-import fr.groggy.racecontrol.tv.BuildConfig
 import fr.groggy.racecontrol.tv.R
 import fr.groggy.racecontrol.tv.core.credentials.CredentialsService
 import fr.groggy.racecontrol.tv.ui.season.archive.SeasonArchiveActivity
@@ -25,16 +24,7 @@ class MainActivity : FragmentActivity() {
         Log.d(TAG, "onCreate")
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        if (BuildConfig.DEBUG) {
-            startDebugHomeActivity()
-        } else {
-            startHomeActivity()
-        }
-    }
-
-    private fun startDebugHomeActivity() {
-        startActivity(SeasonArchiveActivity.intent(this))
-        finish()
+        startHomeActivity()
     }
 
     private fun startHomeActivity() {
