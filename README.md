@@ -9,6 +9,11 @@ This app currently use the F1TV 2.0 apis and support stream content of 1080p at 
 
 Audio selection (language or no commentary) is supported.
 
+Resolution selection (from 270p to 1080p) is available, however the app knows based on bandwidth what
+is the best resolution to pickup.
+
+Closed captions supported in english, spanish, dutch and german.
+
 Application is not translated and only available in english. Feel free to translate it an open a PR :D
 
 ## Install
@@ -34,7 +39,7 @@ does not officially support Android TV and even after sideloading it, it's not u
 The official website is also not easily usable with a remote. If in the future an official application
 would be available, I will happilly abandonned this one.
 
-This will allways be a free and open source app.
+This will always be a free and open source app.
 
 Do what you want with it : use it or modify it.
 
