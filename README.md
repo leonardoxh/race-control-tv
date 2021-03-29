@@ -2,7 +2,7 @@
 
 Android TV application to watch content from [F1 TV](https://f1tv.formula1.com).
 
-At this time, content from the current session and old sessions are availble, including F1, F2, F3...
+At this time, content from the current session and old sessions are available, including F1, F2, F3...
 Onboard channels when available are supported, as well as technical channels like the tracker channel.
 
 This app currently use the F1TV 2.0 apis and support stream content of 1080p at 50FPS
@@ -19,6 +19,12 @@ Application is not translated and only available in english. Feel free to transl
 ## Install
 
 The app is available on [Google Playstore](https://play.google.com/store/apps/details?id=com.github.leonardoxh.f1)
+
+## Fire Sticks / Tvs
+
+The app is supported on fire sticks / tvs, however due some technicalities I can't offer
+the app directly on Amazon store please refer to the [releases page](https://github.com/leonardoxh/race-control-tv/releases)
+to download the latest apk and side load it.
 
 ## Screenshots
 
@@ -37,7 +43,7 @@ The app is available on [Google Playstore](https://play.google.com/store/apps/de
 I have created this app because the official [F1 TV app](https://play.google.com/store/apps/details?id=com.formulaone.production)
 does not officially support Android TV and even after sideloading it, it's not usable with a remote.
 The official website is also not easily usable with a remote. If in the future an official application
-would be available, I will happilly abandonned this one.
+would be available, I will happily abandon this one.
 
 This will always be a free and open source app.
 
