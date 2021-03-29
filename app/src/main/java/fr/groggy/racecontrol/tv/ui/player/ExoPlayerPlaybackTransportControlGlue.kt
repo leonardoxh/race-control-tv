@@ -1,6 +1,8 @@
 package fr.groggy.racecontrol.tv.ui.player
 
 import android.util.Log
+import android.view.View
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.leanback.media.PlaybackTransportControlGlue
@@ -14,6 +16,7 @@ import com.google.android.exoplayer2.analytics.AnalyticsListener.EventTime
 import com.google.android.exoplayer2.ext.leanback.LeanbackPlayerAdapter
 import com.google.android.exoplayer2.source.MediaSourceEventListener.MediaLoadData
 import com.google.android.exoplayer2.source.TrackGroupArray
+import com.google.android.exoplayer2.text.TextOutput
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray
 import fr.groggy.racecontrol.tv.R
@@ -23,7 +26,7 @@ import kotlin.math.roundToInt
 
 class ExoPlayerPlaybackTransportControlGlue(
     private val activity: FragmentActivity,
-    player: SimpleExoPlayer,
+    private val player: SimpleExoPlayer,
     private val trackSelector: DefaultTrackSelector
 ) : PlaybackTransportControlGlue<LeanbackPlayerAdapter>(
     activity,
@@ -44,6 +47,15 @@ class ExoPlayerPlaybackTransportControlGlue(
         null,
         ContextCompat.getDrawable(context, R.drawable.lb_ic_search_mic_out)
     )
+    private val closedCaptionAction = PlaybackControlsRow.ClosedCaptioningAction(activity)
+
+    private val closedCaptionsTextView: TextView by lazy {
+        activity.findViewById(R.id.closed_captions)
+    }
+
+    private val closedCaptionTextOutput = TextOutput { cues ->
+        closedCaptionsTextView.text = cues.joinToString { it.text ?: "" }
+    }
 
     private var currentVideoFormat: Format? = null
     private var currentAudioFormat: Format? = null
@@ -61,16 +73,30 @@ class ExoPlayerPlaybackTransportControlGlue(
             add(rewindAction)
             add(fastFormatAction)
             add(selectAudioAction)
+            add(closedCaptionAction)
         }
     }
 
     override fun onActionClicked(action: Action) {
         Log.d(TAG, "onActionClicked")
-        when(action) {
+        when (action) {
             rewindAction -> playerAdapter.seekOffset(-DEFAULT_SEEK_OFFSET)
             fastFormatAction -> playerAdapter.seekOffset(DEFAULT_SEEK_OFFSET)
             selectAudioAction -> openAudioSelectionDialog()
+            closedCaptionAction -> toggleClosedCaptions()
             else -> super.onActionClicked(action)
+        }
+    }
+
+    private fun toggleClosedCaptions() {
+        if (closedCaptionAction.index == PlaybackControlsRow.ClosedCaptioningAction.INDEX_OFF) {
+            closedCaptionAction.index = PlaybackControlsRow.ClosedCaptioningAction.INDEX_ON
+            closedCaptionsTextView.visibility = View.VISIBLE
+            player.addTextOutput(closedCaptionTextOutput)
+        } else {
+            closedCaptionAction.index = PlaybackControlsRow.ClosedCaptioningAction.INDEX_OFF
+            closedCaptionsTextView.visibility = View.GONE
+            player.removeTextOutput(closedCaptionTextOutput)
         }
     }
 
@@ -81,11 +107,10 @@ class ExoPlayerPlaybackTransportControlGlue(
             dialog.onAudioLanguageSelected { language ->
                 val parameters = trackSelector.buildUponParameters()
                     .setPreferredAudioLanguage(language)
+                    .setPreferredTextLanguage(language)
                 trackSelector.setParameters(parameters)
             }
-            activity.supportFragmentManager.beginTransaction()
-                .add(dialog, null)
-                .commit()
+            dialog.show(activity.supportFragmentManager, null)
         }
     }
 

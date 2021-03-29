@@ -18,6 +18,12 @@ class TokenService @Inject constructor(
 
     companion object {
         private val TAG = TokenService::class.simpleName
+        /*
+         * This is a bit ridiculous
+         * but it is a safe fallback to renew the token,
+         * however it is always renewed at the start of the app
+         * so most likely will never be used
+         */
         private val JWT_LEEWAY = Duration.ofMinutes(1)
     }
 
@@ -31,7 +37,8 @@ class TokenService @Inject constructor(
 
     private suspend fun <T> loadAndGetToken(repository: TokenRepository<T>, jwt: (T) -> JWT, fetch: suspend () -> T): T {
         val existingToken = repository.find()
-        return if (existingToken == null || jwt(existingToken).isExpired(JWT_LEEWAY.seconds)) {
+        return if (existingToken == null || jwt(existingToken).isExpired(expirationInSeconds(jwt(existingToken)).seconds)) {
+            Log.d(TAG, "Token is expired fetching a new one")
             val token = fetch()
             repository.save(token)
             token
@@ -40,4 +47,9 @@ class TokenService @Inject constructor(
         }
     }
 
+    private fun expirationInSeconds(jwt: JWT): Duration {
+        Log.d(TAG, "Token expires at ${jwt.expiresAt}")
+        val expiresAt = jwt.expiresAt ?: return JWT_LEEWAY
+        return Duration.ofMillis(expiresAt.time)
+    }
 }

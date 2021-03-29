@@ -1,7 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.fragment.app.FragmentContainerView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/fragment_container"
-    android:name="fr.groggy.racecontrol.tv.ui.channel.playback.ChannelPlaybackFragment"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:keepScreenOn="true"/>
+    android:keepScreenOn="true">
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragment_container"
+        android:name="fr.groggy.racecontrol.tv.ui.channel.playback.ChannelPlaybackFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:keepScreenOn="true"/>
+
+    <TextView
+        android:id="@+id/closed_captions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:visibility="gone"
+        android:layout_margin="62dp"
+        android:textSize="24sp"
+        android:textColor="@android:color/white"
+        android:background="#80000000"
+        tools:visibility="visible"
+        tools:text="I am a closed caption"/>
+
+</RelativeLayout>
