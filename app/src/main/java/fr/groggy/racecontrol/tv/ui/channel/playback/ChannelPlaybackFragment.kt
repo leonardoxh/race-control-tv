@@ -9,6 +9,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.leanback.app.VideoSupportFragment
 import androidx.leanback.app.VideoSupportFragmentGlueHost
 import androidx.lifecycle.lifecycleScope
+import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.source.MediaSourceFactory
 import com.google.android.exoplayer2.source.hls.HlsMediaSource
@@ -104,8 +105,9 @@ class ChannelPlaybackFragment : VideoSupportFragment() {
     private fun onViewingCreated(viewing: F1TvViewing) {
         Log.d("ChannelPlayback", "Viewing is ready $viewing")
         if (!player.isPlaying) { //IF is playing already just ignore these calls
-            val mediaSource = mediaSourceFactory.createMediaSource(viewing.url)
-            player.prepare(mediaSource)
+            val mediaSource = mediaSourceFactory.createMediaSource(MediaItem.fromUri(viewing.url))
+            player.setMediaSource(mediaSource)
+            player.prepare()
         }
     }
 

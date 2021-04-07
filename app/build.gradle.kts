@@ -16,6 +16,8 @@ android {
         targetSdkVersion(30)
         versionCode = 19
         versionName = "2.0.5"
+
+        buildConfigField("String", "DEFAULT_USER_AGENT", "\"RaceControl f1viewer\"")
     }
 
     signingConfigs {
@@ -67,9 +69,9 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinCoroutinesVersion")
 
     implementation("androidx.core:core-ktx:1.3.2")
-    implementation("androidx.fragment:fragment-ktx:1.3.1")
+    implementation("androidx.fragment:fragment-ktx:1.3.2")
     implementation("androidx.leanback:leanback:1.0.0")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.3.0")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.3.1")
 
     val hiltVersion = rootProject.extra["hiltVersion"]
     val androidxHiltVersion = "1.0.0-beta01"
@@ -95,7 +97,7 @@ dependencies {
     implementation("com.github.bumptech.glide:okhttp3-integration:$glideVersion")
     kapt("com.github.bumptech.glide:compiler:$glideVersion")
 
-    val exoplayerVersion = "2.11.7"
+    val exoplayerVersion = "2.13.2"
     implementation("com.google.android.exoplayer:exoplayer:$exoplayerVersion")
     implementation("com.google.android.exoplayer:extension-leanback:$exoplayerVersion")
     implementation("com.google.android.exoplayer:extension-okhttp:$exoplayerVersion")

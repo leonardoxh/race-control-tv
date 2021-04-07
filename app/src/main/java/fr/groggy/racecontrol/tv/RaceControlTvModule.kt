@@ -1,13 +1,11 @@
 package fr.groggy.racecontrol.tv
 
-import android.content.Context
-import com.google.android.exoplayer2.ext.okhttp.OkHttpDataSourceFactory
+import com.google.android.exoplayer2.ext.okhttp.OkHttpDataSource
 import com.google.android.exoplayer2.upstream.HttpDataSource
 import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.JavaNetCookieJar
 import okhttp3.OkHttpClient
@@ -58,6 +56,8 @@ class RaceControlTvModule {
 
     @Provides
     @Singleton
-    fun httpDataSourceFactory(okHttpClient: OkHttpClient, @ApplicationContext context: Context): HttpDataSource.Factory =
-        OkHttpDataSourceFactory(okHttpClient, context.resources.getString(R.string.app_name))
+    fun httpDataSourceFactory(okHttpClient: OkHttpClient): HttpDataSource.Factory {
+        return OkHttpDataSource.Factory(okHttpClient)
+            .setUserAgent(BuildConfig.DEFAULT_USER_AGENT)
+    }
 }

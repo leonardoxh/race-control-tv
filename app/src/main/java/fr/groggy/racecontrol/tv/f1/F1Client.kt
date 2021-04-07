@@ -3,6 +3,7 @@ package fr.groggy.racecontrol.tv.f1
 import android.net.Uri
 import com.auth0.android.jwt.JWT
 import com.squareup.moshi.Moshi
+import fr.groggy.racecontrol.tv.BuildConfig
 import fr.groggy.racecontrol.tv.f1tv.F1TvViewing
 import fr.groggy.racecontrol.tv.f1tv.F1TvViewingResponse
 import fr.groggy.racecontrol.tv.utils.http.execute
@@ -39,7 +40,7 @@ class F1Client @Inject constructor(
             .url("${ROOT_URL}/v2/account/subscriber/authenticate/by-password")
             .post(body)
             .header("apiKey", API_KEY)
-            .header("User-Agent", "RaceControl f1viewer")
+            .header("User-Agent", BuildConfig.DEFAULT_USER_AGENT)
             .build()
         val response = request.execute(httpClient).parseJsonBody(authenticateResponseJsonAdapter)
         return F1Token(JWT(response.data.subscriptionToken))
@@ -54,7 +55,7 @@ class F1Client @Inject constructor(
             .url(PLAY_URL.format(contentId) + if (channelId != null) "&channelId=$channelId" else "")
             .get()
             .header("apiKey", API_KEY)
-            .header("User-Agent", "RaceControl f1viewer")
+            .header("User-Agent", BuildConfig.DEFAULT_USER_AGENT)
             .header("ascendontoken", token.toString())
             .build()
         val response = request.execute(httpClient).parseJsonBody(viewingResponseJsonAdapter)

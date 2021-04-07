@@ -14,7 +14,7 @@ import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.analytics.AnalyticsListener
 import com.google.android.exoplayer2.analytics.AnalyticsListener.EventTime
 import com.google.android.exoplayer2.ext.leanback.LeanbackPlayerAdapter
-import com.google.android.exoplayer2.source.MediaSourceEventListener.MediaLoadData
+import com.google.android.exoplayer2.source.MediaLoadData
 import com.google.android.exoplayer2.source.TrackGroupArray
 import com.google.android.exoplayer2.text.TextOutput
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
@@ -137,7 +137,7 @@ class ExoPlayerPlaybackTransportControlGlue(
         Log.d(TAG, "onTracksChanged")
         val audio = trackSelections[1]
         if (audio != null) {
-            currentAudioFormat = audio.selectedFormat
+            currentAudioFormat = audio.getFormat(C.TRACK_TYPE_DEFAULT)
             updateSubtitle()
         }
     }

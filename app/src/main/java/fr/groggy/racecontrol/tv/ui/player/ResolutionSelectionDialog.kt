@@ -6,7 +6,6 @@ import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.Format
-import com.google.android.exoplayer2.RendererCapabilities
 import com.google.android.exoplayer2.trackselection.MappingTrackSelector
 import fr.groggy.racecontrol.tv.R
 import kotlin.math.roundToInt
@@ -22,8 +21,7 @@ class ResolutionSelectionDialog(
         for (i in 0 until trackGroups.length) {
             val trackGroup = trackGroups[i]
             for (j in 0 until trackGroup.length) {
-                if (trackInfo.getTrackSupport(C.TRACK_TYPE_DEFAULT, i, j)
-                    == RendererCapabilities.FORMAT_HANDLED) {
+                if (trackInfo.getTrackSupport(C.TRACK_TYPE_DEFAULT, i, j) == C.FORMAT_HANDLED) {
                     formats.add(trackGroup.getFormat(j))
                 }
             }
