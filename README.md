@@ -56,3 +56,5 @@ First of all thank you [Groggy](https://github.com/Groggy) the original creator 
 Thanks to all contributors of [f1viewer](https://github.com/SoMuchForSubtlety/f1viewer) for their work on how to use the F1 TV API.
 
 Thanks to my friend [Thiago Andrade](https://github.com/ttandrade) for the exclusive icons and color guidelines.
+
+[![Donations](https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png)](https://www.buymeacoffee.com/lrossett)
