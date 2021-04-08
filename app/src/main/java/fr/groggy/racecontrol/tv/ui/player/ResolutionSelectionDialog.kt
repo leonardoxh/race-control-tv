@@ -22,7 +22,10 @@ class ResolutionSelectionDialog(
             val trackGroup = trackGroups[i]
             for (j in 0 until trackGroup.length) {
                 if (trackInfo.getTrackSupport(C.TRACK_TYPE_DEFAULT, i, j) == C.FORMAT_HANDLED) {
-                    formats.add(trackGroup.getFormat(j))
+                    val format = trackGroup.getFormat(j)
+                    if (format.frameRate > 1F) {
+                        formats.add(format)
+                    }
                 }
             }
         }
