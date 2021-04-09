@@ -7,6 +7,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import fr.groggy.racecontrol.tv.utils.locale.LocaleManager
 import okhttp3.JavaNetCookieJar
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -60,4 +61,8 @@ class RaceControlTvModule {
         return OkHttpDataSource.Factory(okHttpClient)
             .setUserAgent(BuildConfig.DEFAULT_USER_AGENT)
     }
+
+    @Provides
+    @Singleton
+    fun localeManager(): LocaleManager = LocaleManager()
 }
