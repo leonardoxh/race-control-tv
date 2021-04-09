@@ -1,5 +1,6 @@
 package fr.groggy.racecontrol.tv.ui.session
 
+import android.content.Context
 import android.net.Uri
 import android.util.Log
 import android.view.ViewGroup
@@ -10,15 +11,20 @@ import androidx.leanback.widget.ImageCardView.CARD_TYPE_FLAG_TITLE
 import androidx.leanback.widget.Presenter
 import com.bumptech.glide.Glide
 import fr.groggy.racecontrol.tv.R
+import java.util.*
 
 class SessionCardPresenter: Presenter() {
 
+    private lateinit var context: Context
+
     companion object {
+        private val TAG = SessionCardPresenter::class.simpleName
         private const val WIDTH = 313
         private const val HEIGHT = 176
     }
 
     override fun onCreateViewHolder(parent: ViewGroup): ViewHolder {
+        context = parent.context
         val view = ImageCardView(parent.context)
         view.setMainImageDimensions(
             WIDTH,
@@ -35,8 +41,16 @@ class SessionCardPresenter: Presenter() {
         val view = viewHolder.view as ImageCardView
         val session = item as SessionCard
 
+        val contentSubtype = "session_content_type_" + session.contentSubtype.toLowerCase(Locale.ROOT).replace(" ", "_")
+        val contentSubtypeTranslated: String = try {
+            context.resources.getString(context.resources.getIdentifier(contentSubtype, "string", context.packageName))
+        } catch (e: Exception) {
+            Log.d(TAG, "New translation for $contentSubtype needed")
+            session.contentSubtype
+        }
+
         view.titleText = session.name
-        view.contentText = session.contentSubtype
+        view.contentText = contentSubtypeTranslated.toUpperCase(Locale.ROOT)
 
         Glide.with(viewHolder.view.context)
             .load(session.thumbnail?.url)
