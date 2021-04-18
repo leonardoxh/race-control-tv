@@ -6,20 +6,19 @@ import com.squareup.moshi.Moshi
 import fr.groggy.racecontrol.tv.core.InstantPeriod
 import fr.groggy.racecontrol.tv.utils.http.execute
 import fr.groggy.racecontrol.tv.utils.http.parseJsonBody
-import fr.groggy.racecontrol.tv.utils.locale.LocaleManager
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.threeten.bp.Instant
 import org.threeten.bp.OffsetDateTime
 import org.threeten.bp.Year
+import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class F1TvClient @Inject constructor(
     private val httpClient: OkHttpClient,
-    moshi: Moshi,
-    private val localeManager: LocaleManager
+    moshi: Moshi
 ) {
 
     companion object {
@@ -40,7 +39,7 @@ class F1TvClient @Inject constructor(
     private val archiveSortInstant = Instant.now()
 
     suspend fun getSeason(archive: Archive): F1TvSeason {
-        val response = get(LIST_SEASON.format(localeManager.currentLocale, archive.year), seasonResponseJsonAdapter)
+        val response = get(LIST_SEASON.format(getCurrentLocale(), archive.year), seasonResponseJsonAdapter)
         Log.d(TAG, "Fetched season $archive")
         return F1TvSeason(
             year = Year.of(archive.year),
@@ -97,7 +96,7 @@ class F1TvClient @Inject constructor(
 
     private suspend fun getF1TvSessions(event: F1TvSeasonEvent, season: F1TvSeason): List<F1TvSession> {
         try {
-            val response = get(LIST_SESSIONS.format(localeManager.currentLocale, event.meetingKey), sessionResponseJsonAdapter)
+            val response = get(LIST_SESSIONS.format(getCurrentLocale(), event.meetingKey), sessionResponseJsonAdapter)
             Log.d(TAG, "Fetched session ${event.id}")
 
             return response.resultObj.containers.map {
@@ -143,7 +142,7 @@ class F1TvClient @Inject constructor(
 
     suspend fun getChannels(contentId: String): List<F1TvChannel> {
         try {
-            val response = get(LIST_CHANNELS.format(localeManager.currentLocale, contentId), channelResponseJsonAdapter)
+            val response = get(LIST_CHANNELS.format(getCurrentLocale(), contentId), channelResponseJsonAdapter)
             return response.resultObj.containers.firstOrNull()?.metadata?.additionalStreams
                 ?.sortedBy { it.racingNumber }
                 ?.map {
@@ -181,4 +180,10 @@ class F1TvClient @Inject constructor(
         return request.execute(httpClient).parseJsonBody(jsonAdapter)
     }
 
+    private fun getCurrentLocale(): String {
+        return when (val isO3Language = Locale.getDefault().isO3Language) {
+            "deu", "fra", "nld", "spa", "por" -> isO3Language.toUpperCase(Locale.ROOT)
+            else -> "ENG"
+        }
+    }
 }
