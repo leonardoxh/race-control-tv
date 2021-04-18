@@ -21,12 +21,5 @@
     <string name="video_selection_quality_auto">Auto</string>
 
     <string name="choose_a_season">Select a season</string>
-    <string name="session_content_type_race_highlights">Race highlights</string>
-    <string name="session_content_type_highlights">Highlights</string>
-    <string name="session_content_type_replay">Replay</string>
-    <string name="session_content_type_analysis">Analysis</string>
-    <string name="session_content_type_feature">Feature</string>
-    <string name="session_content_type_show">Show</string>
-    <string name="session_content_type_press_conference">Press conference</string>
 
 </resources>

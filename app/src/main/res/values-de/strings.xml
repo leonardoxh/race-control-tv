@@ -18,11 +18,4 @@
   <string name="video_selection_dialog_title">Video</string>
   <string name="video_selection_quality_auto">Automatisch</string>
   <string name="choose_a_season">Saison auswählen</string>
-  <string name="session_content_type_race_highlights">Rennhighlights</string>
-  <string name="session_content_type_highlights">Highlights</string>
-  <string name="session_content_type_replay">Wiederholung</string>
-  <string name="session_content_type_analysis">Analyse</string>
-  <string name="session_content_type_feature">Feature</string>
-  <string name="session_content_type_show">Show</string>
-  <string name="session_content_type_press_conference">Pressekonferenz</string>
 </resources>
