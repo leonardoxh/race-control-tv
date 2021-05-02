@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="login">Gebruikersnaam</string>
     <string name="password">Wachtwoord</string>
@@ -14,7 +15,6 @@
     </string>
 
     <string name="unable_to_play_video_message">Er ging iets fout bij het afspelen van deze video...</string>
-    <string name="video_quality">%1$dp%2$d</string>
     <string name="audio_selection_dialog_title">Audio</string>
     <string name="video_selection_dialog_title">Video</string>
     <string name="video_selection_quality_auto">Auto</string>

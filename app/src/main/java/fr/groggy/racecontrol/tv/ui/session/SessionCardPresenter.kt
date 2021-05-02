@@ -1,7 +1,6 @@
 package fr.groggy.racecontrol.tv.ui.session
 
 import android.net.Uri
-import android.util.Log
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.leanback.widget.ImageCardView
