@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="login">E-Mail Adresse</string>
+  <string name="password">Passwort</string>
+  <string name="signin">Anmelden</string>
+  <string name="signin_required_f1_tv_pro_account">Ein F1Tv/F1TvPro-Konto ist für die Anmeldung erforderlich</string>
+  <string name="invalid_credentials">Zugangsdaten ungültig</string>
+  <string name="rejected_credentials">Falsche E-Mail Adresse oder falsches Passwort</string>
+  <string name="rejected_credentials_message">
+        Manchmal kann dies aufgrund eines <b>F1 API BUGS</b> passieren, auch wenn Ihre E-Mail Adresse und Ihr Passwort korrekt sind.\n\n
+        1. Ein möglicher Workaround ist es die <b>F1Tv Webseite auf Ihrem Computer aufzurufen</b>.
+        Melden Sie sich mit Ihrem Konto an und anschließend wieder ab und kommen Sie wieder zurück zu dieser App. Dies könnte eventuell helfen.\n
+        2. Es ist auch möglich, dass aus irgendeinem Grund Ihre IP-Adresse blockiert ist (401 Antwort). Eine Möglichkeit dies zu beheben ist das Wechseln des Netzwerkes.
+        Sie sollten sich in diesem Fall an den F1 Support wenden.
+  </string>
+  <string name="unable_to_play_video_message">Beim Versuch dieses Video abzuspielen ist etwas schief gelaufen</string>
+  <string name="audio_selection_dialog_title">Audio</string>
+  <string name="video_selection_dialog_title">Video</string>
+  <string name="video_selection_quality_auto">Automatisch</string>
+  <string name="choose_a_season">Saison auswählen</string>
+</resources>

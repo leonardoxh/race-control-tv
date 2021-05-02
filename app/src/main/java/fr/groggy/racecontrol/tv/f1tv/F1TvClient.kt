@@ -11,6 +11,7 @@ import okhttp3.Request
 import org.threeten.bp.Instant
 import org.threeten.bp.OffsetDateTime
 import org.threeten.bp.Year
+import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -25,9 +26,9 @@ class F1TvClient @Inject constructor(
         private const val ROOT_URL = "https://f1tv.formula1.com"
 
         private const val GROUP_ID = 2 //TODO this might need to be migrated to the correct ONE
-        private const val LIST_SEASON = "/2.0/R/ENG/BIG_SCREEN_HLS/ALL/PAGE/SEARCH/VOD/F1_TV_Pro_Monthly/$GROUP_ID?filter_objectSubtype=Meeting&filter_season=%s&filter_orderByFom=Y&maxResults=100"
-        private const val LIST_SESSIONS = "/2.0/R/ENG/BIG_SCREEN_HLS/ALL/PAGE/SANDWICH/F1_TV_Pro_Monthly/$GROUP_ID?meetingId=%s&title=weekend-sessions"
-        private const val LIST_CHANNELS = "/2.0/R/ENG/BIG_SCREEN_HLS/ALL/CONTENT/VIDEO/%s/F1_TV_Pro_Monthly/$GROUP_ID"
+        private const val LIST_SEASON = "/2.0/R/%s/BIG_SCREEN_HLS/ALL/PAGE/SEARCH/VOD/F1_TV_Pro_Monthly/$GROUP_ID?filter_objectSubtype=Meeting&filter_season=%s&filter_orderByFom=Y&maxResults=100"
+        private const val LIST_SESSIONS = "/2.0/R/%s/BIG_SCREEN_HLS/ALL/PAGE/SANDWICH/F1_TV_Pro_Monthly/$GROUP_ID?meetingId=%s&title=weekend-sessions"
+        private const val LIST_CHANNELS = "/2.0/R/%s/BIG_SCREEN_HLS/ALL/CONTENT/VIDEO/%s/F1_TV_Pro_Monthly/$GROUP_ID"
         private const val PICTURE_URL = "https://ott.formula1.com/image-resizer/image/%s?w=384&h=384&o=L&q=HI"
     }
 
@@ -38,7 +39,7 @@ class F1TvClient @Inject constructor(
     private val archiveSortInstant = Instant.now()
 
     suspend fun getSeason(archive: Archive): F1TvSeason {
-        val response = get(LIST_SEASON.format(archive.year), seasonResponseJsonAdapter)
+        val response = get(LIST_SEASON.format(getCurrentLocale(), archive.year), seasonResponseJsonAdapter)
         Log.d(TAG, "Fetched season $archive")
         return F1TvSeason(
             year = Year.of(archive.year),
@@ -95,7 +96,7 @@ class F1TvClient @Inject constructor(
 
     private suspend fun getF1TvSessions(event: F1TvSeasonEvent, season: F1TvSeason): List<F1TvSession> {
         try {
-            val response = get(LIST_SESSIONS.format(event.meetingKey), sessionResponseJsonAdapter)
+            val response = get(LIST_SESSIONS.format(getCurrentLocale(), event.meetingKey), sessionResponseJsonAdapter)
             Log.d(TAG, "Fetched session ${event.id}")
 
             return response.resultObj.containers.map {
@@ -141,7 +142,7 @@ class F1TvClient @Inject constructor(
 
     suspend fun getChannels(contentId: String): List<F1TvChannel> {
         try {
-            val response = get(LIST_CHANNELS.format(contentId), channelResponseJsonAdapter)
+            val response = get(LIST_CHANNELS.format(getCurrentLocale(), contentId), channelResponseJsonAdapter)
             return response.resultObj.containers.firstOrNull()?.metadata?.additionalStreams
                 ?.sortedBy { it.racingNumber }
                 ?.map {
@@ -179,4 +180,10 @@ class F1TvClient @Inject constructor(
         return request.execute(httpClient).parseJsonBody(jsonAdapter)
     }
 
+    private fun getCurrentLocale(): String {
+        return when (val isO3Language = Locale.getDefault().isO3Language) {
+            "deu", "fra", "nld", "spa", "por" -> isO3Language.toUpperCase(Locale.ROOT)
+            else -> "ENG"
+        }
+    }
 }
