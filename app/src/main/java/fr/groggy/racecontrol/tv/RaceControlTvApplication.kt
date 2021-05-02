@@ -8,6 +8,7 @@ import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
 class RaceControlTvApplication: Application() {
+
     override fun onCreate() {
         super.onCreate()
         context = this
