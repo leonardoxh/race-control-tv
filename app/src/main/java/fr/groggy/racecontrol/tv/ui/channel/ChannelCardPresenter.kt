@@ -9,7 +9,6 @@ import androidx.leanback.widget.ImageCardView.CARD_TYPE_FLAG_CONTENT
 import androidx.leanback.widget.ImageCardView.CARD_TYPE_FLAG_TITLE
 import androidx.leanback.widget.Presenter
 import com.bumptech.glide.Glide
-import fr.groggy.racecontrol.tv.R
 import fr.groggy.racecontrol.tv.f1tv.F1TvBasicChannelType
 import fr.groggy.racecontrol.tv.f1tv.F1TvBasicChannelType.Companion.Data
 import fr.groggy.racecontrol.tv.f1tv.F1TvBasicChannelType.Companion.PitLane
@@ -40,10 +39,10 @@ class ChannelCardPresenter: Presenter() {
             is BasicChannelCard -> {
                 val type = item.type
                 view.titleText = when(type) {
-                    Wif -> R.string.main_broadcast.toString()
-                    PitLane -> R.string.pitlane.toString()
-                    Tracker -> R.string.tracker.toString()
-                    Data -> R.string.data.toString()
+                    Wif -> "Main broadcast"
+                    PitLane -> "Pit lane"
+                    Tracker -> "Tracker"
+                    Data -> "Data"
                     is Unknown -> type.name
                 }
                 view.setBackgroundColor(ContextCompat.getColor(viewHolder.view.context, android.R.color.black))
