@@ -18,4 +18,10 @@
   <string name="video_selection_dialog_title">Video</string>
   <string name="video_selection_quality_auto">Automatisch</string>
   <string name="choose_a_season">Saison auswählen</string>
+
+    <string name="teaser_image_text">Aktuelle Saison: %1$d</string>
+    <string name="teaser_image_description">Aktuelle Saison</string>
+
+    <string name="home_all">Alle anzeigen</string>
+    <string name="home_archive">Archiv</string>
 </resources>

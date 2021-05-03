@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.annotation.Keep
 import androidx.fragment.app.viewModels
 import androidx.leanback.app.RowsSupportFragment
@@ -57,23 +58,34 @@ class HomeFragment : RowsSupportFragment(), OnItemViewClickedListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val imageView = requireActivity().findViewById<ImageView>(R.id.imageView)
-        imageView?.setOnClickListener {
-            val activity = SeasonBrowseActivity.intent(requireContext(), Archive(Year.now().value))
+        val currentYear = Year.now().value
+
+        val imageView = requireActivity().findViewById<ImageView>(R.id.teaserImage)
+        imageView.setOnClickListener {
+            val activity = SeasonBrowseActivity.intent(requireContext(), Archive(currentYear))
             startActivity(activity)
         }
+
+        val teaserImageText = requireActivity().findViewById<TextView>(R.id.teaserImageText)
+        teaserImageText.text = resources.getString(R.string.teaser_image_text, currentYear)
     }
 
     private fun buildRowsAdapter() {
         val viewModel: HomeViewModel by viewModels()
+
+        archivesAdapter.add(getArchiveRow(viewModel))
+//        archivesAdapter.add(ListRow(HeaderItem("Documentations"), listRowAdapter))
+    }
+
+    private fun getArchiveRow(viewModel: HomeViewModel): ListRow {
         val archives = viewModel.listArchive().subList(1, 6)
             .map { archive -> HomeItem(HomeItemType.ARCHIVE, archive.year.toString()) }
 
         val listRowAdapter = ArrayObjectAdapter(HomeItemPresenter())
         listRowAdapter.setItems(archives, null)
-        listRowAdapter.add(HomeItem(HomeItemType.ARCHIVE_ALL, "Alle anzeigen"))
-        archivesAdapter.add(ListRow(HeaderItem("Archiv"), listRowAdapter))
-        archivesAdapter.add(ListRow(HeaderItem("Dokumentationen"), listRowAdapter))
+        listRowAdapter.add(HomeItem(HomeItemType.ARCHIVE_ALL, resources.getString(R.string.home_all)))
+
+        return ListRow(HeaderItem(resources.getString(R.string.home_archive)), listRowAdapter)
     }
 
     private fun setupUIElements() {

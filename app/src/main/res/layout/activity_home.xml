@@ -11,12 +11,12 @@
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/teaserImage"
             android:layout_width="wrap_content"
             android:layout_height="180dp"
             android:layout_margin="20dp"
             android:clickable="true"
-            android:contentDescription="Aktuelle Saison"
+            android:contentDescription="@string/teaser_image_description"
             android:focusable="true"
             android:scaleType="centerCrop"
             android:cropToPadding="true"
@@ -25,12 +25,11 @@
             android:src="@drawable/current_season" />
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/teaserImageText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_centerHorizontal="true"
-            android:text="Aktuelle Saison"
             android:textColor="@android:color/white"
             android:textAlignment="center"
             android:textSize="36sp" />

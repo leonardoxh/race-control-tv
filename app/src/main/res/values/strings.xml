@@ -22,4 +22,10 @@
 
     <string name="choose_a_season">Select a season</string>
 
+    <string name="teaser_image_text">Current season: %1$d</string>
+    <string name="teaser_image_description">Current season</string>
+
+    <string name="home_all">Show all</string>
+    <string name="home_archive">Archive</string>
+
 </resources>
