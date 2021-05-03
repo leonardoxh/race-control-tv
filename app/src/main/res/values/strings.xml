@@ -22,9 +22,4 @@
     <string name="video_selection_quality_auto">Auto</string>
 
     <string name="choose_a_season">Select a season</string>
-
-    <string name="main_broadcast">Main broadcast</string>
-    <string name="pitlane">Pit lane</string>
-    <string name="tracker">Tracker</string>
-    <string name="data">Data</string>
 </resources>

@@ -21,8 +21,4 @@
 
   <string name="choose_a_season">Saison auswählen</string>
 
-    <string name="main_broadcast">Hauptsendung</string>
-    <string name="pitlane">Boxengasse</string>
-    <string name="tracker">Tracker</string>
-    <string name="data">Daten</string>
 </resources>
