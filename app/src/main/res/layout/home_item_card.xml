@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/text_view"
+    android:layout_width="180dp"
+    android:layout_height="90dp"
+    android:autoSizeMaxTextSize="36sp"
+    android:autoSizeMinTextSize="18sp"
+    android:autoSizeStepGranularity="2sp"
+    android:autoSizeTextType="uniform"
+    android:background="@android:color/black"
+    android:gravity="center"
+    android:padding="8dp"
+    android:textAlignment="center"
+    android:textColor="@android:color/white"
+    android:textSize="24sp" />
