@@ -22,8 +22,9 @@ class SeasonArchiveFragment: VerticalGridSupportFragment(), OnItemViewClickedLis
         super.onCreate(savedInstanceState)
 
         title = getText(R.string.choose_a_season)
-        gridPresenter = VerticalGridPresenter().apply {
+        gridPresenter = VerticalGridPresenter(FocusHighlight.ZOOM_FACTOR_NONE).apply {
             numberOfColumns = 5
+            shadowEnabled = false
         }
         adapter = itemAdapter
         onItemViewClickedListener = this

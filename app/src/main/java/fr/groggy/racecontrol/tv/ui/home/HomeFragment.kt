@@ -23,7 +23,11 @@ import org.threeten.bp.Year
 @AndroidEntryPoint
 class HomeFragment : RowsSupportFragment(), OnItemViewClickedListener {
 
-    private val archivesAdapter = ArrayObjectAdapter(ListRowPresenter())
+    private val listRowPresenter = ListRowPresenter(FocusHighlight.ZOOM_FACTOR_NONE).apply {
+        shadowEnabled = false
+        selectEffectEnabled = false
+    }
+    private val archivesAdapter = ArrayObjectAdapter(listRowPresenter)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,7 +90,7 @@ class HomeFragment : RowsSupportFragment(), OnItemViewClickedListener {
         rowViewHolder: RowPresenter.ViewHolder?,
         row: Row?
     ) {
-        val activity = when((item as HomeItem).type) {
+        val activity = when ((item as HomeItem).type) {
             HomeItemType.ARCHIVE -> {
                 SeasonBrowseActivity.intent(requireContext(), Archive(item.text.toInt()))
             }
