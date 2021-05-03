@@ -7,13 +7,11 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewGroup.MarginLayoutParams
 import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.annotation.Keep
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
-import androidx.leanback.app.BrowseSupportFragment
+import androidx.leanback.app.RowsSupportFragment
 import androidx.leanback.widget.*
 import dagger.hilt.android.AndroidEntryPoint
 import fr.groggy.racecontrol.tv.R
@@ -22,7 +20,7 @@ import fr.groggy.racecontrol.tv.ui.season.archive.SeasonArchiveViewModel
 
 @Keep
 @AndroidEntryPoint
-class HomeFragment : BrowseSupportFragment(), OnItemViewClickedListener {
+class HomeFragment : RowsSupportFragment(), OnItemViewClickedListener {
 
     private val archivesAdapter = ArrayObjectAdapter(ListRowPresenter())
 
@@ -39,22 +37,15 @@ class HomeFragment : BrowseSupportFragment(), OnItemViewClickedListener {
         savedInstanceState: Bundle?
     ): View {
         val view = super.onCreateView(inflater, container, savedInstanceState)
-        val containerDock = view!!.findViewById<View>(R.id.browse_container_dock) as FrameLayout
-        val params = containerDock.layoutParams as MarginLayoutParams
+        val params = view!!.layoutParams as ViewGroup.MarginLayoutParams
         val resources: Resources = inflater.context.resources
-        val newMarginTop =
-            TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20f, resources.displayMetrics)
-                .toInt()
 
-        val offsetTopToZero: Int =
-            -resources.getDimensionPixelSize(R.dimen.lb_browse_rows_margin_top)
         val dimensionPixelSize = resources.getDimensionPixelSize(R.dimen.lb_browse_rows_fading_edge)
         val horizontalMargin = -dimensionPixelSize * 2 - 4
 
-        params.topMargin = offsetTopToZero + newMarginTop
         params.leftMargin = horizontalMargin
         params.rightMargin = horizontalMargin
-        containerDock.layoutParams = params
+        view.layoutParams = params
         return view
     }
 
@@ -77,10 +68,10 @@ class HomeFragment : BrowseSupportFragment(), OnItemViewClickedListener {
         listRowAdapter.setItems(archives, null)
         listRowAdapter.add(HomeItem(HomeItemType.ALL, "Alle anzeigen"))
         archivesAdapter.add(ListRow(HeaderItem("Archiv"), listRowAdapter))
+        archivesAdapter.add(ListRow(HeaderItem("Dokumentationen"), listRowAdapter))
     }
 
     private fun setupUIElements() {
-        headersState = HEADERS_DISABLED
         adapter = archivesAdapter
     }
 
