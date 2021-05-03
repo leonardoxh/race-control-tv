@@ -14,7 +14,7 @@ is the best resolution to pickup.
 
 Closed captions supported in english, spanish, dutch and german.
 
-Application is available in English and German. Feel free to translate it and open a PR :D
+Application is available in English, Dutch and German. Feel free to translate it and open a PR :D
 
 ## Install
 

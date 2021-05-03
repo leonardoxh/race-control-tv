@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="login">Gebruikersnaam</string>
+    <string name="password">Wachtwoord</string>
+    <string name="signin">Aanmelden</string>
+    <string name="signin_required_f1_tv_pro_account">Je hebt een F1Tv/F1TvPro account nodig om aan te melden</string>
+    <string name="invalid_credentials">Aanmeldgegevens onjuist</string>
+    <string name="rejected_credentials">Onjuiste gebruikersnaam of wachtwoord</string>
+    <string name="rejected_credentials_message">
+        Dit kan soms voor komen door een <b>F1 API BUG</b>, ondanks correcte gebruikersnaam en wachtwoord\n\n
+        1. Wat kan helpen: ga naar de <b>F1TV website op je computer</b> en meldt je aan met je account. Meldt
+        dan af en probeer het opnieuw in deze app. Het zou dan moeten werken.
+        2. Het is ook mogelijk dat je IP is geblokkeerd (401 antwoord). Probeer in dit geval van netwerk te
+        wisselen. Om het op te lossen moet je contact opnemen met F1 ondersteuning.
+    </string>
+
+    <string name="unable_to_play_video_message">Er ging iets fout bij het afspelen van deze video...</string>
+    <string name="audio_selection_dialog_title">Audio</string>
+    <string name="video_selection_dialog_title">Video</string>
+    <string name="video_selection_quality_auto">Auto</string>
+
+    <string name="choose_a_season">Kies een seizoen</string>
+</resources>

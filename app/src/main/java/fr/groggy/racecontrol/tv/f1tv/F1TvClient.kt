@@ -63,7 +63,7 @@ class F1TvClient @Inject constructor(
         return if (season.year.value < 2018) {
             getSessionArchive(event, season)
         } else {
-            getF1TvSessions(event, season)
+            getF1TvSessions(event)
         }
     }
 
@@ -94,7 +94,7 @@ class F1TvClient @Inject constructor(
         }
     }
 
-    private suspend fun getF1TvSessions(event: F1TvSeasonEvent, season: F1TvSeason): List<F1TvSession> {
+    private suspend fun getF1TvSessions(event: F1TvSeasonEvent): List<F1TvSession> {
         try {
             val response = get(LIST_SESSIONS.format(getCurrentLocale(), event.meetingKey), sessionResponseJsonAdapter)
             Log.d(TAG, "Fetched session ${event.id}")

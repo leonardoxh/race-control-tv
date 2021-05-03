@@ -13,15 +13,17 @@
         2. Es ist auch möglich, dass aus irgendeinem Grund Ihre IP-Adresse blockiert ist (401 Antwort). Eine Möglichkeit dies zu beheben ist das Wechseln des Netzwerkes.
         Sie sollten sich in diesem Fall an den F1 Support wenden.
   </string>
+
   <string name="unable_to_play_video_message">Beim Versuch dieses Video abzuspielen ist etwas schief gelaufen</string>
   <string name="audio_selection_dialog_title">Audio</string>
   <string name="video_selection_dialog_title">Video</string>
   <string name="video_selection_quality_auto">Automatisch</string>
+
   <string name="choose_a_season">Saison auswählen</string>
 
-    <string name="teaser_image_text">Aktuelle Saison: %1$d</string>
-    <string name="teaser_image_description">Aktuelle Saison</string>
+  <string name="teaser_image_text">Aktuelle Saison: %1$d</string>
+  <string name="teaser_image_description">Aktuelle Saison</string>
 
-    <string name="home_all">Alle anzeigen</string>
-    <string name="home_archive">Archiv</string>
+  <string name="home_all">Alle anzeigen</string>
+  <string name="home_archive">Archiv</string>
 </resources>
