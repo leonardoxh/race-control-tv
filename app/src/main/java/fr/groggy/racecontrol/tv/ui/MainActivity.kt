@@ -31,7 +31,6 @@ class MainActivity : FragmentActivity() {
     private fun startHomeActivity() {
         lifecycleScope.launchWhenStarted {
             val intent = if (credentialsService.hasValidF1Credentials()) {
-//                SeasonArchiveActivity.intent(this@MainActivity)
                 HomeActivity.intent(this@MainActivity)
             } else {
                 SignInActivity.intent(this@MainActivity)
