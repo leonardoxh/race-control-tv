@@ -1,10 +1,10 @@
 package fr.groggy.racecontrol.tv.ui.season.archive
 
 import android.os.Bundle
-import android.view.View
 import androidx.annotation.Keep
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
-import androidx.leanback.app.VerticalGridSupportFragment
+import androidx.leanback.app.BrowseSupportFragment
 import androidx.leanback.widget.*
 import dagger.hilt.android.AndroidEntryPoint
 import fr.groggy.racecontrol.tv.R
@@ -13,29 +13,43 @@ import fr.groggy.racecontrol.tv.ui.season.browse.SeasonBrowseActivity
 
 @Keep
 @AndroidEntryPoint
-class SeasonArchiveFragment: VerticalGridSupportFragment(), OnItemViewClickedListener {
-    private val itemAdapter: ArrayObjectAdapter by lazy {
-        ArrayObjectAdapter(ArchivePresenter())
-    }
+class SeasonArchiveFragment: BrowseSupportFragment(), OnItemViewClickedListener {
+
+    private val archivesAdapter = ArrayObjectAdapter(ListRowPresenter())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setupUIElements()
+        setupEventListeners()
+        buildRowsAdapter()
+    }
 
+    private fun setupUIElements() {
         title = getText(R.string.choose_a_season)
-        gridPresenter = VerticalGridPresenter(FocusHighlight.ZOOM_FACTOR_NONE).apply {
-            numberOfColumns = 5
-            shadowEnabled = false
-        }
-        adapter = itemAdapter
+        headersState = HEADERS_ENABLED
+        isHeadersTransitionOnBackEnabled = true
+        brandColor = ContextCompat.getColor(requireContext(), R.color.fastlane_background)
+        adapter = archivesAdapter
+    }
+
+    private fun setupEventListeners() {
         onItemViewClickedListener = this
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
+    private fun buildRowsAdapter() {
+        val archivesTitle = "%s - %s"
         val viewModel: SeasonArchiveViewModel by viewModels()
         val archives = viewModel.listArchive()
-        itemAdapter.setItems(archives, null)
+        val decades = archives.groupBy { archive: Archive -> (archive.year / 10) * 10 }
+        decades.entries.forEach {decade ->
+            run {
+                val entries = decade.value
+                val listRowAdapter = ArrayObjectAdapter(ArchivePresenter())
+                listRowAdapter.setItems(entries, null)
+                val title = archivesTitle.format(entries[entries.size - 1].year, entries[0].year)
+                archivesAdapter.add(ListRow(HeaderItem(title), listRowAdapter))
+            }
+        }
     }
 
     override fun onItemClicked(
