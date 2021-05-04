@@ -8,7 +8,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import fr.groggy.racecontrol.tv.R
 import fr.groggy.racecontrol.tv.core.credentials.CredentialsService
 import fr.groggy.racecontrol.tv.ui.home.HomeActivity
-import fr.groggy.racecontrol.tv.ui.season.archive.SeasonArchiveActivity
 import fr.groggy.racecontrol.tv.ui.signin.SignInActivity
 import javax.inject.Inject
 
