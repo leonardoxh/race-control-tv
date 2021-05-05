@@ -20,4 +20,11 @@
     <string name="video_selection_quality_auto">Auto</string>
 
     <string name="choose_a_season">Kies een seizoen</string>
+
+    <string name="teaser_image_text">Huidig seizoen: %1$d</string>
+    <string name="teaser_image_description">Huidig seizoen</string>
+
+    <string name="home_all">Toon alle</string>
+    <string name="home_archive">Archief</string>
+
 </resources>
