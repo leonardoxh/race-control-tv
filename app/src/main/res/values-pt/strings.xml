@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="login">Endereço de email</string>
+    <string name="password">Senha</string>
+    <string name="signin">Entrar</string>
+    <string name="signin_required_f1_tv_pro_account">Uma conta do F1Tv/F1TvPro é necessaria para login</string>
+    <string name="invalid_credentials">Credenciais invalidas</string>
+    <string name="rejected_credentials">Email ou senha incorretos</string>
+    <string name="rejected_credentials_message">
+        Algumas vezes isso pode acontecer mesmo se o email e senha estejam corretos por um <b>ERRO DE API F1</b>.\n\n
+        1. Se esse é o caso uma possível solução é <b> ir para o site da F1TV no seu computador</b>,
+        depois entrar e sair da sua conta depois voltar para o app e eventualmente vai funcionar.\n
+        2. Também é possível que por algum motivo seu IP foi bloqueado (resposta 401) neste caso tente
+        mudar de rede. Nesse caso contate o suporte F1.
+    </string>
+
+    <string name="unable_to_play_video_message">Algo deu errado durante a reprodução desse vídeo</string>
+    <string name="audio_selection_dialog_title">Áudio</string>
+    <string name="video_selection_dialog_title">Vídeo</string>
+    <string name="video_selection_quality_auto">Automático</string>
+
+    <string name="choose_a_season">Selecione uma temporada</string>
+</resources>
