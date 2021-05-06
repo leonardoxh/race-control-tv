@@ -9,9 +9,9 @@
     <string name="rejected_credentials_message">
         Algumas vezes isso pode acontecer mesmo se o email e senha estejam corretos por um <b>ERRO DE API F1</b>.\n\n
         1. Se esse é o caso uma possível solução é <b>ir para o site da F1TV no seu computador</b>,
-        depois entrar e sair da sua conta depois voltar para o app e eventualmente vai funcionar.\n
+        entrar e sair da sua conta depois voltar para o app e eventualmente irá funcionar.\n
         2. Também é possível que por algum motivo seu IP foi bloqueado (resposta 401) neste caso tente
-        mudar de rede. Nesse caso contate o suporte F1.
+        mudar de rede e contate o suporte F1.
     </string>
 
     <string name="unable_to_play_video_message">Algo deu errado durante a reprodução desse vídeo</string>
