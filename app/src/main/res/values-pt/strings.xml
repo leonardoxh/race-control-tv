@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="login">Endereço de email</string>
+    <string name="login">Email</string>
     <string name="password">Senha</string>
     <string name="signin">Entrar</string>
-    <string name="signin_required_f1_tv_pro_account">Uma conta do F1Tv/F1TvPro é necessaria para login</string>
-    <string name="invalid_credentials">Credenciais invalidas</string>
+    <string name="signin_required_f1_tv_pro_account">Uma conta do F1Tv/F1TvPro é necessária para login</string>
+    <string name="invalid_credentials">Credenciais inválidas</string>
     <string name="rejected_credentials">Email ou senha incorretos</string>
     <string name="rejected_credentials_message">
         Algumas vezes isso pode acontecer mesmo se o email e senha estejam corretos por um <b>ERRO DE API F1</b>.\n\n
