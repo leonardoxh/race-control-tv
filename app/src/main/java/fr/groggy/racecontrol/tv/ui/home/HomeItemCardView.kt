@@ -11,7 +11,7 @@ class HomeItemCardView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyle: Int = R.style.TextCardStyle
-): BaseCardView(
+) : BaseCardView(
     context,
     attrs,
     defStyle
@@ -19,8 +19,7 @@ class HomeItemCardView @JvmOverloads constructor(
     private val textView: TextView
 
     init {
-        LayoutInflater.from(getContext())
-            .inflate(R.layout.home_item_card, this)
+        inflate(context, R.layout.home_item_card, this)
         isFocusable = true
 
         textView = findViewById(R.id.text_view)

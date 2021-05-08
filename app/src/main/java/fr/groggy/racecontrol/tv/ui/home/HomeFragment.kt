@@ -1,14 +1,13 @@
 package fr.groggy.racecontrol.tv.ui.home
 
-import android.content.res.Resources
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.Keep
+import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.viewModels
 import androidx.leanback.app.RowsSupportFragment
 import androidx.leanback.widget.*
@@ -41,17 +40,16 @@ class HomeFragment : RowsSupportFragment(), OnItemViewClickedListener {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
+    ): View? {
         val view = super.onCreateView(inflater, container, savedInstanceState)
-        val params = view!!.layoutParams as ViewGroup.MarginLayoutParams
-        val resources: Resources = inflater.context.resources
+        view?.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+            val dimensionPixelSize = inflater.context.resources.getDimensionPixelSize(R.dimen.lb_browse_rows_fading_edge)
+            val horizontalMargin = -dimensionPixelSize * 2 - 4
 
-        val dimensionPixelSize = resources.getDimensionPixelSize(R.dimen.lb_browse_rows_fading_edge)
-        val horizontalMargin = -dimensionPixelSize * 2 - 4
+            leftMargin = horizontalMargin
+            rightMargin = horizontalMargin
+        }
 
-        params.leftMargin = horizontalMargin
-        params.rightMargin = horizontalMargin
-        view.layoutParams = params
         return view
     }
 

@@ -1,6 +1,6 @@
 package fr.groggy.racecontrol.tv.ui.home
 
-enum class HomeItemType{
+enum class HomeItemType {
     ARCHIVE, ARCHIVE_ALL
 }
 

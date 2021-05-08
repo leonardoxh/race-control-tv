@@ -13,7 +13,7 @@ import fr.groggy.racecontrol.tv.ui.season.browse.SeasonBrowseActivity
 
 @Keep
 @AndroidEntryPoint
-class SeasonArchiveFragment: BrowseSupportFragment(), OnItemViewClickedListener {
+class SeasonArchiveFragment : BrowseSupportFragment(), OnItemViewClickedListener {
 
     private val archivesAdapter = ArrayObjectAdapter(ListRowPresenter())
 
@@ -37,18 +37,19 @@ class SeasonArchiveFragment: BrowseSupportFragment(), OnItemViewClickedListener 
     }
 
     private fun buildRowsAdapter() {
-        val archivesTitle = "%s - %s"
         val viewModel: SeasonArchiveViewModel by viewModels()
         val archives = viewModel.listArchive()
-        val decades = archives.groupBy { archive: Archive -> (archive.year / 10) * 10 }
-        decades.entries.forEach {decade ->
-            run {
-                val entries = decade.value
-                val listRowAdapter = ArrayObjectAdapter(ArchivePresenter())
-                listRowAdapter.setItems(entries, null)
-                val title = archivesTitle.format(entries[entries.size - 1].year, entries[0].year)
-                archivesAdapter.add(ListRow(HeaderItem(title), listRowAdapter))
-            }
+        val decades = archives.groupBy { (it.year / 10) * 10 }
+        decades.entries.forEach { decade ->
+            val entries = decade.value
+            val listRowAdapter = ArrayObjectAdapter(ArchivePresenter())
+            listRowAdapter.setItems(entries, null)
+            val title = getString(R.string.season_archives_title).format(
+                entries[0].year,
+                entries[entries.size - 1].year
+            )
+            archivesAdapter.add(ListRow(HeaderItem(title), listRowAdapter))
+
         }
     }
 

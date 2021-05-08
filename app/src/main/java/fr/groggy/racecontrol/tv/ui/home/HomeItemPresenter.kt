@@ -18,8 +18,8 @@ class HomeItemPresenter: Presenter() {
         return ViewHolder(view)
     }
 
-    override fun onBindViewHolder(viewHolder: ViewHolder?, item: Any?) {
-        val view = viewHolder?.view as HomeItemCardView
+    override fun onBindViewHolder(viewHolder: ViewHolder, item: Any?) {
+        val view = viewHolder.view as HomeItemCardView
         val homeItem = item as HomeItem
         view.setText(homeItem.text)
     }
