@@ -44,9 +44,9 @@ class SeasonArchiveFragment : BrowseSupportFragment(), OnItemViewClickedListener
             val entries = decade.value
             val listRowAdapter = ArrayObjectAdapter(ArchivePresenter())
             listRowAdapter.setItems(entries, null)
-            val title = getString(R.string.season_archives_title).format(
-                entries[0].year,
-                entries[entries.size - 1].year
+            val title = getString(
+                R.string.season_archives_title, entries[0].year.toString(),
+                entries[entries.size - 1].year.toString()
             )
             archivesAdapter.add(ListRow(HeaderItem(title), listRowAdapter))
 
