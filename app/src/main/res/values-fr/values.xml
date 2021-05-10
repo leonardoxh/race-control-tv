@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="login">Adresse mail</string>
+    <string name="password">Mot de passe</string>
+    <string name="signin">Se connecter</string>
+    <string name="signin_required_f1_tv_pro_account">Un compte F1Tv/F1TvPro est requis pour se connecter</string>
+    <string name="invalid_credentials">Identifiant invalide</string>
+    <string name="rejected_credentials">Adresse mail ou mot de passe incorrect</string>
+    <string name="rejected_credentials_message">
+        Ceci peut arriver alors que vos identifiant sont correct, ça peut être dû à un <b>BUG des API de la F1</b>.\n\n
+        1. Si tel est le cas, une solution possible consiste à <b>vous rendre sur le site F1TV sur un ordinateur</b>,
+        puis connectez vous a votre compte et déconnectez pour revenir
+        sur l\'application, ça devrais refonctionner à nouveau.\n
+        2. Il est également possible que, pour une raison quelconque, votre adresse IP soit bloquée (réponse 401) dans ce cas, essayez
+        de changer de réseau, cela pourrait également fonctionner. Dans ce cas, vous devez également joindre le support F1.</string>
+
+    <string name="unable_to_play_video_message">Une erreur s\'est produite lors de la tentative de lecture de cette vidéo</string>
+    <string name="audio_selection_dialog_title">Audio</string>
+    <string name="video_selection_dialog_title">Vidéo</string>
+    <string name="video_selection_quality_auto">Auto</string>
+
+    <string name="choose_a_season">Sélectionnez une saison</string>
+</resources>

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="video_quality" translatable="false">%1$dp%2$d</string>
+</resources>
