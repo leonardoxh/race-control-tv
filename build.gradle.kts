@@ -5,7 +5,7 @@ buildscript {
     }
     dependencies {
         classpath("com.android.tools.build:gradle:4.2.0")
-        classpath(kotlin("gradle-plugin", version = "1.4.0"))
+        classpath(kotlin("gradle-plugin", version = "1.4.32"))
 
         val hiltVersion = "2.35.1"
         project.extra["hiltVersion"] = hiltVersion
