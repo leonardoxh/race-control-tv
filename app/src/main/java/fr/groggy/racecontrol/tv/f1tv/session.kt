@@ -36,7 +36,7 @@ data class F1TvSessionEmfAttributes(
     @Json(name = "Meeting_End_Date") val endDate: String?
 )
 
-inline class F1TvSessionId(val value: String)
+class F1TvSessionId(val value: String)
 
 data class F1TvSession(
     val id: F1TvSessionId,

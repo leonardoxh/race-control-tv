@@ -18,7 +18,6 @@ import fr.groggy.racecontrol.tv.ui.season.archive.SeasonArchiveActivity
 import fr.groggy.racecontrol.tv.ui.season.browse.SeasonBrowseActivity
 import org.threeten.bp.Year
 
-
 @Keep
 @AndroidEntryPoint
 class HomeFragment : RowsSupportFragment(), OnItemViewClickedListener {
