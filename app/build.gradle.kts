@@ -75,7 +75,7 @@ dependencies {
     kapt("com.google.dagger:hilt-android-compiler:$hiltVersion")
     kapt("androidx.hilt:hilt-compiler:1.0.0")
 
-    val okHttpVersion = "4.9.0"
+    val okHttpVersion = "4.9.1"
     implementation("com.squareup.okhttp3:okhttp:$okHttpVersion")
     implementation("com.squareup.okhttp3:okhttp-urlconnection:$okHttpVersion")
     implementation("com.squareup.okhttp3:logging-interceptor:$okHttpVersion")
