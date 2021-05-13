@@ -27,6 +27,7 @@ class HomeFragment : RowsSupportFragment(), OnItemViewClickedListener {
         selectEffectEnabled = false
     }
     private val archivesAdapter = ArrayObjectAdapter(listRowPresenter)
+    private var imageView: ImageView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,6 +50,8 @@ class HomeFragment : RowsSupportFragment(), OnItemViewClickedListener {
             rightMargin = horizontalMargin
         }
 
+        imageView = requireActivity().findViewById(R.id.teaserImage)
+
         return view
     }
 
@@ -57,8 +60,8 @@ class HomeFragment : RowsSupportFragment(), OnItemViewClickedListener {
 
         val currentYear = Year.now().value
 
-        val imageView = requireActivity().findViewById<ImageView>(R.id.teaserImage)
-        imageView.setOnClickListener {
+        imageView?.requestFocus()
+        imageView?.setOnClickListener {
             val activity = SeasonBrowseActivity.intent(requireContext(), Archive(currentYear))
             startActivity(activity)
         }
