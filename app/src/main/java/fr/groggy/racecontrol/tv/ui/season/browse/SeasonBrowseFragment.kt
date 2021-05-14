@@ -54,7 +54,7 @@ class SeasonBrowseFragment : BrowseSupportFragment(), OnItemViewClickedListener 
         val viewModel: SeasonBrowseViewModel by viewModels({ requireActivity() })
         val archive = findArchive(requireActivity())
         lifecycleScope.launchWhenStarted {
-            viewModel.season(archive).asLiveData().observe(viewLifecycleOwner, ::onUpdatedSeason)
+            viewModel.getSeason(archive).asLiveData().observe(viewLifecycleOwner, ::onUpdatedSeason)
         }
     }
 
