@@ -1,7 +1,6 @@
 package fr.groggy.racecontrol.tv.ui.home
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +16,7 @@ import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import fr.groggy.racecontrol.tv.R
 import fr.groggy.racecontrol.tv.f1tv.Archive
+import fr.groggy.racecontrol.tv.ui.common.CustomListRowPresenter
 import fr.groggy.racecontrol.tv.ui.season.archive.SeasonArchiveActivity
 import fr.groggy.racecontrol.tv.ui.season.browse.Season
 import fr.groggy.racecontrol.tv.ui.season.browse.SeasonBrowseActivity
@@ -28,10 +28,7 @@ import org.threeten.bp.Year
 @AndroidEntryPoint
 class HomeFragment : RowsSupportFragment(), OnItemViewClickedListener {
 
-    private val listRowPresenter = ListRowPresenter(FocusHighlight.ZOOM_FACTOR_NONE).apply {
-        shadowEnabled = false
-        selectEffectEnabled = false
-    }
+    private val listRowPresenter = CustomListRowPresenter()
     private val archivesAdapter = ArrayObjectAdapter(listRowPresenter)
     private var imageView: ImageView? = null
     private val currentYear = Year.now().value

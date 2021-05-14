@@ -14,6 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import fr.groggy.racecontrol.tv.R
 import fr.groggy.racecontrol.tv.f1tv.Archive
+import fr.groggy.racecontrol.tv.ui.common.CustomListRowPresenter
 import fr.groggy.racecontrol.tv.ui.event.EventListRowDiffCallback
 import fr.groggy.racecontrol.tv.ui.session.SessionCardPresenter
 import fr.groggy.racecontrol.tv.ui.session.browse.SessionBrowseActivity
@@ -43,7 +44,8 @@ class SeasonBrowseFragment : BrowseSupportFragment(), OnItemViewClickedListener 
     private val eventListRowDiffCallback = EventListRowDiffCallback()
     private val sessionCardPresenter = SessionCardPresenter()
 
-    private val eventsAdapter = ArrayObjectAdapter(ListRowPresenter())
+    private val listRowPresenter = CustomListRowPresenter()
+    private val eventsAdapter = ArrayObjectAdapter(listRowPresenter)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d(TAG, "onCreate")
@@ -92,9 +94,15 @@ class SeasonBrowseFragment : BrowseSupportFragment(), OnItemViewClickedListener 
         return listRow
     }
 
-    override fun onItemClicked(itemViewHolder: Presenter.ViewHolder, item: Any, rowViewHolder: RowPresenter.ViewHolder, row: Row) {
+    override fun onItemClicked(
+        itemViewHolder: Presenter.ViewHolder,
+        item: Any,
+        rowViewHolder: RowPresenter.ViewHolder,
+        row: Row
+    ) {
         val session = item as Session
-        val intent = SessionBrowseActivity.intent(requireActivity(), session.id.value, session.contentId)
+        val intent =
+            SessionBrowseActivity.intent(requireActivity(), session.id.value, session.contentId)
         startActivity(intent)
     }
 

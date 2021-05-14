@@ -1,6 +1,7 @@
 package fr.groggy.racecontrol.tv.ui.session
 
 import android.net.Uri
+import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.leanback.widget.ImageCardView
@@ -10,7 +11,7 @@ import androidx.leanback.widget.Presenter
 import com.bumptech.glide.Glide
 import fr.groggy.racecontrol.tv.R
 
-class SessionCardPresenter: Presenter() {
+class SessionCardPresenter : Presenter() {
 
     companion object {
         private const val WIDTH = 313
@@ -18,34 +19,37 @@ class SessionCardPresenter: Presenter() {
     }
 
     override fun onCreateViewHolder(parent: ViewGroup): ViewHolder {
-        val view = ImageCardView(parent.context)
-        view.setMainImageDimensions(
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.session_card, parent, false)
+
+        val imageCardView = view.findViewById<ImageCardView>(R.id.image_card_view)
+        imageCardView.setMainImageDimensions(
             WIDTH,
             HEIGHT
         )
-        view.cardType = CARD_TYPE_FLAG_TITLE or CARD_TYPE_FLAG_CONTENT
+        imageCardView.cardType = CARD_TYPE_FLAG_TITLE or CARD_TYPE_FLAG_CONTENT
 
-        view.findViewById<TextView>(R.id.title_text)?.setLines(2)
+        imageCardView.findViewById<TextView>(R.id.title_text)?.setLines(2)
 
         return ViewHolder(view)
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, item: Any) {
-        val view = viewHolder.view as ImageCardView
+        val imageCardView = viewHolder.view.findViewById<ImageCardView>(R.id.image_card_view)
         val session = item as SessionCard
 
-        view.titleText = session.name
-        view.contentText = session.contentSubtype
+        imageCardView.titleText = session.name
+        imageCardView.contentText = session.contentSubtype
 
         Glide.with(viewHolder.view.context)
             .load(session.thumbnail?.url)
-            .into(view.mainImageView)
+            .into(imageCardView.mainImageView)
     }
 
     override fun onUnbindViewHolder(viewHolder: ViewHolder) {
-        val view = viewHolder.view as ImageCardView
-        view.badgeImage = null
-        view.mainImage = null
+        val imageCardView = viewHolder.view.findViewById<ImageCardView>(R.id.image_card_view)
+        imageCardView.badgeImage = null
+        imageCardView.mainImage = null
     }
 
 }

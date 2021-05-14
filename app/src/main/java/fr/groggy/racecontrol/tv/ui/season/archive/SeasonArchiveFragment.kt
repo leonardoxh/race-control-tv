@@ -9,13 +9,15 @@ import androidx.leanback.widget.*
 import dagger.hilt.android.AndroidEntryPoint
 import fr.groggy.racecontrol.tv.R
 import fr.groggy.racecontrol.tv.f1tv.Archive
+import fr.groggy.racecontrol.tv.ui.common.CustomListRowPresenter
 import fr.groggy.racecontrol.tv.ui.season.browse.SeasonBrowseActivity
 
 @Keep
 @AndroidEntryPoint
 class SeasonArchiveFragment : BrowseSupportFragment(), OnItemViewClickedListener {
 
-    private val archivesAdapter = ArrayObjectAdapter(ListRowPresenter())
+    private val listRowPresenter = CustomListRowPresenter()
+    private val archivesAdapter = ArrayObjectAdapter(listRowPresenter)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
