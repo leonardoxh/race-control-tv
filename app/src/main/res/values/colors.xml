@@ -1,3 +1,4 @@
 <resources>
     <color name="fastlane_background">#0096a6</color>
+    <color name="card_background">#37474F</color>
 </resources>

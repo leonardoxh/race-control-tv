@@ -1,6 +1,6 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
     <stroke android:width="2dp" android:color="#FFFFFF" />
-    <solid android:color="#000000" />
+    <solid android:color="@color/card_background" />
     <corners android:radius="0dp" />
     <padding android:left="2dp" android:top="2dp" android:right="2dp" android:bottom="2dp" />
 </shape>
