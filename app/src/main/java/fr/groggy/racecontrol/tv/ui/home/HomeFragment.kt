@@ -22,6 +22,7 @@ import fr.groggy.racecontrol.tv.ui.season.browse.Season
 import fr.groggy.racecontrol.tv.ui.season.browse.SeasonBrowseActivity
 import fr.groggy.racecontrol.tv.ui.season.browse.Session
 import fr.groggy.racecontrol.tv.ui.session.SessionCardPresenter
+import fr.groggy.racecontrol.tv.ui.session.browse.SessionBrowseActivity
 import org.threeten.bp.Year
 
 @Keep
@@ -84,26 +85,32 @@ class HomeFragment : RowsSupportFragment(), OnItemViewClickedListener {
 
     private fun onUpdatedSeason(season: Season) {
         val viewModel: HomeViewModel by viewModels()
-        val event = season.events.filter { it.sessions.isNotEmpty() }[0]
-        val listRowAdapter = ArrayObjectAdapter(SessionCardPresenter())
-        listRowAdapter.setItems(event.sessions, Session.diffCallback)
+        val events = season.events.filter { it.sessions.isNotEmpty() }
+        if (events.isNotEmpty()) {
+            val event = events[0]
+            val listRowAdapter = ArrayObjectAdapter(SessionCardPresenter())
+            listRowAdapter.setItems(event.sessions, Session.diffCallback)
 
-        if (archivesAdapter.size() == 0) {
-            archivesAdapter.add(
-                ListRow(
-                    HeaderItem(
-                        getString(
-                            R.string.season_last_event,
-                            event.name,
-                            currentYear.toString()
-                        )
-                    ), listRowAdapter
+            if (archivesAdapter.size() == 0) {
+                archivesAdapter.add(
+                    ListRow(
+                        HeaderItem(
+                            getString(
+                                R.string.season_last_event,
+                                event.name,
+                                currentYear.toString()
+                            )
+                        ), listRowAdapter
+                    )
                 )
-            )
-            archivesAdapter.add(getArchiveRow(viewModel))
-        } else {
-            val listRow: ListRow = archivesAdapter.get(0) as ListRow
-            (listRow.adapter as ArrayObjectAdapter).setItems(event.sessions, Session.diffCallback)
+                archivesAdapter.add(getArchiveRow(viewModel))
+            } else {
+                val listRow: ListRow = archivesAdapter.get(0) as ListRow
+                (listRow.adapter as ArrayObjectAdapter).setItems(
+                    event.sessions,
+                    Session.diffCallback
+                )
+            }
         }
 
     }
@@ -138,13 +145,19 @@ class HomeFragment : RowsSupportFragment(), OnItemViewClickedListener {
         rowViewHolder: RowPresenter.ViewHolder?,
         row: Row?
     ) {
-        val activity = when ((item as HomeItem).type) {
-            HomeItemType.ARCHIVE -> {
-                SeasonBrowseActivity.intent(requireContext(), Archive(item.text.toInt()))
+        val activity = when (item) {
+            is Session -> {
+                SessionBrowseActivity.intent(requireActivity(), item.id.value, item.contentId)
             }
-            HomeItemType.ARCHIVE_ALL -> {
-                SeasonArchiveActivity.intent(requireContext())
+            is HomeItem -> when (item.type) {
+                HomeItemType.ARCHIVE -> {
+                    SeasonBrowseActivity.intent(requireContext(), Archive(item.text.toInt()))
+                }
+                HomeItemType.ARCHIVE_ALL -> {
+                    SeasonArchiveActivity.intent(requireContext())
+                }
             }
+            else -> null
         }
         startActivity(activity)
     }
