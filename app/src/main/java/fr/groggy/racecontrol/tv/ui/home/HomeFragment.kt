@@ -92,7 +92,17 @@ class HomeFragment : RowsSupportFragment(), OnItemViewClickedListener {
         listRowAdapter.setItems(event.sessions, Session.diffCallback)
 
         if (archivesAdapter.size() == 0) {
-            archivesAdapter.add(ListRow(HeaderItem(event.name + " " + currentYear), listRowAdapter))
+            archivesAdapter.add(
+                ListRow(
+                    HeaderItem(
+                        getString(
+                            R.string.season_last_event,
+                            event.name,
+                            currentYear.toString()
+                        )
+                    ), listRowAdapter
+                )
+            )
             archivesAdapter.add(getArchiveRow(viewModel))
         } else {
             val listRow: ListRow = archivesAdapter.get(0) as ListRow
