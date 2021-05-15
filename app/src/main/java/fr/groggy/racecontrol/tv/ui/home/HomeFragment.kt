@@ -30,9 +30,10 @@ import org.threeten.bp.Year
 class HomeFragment : RowsSupportFragment(), OnItemViewClickedListener {
 
     private val listRowPresenter = CustomListRowPresenter()
-    private val archivesAdapter = ArrayObjectAdapter(listRowPresenter)
+    private val homeEntriesAdapter = ArrayObjectAdapter(listRowPresenter)
     private var imageView: ImageView? = null
     private val currentYear = Year.now().value
+    private var archivesRow: ListRow? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,38 +82,44 @@ class HomeFragment : RowsSupportFragment(), OnItemViewClickedListener {
             viewModel.getCurrentSeason(Archive(currentYear)).asLiveData()
                 .observe(viewLifecycleOwner, ::onUpdatedSeason)
         }
+
+        archivesRow = getArchiveRow(viewModel)
     }
 
     private fun onUpdatedSeason(season: Season) {
-        val viewModel: HomeViewModel by viewModels()
         val events = season.events.filter { it.sessions.isNotEmpty() }
         if (events.isNotEmpty()) {
             val event = events[0]
-            val listRowAdapter = ArrayObjectAdapter(SessionCardPresenter())
-            listRowAdapter.setItems(event.sessions, Session.diffCallback)
+            val existingListRows = homeEntriesAdapter.unmodifiableList<ListRow>()
+            val headerName =
+                getString(R.string.season_last_event, event.name, currentYear.toString())
+            val existingListRow = existingListRows.find { it.headerItem.name == headerName }
+            val sessionsListRow = getLastSessionsRow(event.sessions, headerName, existingListRow)
 
-            if (archivesAdapter.size() == 0) {
-                archivesAdapter.add(
-                    ListRow(
-                        HeaderItem(
-                            getString(
-                                R.string.season_last_event,
-                                event.name,
-                                currentYear.toString()
-                            )
-                        ), listRowAdapter
-                    )
-                )
-                archivesAdapter.add(getArchiveRow(viewModel))
+            if (existingListRow == null) {
+                homeEntriesAdapter.add(sessionsListRow)
+                homeEntriesAdapter.add(archivesRow)
             } else {
-                val listRow: ListRow = archivesAdapter.get(0) as ListRow
-                (listRow.adapter as ArrayObjectAdapter).setItems(
-                    event.sessions,
-                    Session.diffCallback
-                )
+                homeEntriesAdapter.replace(0, sessionsListRow)
             }
         }
+    }
 
+    private fun getLastSessionsRow(
+        sessions: List<Session>,
+        headerName: String,
+        existingListRow: ListRow?
+    ): ListRow {
+        val (listRow, listRowAdapter) = if (existingListRow == null) {
+            val listRowAdapter = ArrayObjectAdapter(SessionCardPresenter())
+            val listRow = ListRow(HeaderItem(headerName), listRowAdapter)
+            listRow to listRowAdapter
+        } else {
+            val listRowAdapter = existingListRow.adapter as ArrayObjectAdapter
+            existingListRow to listRowAdapter
+        }
+        listRowAdapter.setItems(sessions, Session.diffCallback)
+        return listRow
     }
 
     private fun getArchiveRow(viewModel: HomeViewModel): ListRow {
@@ -132,7 +139,7 @@ class HomeFragment : RowsSupportFragment(), OnItemViewClickedListener {
     }
 
     private fun setupUIElements() {
-        adapter = archivesAdapter
+        adapter = homeEntriesAdapter
     }
 
     private fun setupEventListeners() {
