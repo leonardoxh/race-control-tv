@@ -36,7 +36,7 @@ data class F1TvChannelAdditionalStream(
     val type: String
 )
 
-inline class F1TvChannelId(val value: String)
+class F1TvChannelId(val value: String)
 
 sealed class F1TvBasicChannelType {
     companion object {

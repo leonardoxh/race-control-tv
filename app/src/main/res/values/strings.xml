@@ -16,10 +16,16 @@
     </string>
 
     <string name="unable_to_play_video_message">Something went wrong while trying to play this video</string>
-    <string name="video_quality" translatable="false">%1$dp%2$d</string>
     <string name="audio_selection_dialog_title">Audio</string>
     <string name="video_selection_dialog_title">Video</string>
     <string name="video_selection_quality_auto">Auto</string>
 
     <string name="choose_a_season">Select a season</string>
+
+    <string name="teaser_image_text">Current season: %1$d</string>
+    <string name="teaser_image_description">Current season</string>
+
+    <string name="home_all">Show all</string>
+    <string name="home_archive">Archive</string>
+
 </resources>

@@ -2,7 +2,7 @@ package fr.groggy.racecontrol.tv.f1tv
 
 import fr.groggy.racecontrol.tv.core.InstantPeriod
 
-inline class F1TvEventId(val value: String)
+class F1TvEventId(val value: String)
 
 data class F1TvEvent(
     val id: F1TvEventId,
