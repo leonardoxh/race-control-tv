@@ -1,6 +1,7 @@
 package fr.groggy.racecontrol.tv.f1tv
 
 import android.util.Log
+import com.google.common.collect.ImmutableList
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import fr.groggy.racecontrol.tv.core.InstantPeriod
@@ -8,6 +9,7 @@ import fr.groggy.racecontrol.tv.utils.http.execute
 import fr.groggy.racecontrol.tv.utils.http.parseJsonBody
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import okhttp3.internal.toImmutableList
 import org.threeten.bp.Instant
 import org.threeten.bp.OffsetDateTime
 import org.threeten.bp.Year
@@ -62,8 +64,10 @@ class F1TvClient @Inject constructor(
     suspend fun getSessions(event: F1TvSeasonEvent, season: F1TvSeason): List<F1TvSession> {
         return if (season.year.value < 2018) {
             getSessionArchive(event, season)
-        } else {
+        } else if (event.period.start < Instant.now()) {
             getF1TvSessions(event)
+        } else {
+            return listOf()
         }
     }
 
@@ -96,9 +100,11 @@ class F1TvClient @Inject constructor(
 
     private suspend fun getF1TvSessions(event: F1TvSeasonEvent): List<F1TvSession> {
         try {
-            val response = get(LIST_SESSIONS.format(getCurrentLocale(), event.meetingKey), sessionResponseJsonAdapter)
+            val response = get(
+                LIST_SESSIONS.format(getCurrentLocale(), event.meetingKey),
+                sessionResponseJsonAdapter
+            )
             Log.d(TAG, "Fetched session ${event.id}")
-
             return response.resultObj.containers.map {
                 F1TvSession(
                     id = F1TvSessionId(it.id),
