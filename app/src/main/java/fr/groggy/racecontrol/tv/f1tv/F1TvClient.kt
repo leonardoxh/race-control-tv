@@ -64,8 +64,10 @@ class F1TvClient @Inject constructor(
     suspend fun getSessions(event: F1TvSeasonEvent, season: F1TvSeason): List<F1TvSession> {
         return if (season.year.value < 2018) {
             getSessionArchive(event, season)
-        } else {
+        } else if (event.period.start < Instant.now()) {
             getF1TvSessions(event)
+        } else {
+            return listOf()
         }
     }
 
@@ -97,40 +99,36 @@ class F1TvClient @Inject constructor(
     }
 
     private suspend fun getF1TvSessions(event: F1TvSeasonEvent): List<F1TvSession> {
-        if (event.period.start < Instant.now()) {
-            try {
-                val response = get(
-                    LIST_SESSIONS.format(getCurrentLocale(), event.meetingKey),
-                    sessionResponseJsonAdapter
+        try {
+            val response = get(
+                LIST_SESSIONS.format(getCurrentLocale(), event.meetingKey),
+                sessionResponseJsonAdapter
+            )
+            Log.d(TAG, "Fetched session ${event.id}")
+            return response.resultObj.containers.map {
+                F1TvSession(
+                    id = F1TvSessionId(it.id),
+                    eventId = event.id,
+                    pictureUrl = PICTURE_URL.format(it.metadata.pictureUrl),
+                    contentId = it.metadata.contentId,
+                    name = it.metadata.title,
+                    contentSubtype = it.metadata.contentSubtype,
+                    period = InstantPeriod(
+                        start = parseOffsetDateSafely(it.metadata.emfAttributes.startDate),
+                        end = parseOffsetDateSafely(it.metadata.emfAttributes.endDate)
+                    ),
+                    available = true,
+                    images = listOf(),
+                    channels = listOf()
                 )
-                Log.d(TAG, "Fetched session ${event.id}")
-                return response.resultObj.containers.map {
-                    F1TvSession(
-                        id = F1TvSessionId(it.id),
-                        eventId = event.id,
-                        pictureUrl = PICTURE_URL.format(it.metadata.pictureUrl),
-                        contentId = it.metadata.contentId,
-                        name = it.metadata.title,
-                        contentSubtype = it.metadata.contentSubtype,
-                        period = InstantPeriod(
-                            start = parseOffsetDateSafely(it.metadata.emfAttributes.startDate),
-                            end = parseOffsetDateSafely(it.metadata.emfAttributes.endDate)
-                        ),
-                        available = true,
-                        images = listOf(),
-                        channels = listOf()
-                    )
-                }
-            } catch (e: Exception) {
-                /*
-                 * The pre seasons for example are not available to query
-                 * on the regular api, for this fallback to the archive
-                 */
-                Log.d(TAG, "getF1TvSessions failed with ${e.message}")
-                //return getSessionArchive(event, season)
-                return listOf()
             }
-        } else {
+        } catch (e: Exception) {
+            /*
+             * The pre seasons for example are not available to query
+             * on the regular api, for this fallback to the archive
+             */
+            Log.d(TAG, "getF1TvSessions failed with ${e.message}")
+            //return getSessionArchive(event, season)
             return listOf()
         }
     }
