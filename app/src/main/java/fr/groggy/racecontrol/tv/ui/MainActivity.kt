@@ -7,7 +7,7 @@ import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import fr.groggy.racecontrol.tv.R
 import fr.groggy.racecontrol.tv.core.credentials.CredentialsService
-import fr.groggy.racecontrol.tv.ui.season.archive.SeasonArchiveActivity
+import fr.groggy.racecontrol.tv.ui.home.HomeActivity
 import fr.groggy.racecontrol.tv.ui.signin.SignInActivity
 import javax.inject.Inject
 
@@ -30,7 +30,7 @@ class MainActivity : FragmentActivity() {
     private fun startHomeActivity() {
         lifecycleScope.launchWhenStarted {
             val intent = if (credentialsService.hasValidF1Credentials()) {
-                SeasonArchiveActivity.intent(this@MainActivity)
+                HomeActivity.intent(this@MainActivity)
             } else {
                 SignInActivity.intent(this@MainActivity)
             }

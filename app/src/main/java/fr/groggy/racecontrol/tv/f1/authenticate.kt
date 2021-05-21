@@ -22,4 +22,4 @@ data class F1Credentials(
     val password: String
 )
 
-inline class F1Token(val value: JWT)
+class F1Token(val value: JWT)

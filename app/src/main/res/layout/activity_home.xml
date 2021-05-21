@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:keepScreenOn="true"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/teaserImage"
+            android:layout_width="wrap_content"
+            android:layout_height="180dp"
+            android:layout_margin="20dp"
+            android:clickable="true"
+            android:contentDescription="@string/teaser_image_description"
+            android:focusable="true"
+            android:scaleType="centerCrop"
+            android:cropToPadding="true"
+            android:padding="2dp"
+            android:background="@drawable/teaser_item_background"
+            android:src="@drawable/current_season" />
+
+        <TextView
+            android:id="@+id/teaserImageText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_centerHorizontal="true"
+            android:textColor="@android:color/white"
+            android:textAlignment="center"
+            android:textSize="36sp" />
+    </RelativeLayout>
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragment"
+        android:name="fr.groggy.racecontrol.tv.ui.home.HomeFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>

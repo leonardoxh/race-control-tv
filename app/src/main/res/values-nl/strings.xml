@@ -21,8 +21,10 @@
 
     <string name="choose_a_season">Kies een seizoen</string>
 
-    <string name="main_broadcast">Hoofduitzending</string>
-    <string name="pitlane">Pit straat</string>
-    <string name="tracker">Tracker</string>
-    <string name="data">Data</string>
+    <string name="teaser_image_text">Huidig seizoen: %1$d</string>
+    <string name="teaser_image_description">Huidig seizoen</string>
+
+    <string name="home_all">Toon alle</string>
+    <string name="home_archive">Archief</string>
+
 </resources>

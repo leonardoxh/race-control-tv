@@ -16,7 +16,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import fr.groggy.racecontrol.tv.R
 import fr.groggy.racecontrol.tv.core.credentials.CredentialsService
 import fr.groggy.racecontrol.tv.f1.F1Credentials
-import fr.groggy.racecontrol.tv.ui.season.archive.SeasonArchiveActivity
+import fr.groggy.racecontrol.tv.ui.home.HomeActivity
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -52,8 +52,7 @@ class SignInActivity : ComponentActivity() {
             if (credentials.login.isEmpty() || credentials.password.isEmpty()) {
                 Toast.makeText(applicationContext, R.string.invalid_credentials, Toast.LENGTH_SHORT).show()
             } else if (credentialsService.checkAndSave(credentials)) {
-                val intent = SeasonArchiveActivity.intent(this@SignInActivity)
-                startActivity(intent)
+                startActivity(HomeActivity.intent(this@SignInActivity))
                 finish()
             } else {
                 AlertDialog.Builder(this@SignInActivity)

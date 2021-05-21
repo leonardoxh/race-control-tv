@@ -1,7 +1,6 @@
 plugins {
     id("com.android.application")
     kotlin("android")
-    kotlin("android.extensions")
     kotlin("kapt")
     id("dagger.hilt.android.plugin")
 }
@@ -14,8 +13,8 @@ android {
         applicationId = "com.github.leonardoxh.f1"
         minSdkVersion(21)
         targetSdkVersion(30)
-        versionCode = 21
-        versionName = "2.0.7"
+        versionCode = 23
+        versionName = "2.1.1"
 
         buildConfigField("String", "DEFAULT_USER_AGENT", "\"RaceControl f1viewer\"")
     }
@@ -55,31 +54,28 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
         freeCompilerArgs = freeCompilerArgs + listOf(
-            "-XXLanguage:+InlineClasses",
-            "-Xuse-experimental=kotlin.time.ExperimentalTime",
             "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi"
         )
     }
 }
 
 dependencies {
-    val kotlinCoroutinesVersion = "1.4.2"
+    val kotlinCoroutinesVersion = "1.4.3"
     implementation(kotlin("stdlib"))
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinCoroutinesVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinCoroutinesVersion")
 
     implementation("androidx.core:core-ktx:1.3.2")
-    implementation("androidx.fragment:fragment-ktx:1.3.2")
+    implementation("androidx.fragment:fragment-ktx:1.3.3")
     implementation("androidx.leanback:leanback:1.0.0")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.3.1")
 
     val hiltVersion = rootProject.extra["hiltVersion"]
-    val androidxHiltVersion = "1.0.0-beta01"
     implementation("com.google.dagger:hilt-android:$hiltVersion")
     kapt("com.google.dagger:hilt-android-compiler:$hiltVersion")
-    kapt("androidx.hilt:hilt-compiler:$androidxHiltVersion")
+    kapt("androidx.hilt:hilt-compiler:1.0.0")
 
-    val okHttpVersion = "4.9.0"
+    val okHttpVersion = "4.9.1"
     implementation("com.squareup.okhttp3:okhttp:$okHttpVersion")
     implementation("com.squareup.okhttp3:okhttp-urlconnection:$okHttpVersion")
     implementation("com.squareup.okhttp3:logging-interceptor:$okHttpVersion")
