@@ -1,6 +1,7 @@
 package fr.groggy.racecontrol.tv.f1tv
 
 import android.util.Log
+import com.google.common.collect.ImmutableList
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import fr.groggy.racecontrol.tv.core.InstantPeriod
@@ -8,6 +9,7 @@ import fr.groggy.racecontrol.tv.utils.http.execute
 import fr.groggy.racecontrol.tv.utils.http.parseJsonBody
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import okhttp3.internal.toImmutableList
 import org.threeten.bp.Instant
 import org.threeten.bp.OffsetDateTime
 import org.threeten.bp.Year
@@ -95,34 +97,40 @@ class F1TvClient @Inject constructor(
     }
 
     private suspend fun getF1TvSessions(event: F1TvSeasonEvent): List<F1TvSession> {
-        try {
-            val response = get(LIST_SESSIONS.format(getCurrentLocale(), event.meetingKey), sessionResponseJsonAdapter)
-            Log.d(TAG, "Fetched session ${event.id}")
-
-            return response.resultObj.containers.map {
-                F1TvSession(
-                    id = F1TvSessionId(it.id),
-                    eventId = event.id,
-                    pictureUrl = PICTURE_URL.format(it.metadata.pictureUrl),
-                    contentId = it.metadata.contentId,
-                    name = it.metadata.title,
-                    contentSubtype = it.metadata.contentSubtype,
-                    period = InstantPeriod(
-                        start = parseOffsetDateSafely(it.metadata.emfAttributes.startDate),
-                        end = parseOffsetDateSafely(it.metadata.emfAttributes.endDate)
-                    ),
-                    available = true,
-                    images = listOf(),
-                    channels = listOf()
+        if (event.period.start < Instant.now()) {
+            try {
+                val response = get(
+                    LIST_SESSIONS.format(getCurrentLocale(), event.meetingKey),
+                    sessionResponseJsonAdapter
                 )
+                Log.d(TAG, "Fetched session ${event.id}")
+                return response.resultObj.containers.map {
+                    F1TvSession(
+                        id = F1TvSessionId(it.id),
+                        eventId = event.id,
+                        pictureUrl = PICTURE_URL.format(it.metadata.pictureUrl),
+                        contentId = it.metadata.contentId,
+                        name = it.metadata.title,
+                        contentSubtype = it.metadata.contentSubtype,
+                        period = InstantPeriod(
+                            start = parseOffsetDateSafely(it.metadata.emfAttributes.startDate),
+                            end = parseOffsetDateSafely(it.metadata.emfAttributes.endDate)
+                        ),
+                        available = true,
+                        images = listOf(),
+                        channels = listOf()
+                    )
+                }
+            } catch (e: Exception) {
+                /*
+                 * The pre seasons for example are not available to query
+                 * on the regular api, for this fallback to the archive
+                 */
+                Log.d(TAG, "getF1TvSessions failed with ${e.message}")
+                //return getSessionArchive(event, season)
+                return listOf()
             }
-        } catch (e: Exception) {
-            /*
-             * The pre seasons for example are not available to query
-             * on the regular api, for this fallback to the archive
-             */
-            Log.d(TAG, "getF1TvSessions failed with ${e.message}")
-            //return getSessionArchive(event, season)
+        } else {
             return listOf()
         }
     }
