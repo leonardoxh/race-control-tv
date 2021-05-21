@@ -12,6 +12,7 @@ import fr.groggy.racecontrol.tv.R
 import fr.groggy.racecontrol.tv.core.season.SeasonService
 import fr.groggy.racecontrol.tv.f1tv.Archive
 import fr.groggy.racecontrol.tv.utils.coroutines.schedule
+import org.threeten.bp.Duration
 import javax.inject.Inject
 import kotlin.time.minutes
 
@@ -51,7 +52,8 @@ class SeasonBrowseActivity : FragmentActivity() {
         Log.d(TAG, "onStart")
         super.onStart()
         lifecycleScope.launchWhenStarted {
-            schedule(1.minutes) {
+            schedule(Duration.ofMinutes(1)) {
+                Log.d("Fetching new data", "Lifecycle state is ${lifecycle.currentState}")
                 val archive = SeasonBrowseFragment.findArchive(this@SeasonBrowseActivity)
                 seasonService.loadSeason(archive)
 

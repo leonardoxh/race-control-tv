@@ -57,8 +57,10 @@ class SessionGridFragment : VerticalGridSupportFragment(), OnItemViewClickedList
     }
 
     private fun setupUIElements() {
-        gridPresenter = VerticalGridPresenter()
-        gridPresenter.numberOfColumns = COLUMNS
+        gridPresenter = VerticalGridPresenter(FocusHighlight.ZOOM_FACTOR_NONE).apply {
+            numberOfColumns = COLUMNS
+            shadowEnabled = false
+        }
         adapter = channelsAdapter
     }
 
