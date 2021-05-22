@@ -50,3 +50,58 @@ data class F1TvSession(
     val images: List<F1TvImageId>,
     val channels: List<F1TvChannelId>
 )
+
+@JsonClass(generateAdapter = true)
+data class F1TvFutureSessionResponse(
+    val resultObj: F1TvFutureSessionLayoutContainers
+)
+
+@JsonClass(generateAdapter = true)
+data class F1TvFutureSessionLayoutContainers(
+    val containers: List<F1TvLayoutContainer>
+)
+
+@JsonClass(generateAdapter = true)
+data class F1TvLayoutContainer(
+    val layout: String,
+    val retrieveItems: F1TvFutureSessionRetrieveItems
+)
+
+@JsonClass(generateAdapter = true)
+data class F1TvFutureSessionRetrieveItems(
+    val resultObj: F1TvFutureSessionResult
+)
+
+@JsonClass(generateAdapter = true)
+data class F1TvFutureSessionResult(
+    val containers: List<F1TvFutureSession>
+)
+
+@JsonClass(generateAdapter = true)
+data class F1TvFutureSession(
+    val eventName: String?,
+    val events: List<F1TvFutureSessionEvent>?
+)
+
+@JsonClass(generateAdapter = true)
+data class F1TvFutureSessionEvent(
+    val id: String,
+    val metadata: F1TvFutureSessionEventMetadata
+)
+
+@JsonClass(generateAdapter = true)
+data class F1TvFutureSessionEventMetadata(
+    val emfAttributes: F1TvFutureSessionEmfAttributes,
+    val title: String,
+    val pictureUrl: String?,
+    val contentSubtype: String,
+    val contentId: String
+)
+
+@JsonClass(generateAdapter = true)
+data class F1TvFutureSessionEmfAttributes(
+    val sessionStartDate: Long,
+    val sessionEndDate: Long,
+    @Json(name="Series") val series: String,
+
+)
