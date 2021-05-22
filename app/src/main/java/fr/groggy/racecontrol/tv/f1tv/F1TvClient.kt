@@ -9,7 +9,10 @@ import fr.groggy.racecontrol.tv.utils.http.parseJsonBody
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.internal.toImmutableList
-import org.threeten.bp.*
+import org.threeten.bp.Instant
+import org.threeten.bp.OffsetDateTime
+import org.threeten.bp.Year
+import org.threeten.bp.ZoneId
 import org.threeten.bp.format.DateTimeFormatter
 import java.util.*
 import javax.inject.Inject
@@ -171,13 +174,16 @@ class F1TvClient @Inject constructor(
                         .filter { it.eventName.equals("ALL") }
                         .forEach { ev ->
                             ev.events!!
-                                .filter { it.metadata.emfAttributes.sessionStartDate > Instant.now().toEpochMilli()}
-                                .forEach { fev ->
-                                run {
-                                    schedules.add(fev)
-                                    Log.d(TAG, fev.toString())
+                                .filter {
+                                    it.metadata.emfAttributes.sessionStartDate > Instant.now()
+                                        .toEpochMilli()
                                 }
-                            }
+                                .forEach { fev ->
+                                    run {
+                                        schedules.add(fev)
+                                        Log.d(TAG, fev.toString())
+                                    }
+                                }
                         }
                 }
             return schedules.map {
