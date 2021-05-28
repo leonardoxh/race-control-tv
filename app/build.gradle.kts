@@ -14,7 +14,7 @@ android {
         minSdkVersion(21)
         targetSdkVersion(30)
         versionCode = 23
-        versionName = "2.1.2"
+        versionName = "2.1.1"
 
         buildConfigField("String", "DEFAULT_USER_AGENT", "\"RaceControl f1viewer\"")
     }
