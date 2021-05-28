@@ -14,7 +14,7 @@
         wisselen. Om het op te lossen moet je contact opnemen met F1 ondersteuning.
     </string>
 
-    <string name="unable_to_play_video_message">Er ging iets fout bij het afspelen van deze video...</string>
+    <string name="unable_to_play_video_message">Er ging iets fout bij het afspelen van deze video</string>
     <string name="audio_selection_dialog_title">Audio</string>
     <string name="video_selection_dialog_title">Video</string>
     <string name="video_selection_quality_auto">Auto</string>

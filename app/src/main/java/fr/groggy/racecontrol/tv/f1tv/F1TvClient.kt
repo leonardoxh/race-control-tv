@@ -30,29 +30,22 @@ class F1TvClient @Inject constructor(
         private const val ROOT_URL = "https://f1tv.formula1.com"
 
         private const val GROUP_ID = 2 //TODO this might need to be migrated to the correct ONE
-        private const val LIST_SEASON =
-            "/2.0/R/%s/BIG_SCREEN_HLS/ALL/PAGE/SEARCH/VOD/F1_TV_Pro_Monthly/$GROUP_ID?filter_objectSubtype=Meeting&filter_season=%s&filter_orderByFom=Y&maxResults=100"
-        private const val LIST_SESSIONS =
-            "/2.0/R/%s/BIG_SCREEN_HLS/ALL/PAGE/SANDWICH/F1_TV_Pro_Monthly/$GROUP_ID?meetingId=%s&title=weekend-sessions"
-        private const val LIST_FUTURE_SESSIONS =
-            "/2.0/R/%s/WEB_DASH/ALL/PAGE/1349/F1_TV_Pro_Monthly/$GROUP_ID"
-        private const val LIST_CHANNELS =
-            "/2.0/R/%s/BIG_SCREEN_HLS/ALL/CONTENT/VIDEO/%s/F1_TV_Pro_Monthly/$GROUP_ID"
-        private const val PICTURE_URL =
-            "https://ott.formula1.com/image-resizer/image/%s?w=384&h=384&o=L&q=HI"
+        private const val LIST_SEASON = "/2.0/R/%s/BIG_SCREEN_HLS/ALL/PAGE/SEARCH/VOD/F1_TV_Pro_Monthly/$GROUP_ID?filter_objectSubtype=Meeting&filter_season=%s&filter_orderByFom=Y&maxResults=100"
+        private const val LIST_SESSIONS = "/2.0/R/%s/BIG_SCREEN_HLS/ALL/PAGE/SANDWICH/F1_TV_Pro_Monthly/$GROUP_ID?meetingId=%s&title=weekend-sessions"
+        private const val LIST_FUTURE_SESSIONS = "/2.0/R/%s/BIG_SCREEN_HLS/ALL/PAGE/1349/F1_TV_Pro_Monthly/$GROUP_ID"
+        private const val LIST_CHANNELS = "/2.0/R/%s/BIG_SCREEN_HLS/ALL/CONTENT/VIDEO/%s/F1_TV_Pro_Monthly/$GROUP_ID"
+        private const val PICTURE_URL = "https://ott.formula1.com/image-resizer/image/%s?w=384&h=384&o=L&q=HI"
     }
 
     private val seasonResponseJsonAdapter = moshi.adapter(F1TvSeasonResponse::class.java)
     private val sessionResponseJsonAdapter = moshi.adapter(F1TvSessionResponse::class.java)
-    private val futureSessionResponseJsonAdapter =
-        moshi.adapter(F1TvFutureSessionResponse::class.java)
+    private val futureSessionResponseJsonAdapter = moshi.adapter(F1TvFutureSessionResponse::class.java)
     private val channelResponseJsonAdapter = moshi.adapter(F1TvChannelResponse::class.java)
     private val sessionArchiveJsonAdapter = moshi.adapter(SessionArchive::class.java)
     private val archiveSortInstant = Instant.now()
 
     suspend fun getSeason(archive: Archive): F1TvSeason {
-        val response =
-            get(LIST_SEASON.format(getCurrentLocale(), archive.year), seasonResponseJsonAdapter)
+        val response = get(LIST_SEASON.format(getCurrentLocale(), archive.year), seasonResponseJsonAdapter)
         Log.d(TAG, "Fetched season $archive")
         return F1TvSeason(
             year = Year.of(archive.year),
@@ -86,10 +79,7 @@ class F1TvClient @Inject constructor(
         }
     }
 
-    private suspend fun getSessionArchive(
-        event: F1TvSeasonEvent,
-        season: F1TvSeason
-    ): List<F1TvSession> {
+    private suspend fun getSessionArchive(event: F1TvSeasonEvent, season: F1TvSeason): List<F1TvSession> {
         try {
             val result = get(season.detailAction!!, sessionArchiveJsonAdapter)
             return result.resultObj.containers.mapNotNull { sessionArchiveContainer ->
@@ -117,13 +107,13 @@ class F1TvClient @Inject constructor(
     }
 
     private suspend fun getF1TvSessions(event: F1TvSeasonEvent): List<F1TvSession> {
-        val list: MutableList<F1TvSession> = ArrayList()
+        val list = mutableListOf<F1TvSession>()
         if (event.period.start < Instant.now() && event.period.end > Instant.now()) {
             list.addAll(getFutureF1TvSessions(event))
         }
         list.addAll(getBroadcastedF1TvSessions(event))
         list.forEach { it -> Log.d(TAG, it.toString()) }
-        return list.toImmutableList()
+        return list
     }
 
     private suspend fun getBroadcastedF1TvSessions(event: F1TvSeasonEvent): List<F1TvSession> {
@@ -166,7 +156,7 @@ class F1TvClient @Inject constructor(
                 futureSessionResponseJsonAdapter
             )
             Log.d(TAG, "Fetched future sessions for event ${event.id}")
-            val schedules = ArrayList<F1TvFutureSessionEvent>()
+            val schedules = mutableListOf<F1TvFutureSessionEvent>()
             response.resultObj.containers
                 .filter { it.layout == "schedule" }
                 .forEach { it ->
@@ -179,10 +169,8 @@ class F1TvClient @Inject constructor(
                                         .toEpochMilli()
                                 }
                                 .forEach { fev ->
-                                    run {
-                                        schedules.add(fev)
-                                        Log.d(TAG, fev.toString())
-                                    }
+                                    schedules.add(fev)
+                                    Log.d(TAG, fev.toString())
                                 }
                         }
                 }
@@ -224,32 +212,31 @@ class F1TvClient @Inject constructor(
 
     suspend fun getChannels(contentId: String): List<F1TvChannel> {
         try {
-            val response =
-                get(LIST_CHANNELS.format(getCurrentLocale(), contentId), channelResponseJsonAdapter)
+            val response = get(LIST_CHANNELS.format(getCurrentLocale(), contentId), channelResponseJsonAdapter)
             return response.resultObj.containers.firstOrNull()?.metadata?.additionalStreams
                 ?.sortedBy { it.racingNumber }
                 ?.map {
-                    val channelIdAndContentId = it.playbackUrl.split("CONTENT/PLAY?")
-                        .last()
-                        .split('&')
+                val channelIdAndContentId = it.playbackUrl.split("CONTENT/PLAY?")
+                    .last()
+                    .split('&')
 
-                    if (it.type == "obc") {
-                        F1TvOnboardChannel(
-                            channelId = channelIdAndContentId.first().split("=").last(),
-                            contentId = channelIdAndContentId.last().split("=").last(),
-                            name = "${it.driverFirstName} ${it.driverLastName} ${it.racingNumber}",
-                            background = it.hex,
-                            subTitle = it.teamName,
-                            driver = F1TvDriverId("") //TODO - do we have to load the driver ?
-                        )
-                    } else {
-                        F1TvBasicChannel(
-                            channelId = channelIdAndContentId.first().split("=").last(),
-                            contentId = channelIdAndContentId.last().split("=").last(),
-                            type = F1TvBasicChannelType.from(it.type, it.title)
-                        )
-                    }
-                } ?: listOf()
+                if (it.type == "obc") {
+                    F1TvOnboardChannel(
+                        channelId = channelIdAndContentId.first().split("=").last(),
+                        contentId = channelIdAndContentId.last().split("=").last(),
+                        name = "${it.driverFirstName} ${it.driverLastName} ${it.racingNumber}",
+                        background = it.hex,
+                        subTitle = it.teamName,
+                        driver = F1TvDriverId("") //TODO - do we have to load the driver ?
+                    )
+                } else {
+                    F1TvBasicChannel(
+                        channelId = channelIdAndContentId.first().split("=").last(),
+                        contentId = channelIdAndContentId.last().split("=").last(),
+                        type = F1TvBasicChannelType.from(it.type, it.title)
+                    )
+                }
+            } ?: listOf()
         } catch (e: Exception) {
             return listOf()
         }

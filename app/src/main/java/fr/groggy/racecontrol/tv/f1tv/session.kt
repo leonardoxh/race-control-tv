@@ -102,6 +102,5 @@ data class F1TvFutureSessionEventMetadata(
 data class F1TvFutureSessionEmfAttributes(
     val sessionStartDate: Long,
     val sessionEndDate: Long,
-    @Json(name = "Series") val series: String,
-
-    )
+    @Json(name = "Series") val series: String
+)
