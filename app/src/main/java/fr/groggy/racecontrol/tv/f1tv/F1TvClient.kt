@@ -147,7 +147,7 @@ class F1TvClient @Inject constructor(
     }
 
     private suspend fun getFutureF1TvSessions(event: F1TvSeasonEvent): List<F1TvSession> {
-        val dateTimeFormatter: DateTimeFormatter =
+        val dateTimeFormatter =
             DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
                 .withZone(ZoneId.systemDefault())
         try {
