@@ -23,7 +23,7 @@ class HomeActivity : FragmentActivity(R.layout.activity_home) {
     }
 
     @Inject
-    lateinit var seasonService: SeasonService
+    internal lateinit var seasonService: SeasonService
 
     override fun onStart() {
         Log.d(TAG, "onStart")

@@ -29,8 +29,7 @@ import org.threeten.bp.Year
 @AndroidEntryPoint
 class HomeFragment : RowsSupportFragment(), OnItemViewClickedListener {
 
-    private val listRowPresenter = CustomListRowPresenter()
-    private val homeEntriesAdapter = ArrayObjectAdapter(listRowPresenter)
+    private val homeEntriesAdapter = ArrayObjectAdapter(CustomListRowPresenter())
     private var imageView: ImageView? = null
     private val currentYear = Year.now().value
     private var archivesRow: ListRow? = null
@@ -73,6 +72,7 @@ class HomeFragment : RowsSupportFragment(), OnItemViewClickedListener {
 
         val teaserImageText = requireActivity().findViewById<TextView>(R.id.teaserImageText)
         teaserImageText.text = resources.getString(R.string.teaser_image_text, currentYear)
+        homeEntriesAdapter.clear()
     }
 
     private fun buildRowsAdapter() {
@@ -89,7 +89,7 @@ class HomeFragment : RowsSupportFragment(), OnItemViewClickedListener {
     private fun onUpdatedSeason(season: Season) {
         val events = season.events.filter { it.sessions.isNotEmpty() }
         if (events.isNotEmpty()) {
-            val event = events[0]
+            val event = events.first()
             val existingListRows = homeEntriesAdapter.unmodifiableList<ListRow>()
             val headerName =
                 getString(R.string.season_last_event, event.name, currentYear.toString())

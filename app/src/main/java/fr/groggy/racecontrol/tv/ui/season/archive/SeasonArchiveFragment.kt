@@ -16,8 +16,7 @@ import fr.groggy.racecontrol.tv.ui.season.browse.SeasonBrowseActivity
 @AndroidEntryPoint
 class SeasonArchiveFragment : BrowseSupportFragment(), OnItemViewClickedListener {
 
-    private val listRowPresenter = CustomListRowPresenter()
-    private val archivesAdapter = ArrayObjectAdapter(listRowPresenter)
+    private val archivesAdapter = ArrayObjectAdapter(CustomListRowPresenter())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

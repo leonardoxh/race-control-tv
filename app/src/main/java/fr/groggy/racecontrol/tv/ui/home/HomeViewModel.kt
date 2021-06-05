@@ -11,7 +11,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val seasonService: SeasonService
-) : ViewModel() {
+): ViewModel() {
 
     fun listArchive(): List<Archive> {
         return seasonService.listArchive()

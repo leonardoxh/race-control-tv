@@ -44,8 +44,7 @@ class SeasonBrowseFragment : BrowseSupportFragment(), OnItemViewClickedListener 
     private val eventListRowDiffCallback = EventListRowDiffCallback()
     private val sessionCardPresenter = SessionCardPresenter()
 
-    private val listRowPresenter = CustomListRowPresenter()
-    private val eventsAdapter = ArrayObjectAdapter(listRowPresenter)
+    private val eventsAdapter = ArrayObjectAdapter(CustomListRowPresenter())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d(TAG, "onCreate")
