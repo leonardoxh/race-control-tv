@@ -252,7 +252,7 @@ class F1TvClient @Inject constructor(
 
     private fun getCurrentLocale(): String {
         return when (val isO3Language = Locale.getDefault().isO3Language) {
-            "deu", "fra", "nld", "spa", "por" -> isO3Language.toUpperCase(Locale.ROOT)
+            "deu", "fra", "nld", "spa", "por", "rus" -> isO3Language.toUpperCase(Locale.ROOT)
             else -> "ENG"
         }
     }

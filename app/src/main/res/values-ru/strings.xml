@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="login">Адрес Email</string>
+    <string name="password">Пароль</string>
+    <string name="signin">Вход</string>
+    <string name="signin_required_f1_tv_pro_account">Для входа необходима учетная запись F1Tv/F1TvPro</string>
+    <string name="invalid_credentials">Неверные учетные данные</string>
+    <string name="rejected_credentials">Неправильный email или пароль</string>
+    <string name="rejected_credentials_message">
+        Несмотря на ввод корректных email и пароля это может быть следствием проблемы <b>F1 API BUG</b>.\n\n
+        1. В этом случае попробуйте выполнить следующее: <b>откройте веб-сайт F1TV на компьютере</b>,
+        войдите в учетную запись используя Ваш email и пароль
+        вернитесь в приложение и повторите попытку входа.\n
+        2. Кроме того, причиной может быть блокировка Вашего IP адреса (код 401). В этом случае попробуйте
+        переключиться на другое сетевое соединение. Также Вы можете обратиться за помощью в службу технической поддержки F1Tv.
+    </string>
+
+    <string name="unable_to_play_video_message">Что-то пошло не так при попытке проигрывания видео</string>
+    <string name="audio_selection_dialog_title">Звук</string>
+    <string name="video_selection_dialog_title">Видео</string>
+    <string name="video_selection_quality_auto">Автоматически</string>
+
+    <string name="choose_a_season">Выбор сезона</string>
+
+    <string name="teaser_image_text">Текущий сезон: %1$d</string>
+    <string name="teaser_image_description">Текущий сезон</string>
+
+    <string name="home_all">Показать всё</string>
+    <string name="home_archive">Архив</string>
+
+</resources>
